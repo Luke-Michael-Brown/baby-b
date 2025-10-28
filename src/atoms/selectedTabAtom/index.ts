@@ -2,28 +2,102 @@ import { atom } from "jotai";
 
 export const COLUMNS = {
 	sleep: [
-		{ minWidth: 175, field: "start_time", headerName: "Start Time" },
-		{ minWidth: 175, field: "end_time", headerName: "End Time" },
-		{ minWidth: 100, field: "extra1", headerName: "Type" },
+		{
+			minWidth: 175,
+			field: "start_time",
+			headerName: "Start Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 175,
+			field: "end_time",
+			headerName: "End Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 100,
+			field: "extra1",
+			headerName: "Type",
+			formType: "select",
+			selectFields: ["Night Sleep", "Nap"],
+		},
 	],
 	diaper: [
-		{ minWidth: 175, field: "start_time", headerName: "Start Time" },
-		{ minWidth: 175, field: "extra1", headerName: "Type" },
+		{
+			minWidth: 175,
+			field: "start_time",
+			headerName: "Start Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 175,
+			field: "extra1",
+			headerName: "Type",
+			formType: "select",
+			selectFields: ["Pee", "Poo", "Pee & Poo"],
+		},
 	],
 	nursing: [
-		{ minWidth: 175, field: "start_time", headerName: "Start Time" },
-		{ minWidth: 175, field: "end_time", headerName: "End Time" },
-		{ minWidth: 100, field: "extra1", headerName: "Left or Right" },
+		{
+			minWidth: 175,
+			field: "start_time",
+			headerName: "Start Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 175,
+			field: "end_time",
+			headerName: "End Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 100,
+			field: "extra1",
+			headerName: "Left or Right",
+			formType: "select",
+			selectFields: ["Left", "Right"],
+		},
 	],
 	bottle: [
-		{ minWidth: 175, field: "start_time", headerName: "Start Time" },
-		{ minWidth: 175, field: "end_time", headerName: "End Time" },
-		{ minWidth: 100, field: "extra1", headerName: "Amount (oz)" },
+		{
+			minWidth: 175,
+			field: "start_time",
+			headerName: "Start Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 175,
+			field: "end_time",
+			headerName: "End Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 100,
+			field: "extra1",
+			headerName: "Amount (oz)",
+			formType: "number",
+		},
 	],
 	pumping: [
-		{ minWidth: 175, field: "start_time", headerName: "Start Time" },
-		{ minWidth: 175, field: "end_time", headerName: "End Time" },
-		{ minWidth: 100, field: "extra1", headerName: "Left or Right" },
+		{
+			minWidth: 175,
+			field: "start_time",
+			headerName: "Start Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 175,
+			field: "end_time",
+			headerName: "End Time",
+			formType: "datePicker",
+		},
+		{
+			minWidth: 100,
+			field: "extra1",
+			headerName: "Left or Right",
+			formType: "select",
+			selectFields: ["Left", "Right"],
+		},
 	],
 };
 
