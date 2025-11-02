@@ -60,12 +60,12 @@ const lightPalette: ThemeOptions['palette'] = {
   primary: { main: '#1976d2' },
   secondary: { main: '#8e24aa' },
   neutral: { main: '#6b7280', contrastText: '#fff' },
-  summary: { main: '#4f83cc', contrastText: '#fff' },
-  sleep: { main: '#9c5ca3', contrastText: '#fff' },
-  diaper: { main: '#4caf70', contrastText: '#fff' },
-  nursing: { main: '#fddc69', contrastText: '#000' },
-  pumping: { main: '#e57373', contrastText: '#fff' },
-  bottle: { main: '#fb8c42', contrastText: '#fff' },
+  summary: { main: '#4dabf5', contrastText: '#fff' },    // subtle blue
+  sleep: { main: '#b39ddb', contrastText: '#fff' },      // soft purple
+  diaper: { main: '#81c784', contrastText: '#fff' },     // soft green
+  nursing: { main: '#fff176', contrastText: '#121212' }, // muted yellow
+  pumping: { main: '#e57373', contrastText: '#fff' },    // soft red
+  bottle: { main: '#ffb74d', contrastText: '#121212' },  // soft orange
   background: { default: '#f9f9f9', paper: '#ffffff' },
   divider: '#e0e0e0',
 };
@@ -76,12 +76,12 @@ const darkPalette: ThemeOptions['palette'] = {
   primary: { main: '#90caf9', contrastText: '#121212' },
   secondary: { main: '#b785c4', contrastText: '#121212' },
   neutral: { main: '#64748b', contrastText: '#ffffff' },
-  summary: { main: '#4a90e2', contrastText: '#ffffff' },
-  sleep: { main: '#8e44ad', contrastText: '#ffffff' },
-  diaper: { main: '#43a047', contrastText: '#ffffff' },
-  nursing: { main: '#fbc02d', contrastText: '#121212' },
-  pumping: { main: '#e53935', contrastText: '#ffffff' },
-  bottle: { main: '#fb8c00', contrastText: '#ffffff' },
+  summary: { main: '#42a5f5', contrastText: '#121212' },    // gentle blue
+  sleep: { main: '#9575cd', contrastText: '#121212' },      // muted purple
+  diaper: { main: '#66bb6a', contrastText: '#121212' },     // muted green
+  nursing: { main: '#ffee58', contrastText: '#121212' },    // soft yellow
+  pumping: { main: '#ef5350', contrastText: '#ffffff' },    // muted red
+  bottle: { main: '#ffa726', contrastText: '#121212' },     // soft orange
   background: { default: '#101010', paper: '#1c1c1c' },
   divider: 'rgba(255,255,255,0.2)',
   text: { primary: '#ffffff', secondary: '#cfd8dc', disabled: '#78909c' },
