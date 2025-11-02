@@ -13,7 +13,7 @@ import TabContent from "./components/TabContent";
 import Footer from "./components/Footer";
 import UpdateToast from "./components/UpdateToast";
 import Box from "@mui/material/Box";
-import { getTheme } from "./theme";
+import { useTheme } from "./theme";
 import useGoogleAPI from "./hooks/useGoogleAPI";
 import useBabiesList from "./hooks/useBabiesList";
 import selectedBabyAtom from "./atoms/selectedBabyAtom";
@@ -68,7 +68,7 @@ function AppContainer() {
   const [mode, setMode] = useState<"light" | "dark">(
     localStorage.getItem("mode") === "dark" ? "dark" : "light",
   );
-  const theme = getTheme(mode);
+  const theme = useTheme(mode);
   const { isSignedIn, signIn, accessToken } = useGoogleAPI();
 
   return (
