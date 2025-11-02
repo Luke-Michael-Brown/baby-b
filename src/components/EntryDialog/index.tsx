@@ -60,7 +60,7 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    babiesData[selectedBaby][tab].push({
+    babiesData[selectedBaby][tab].unshift({
       ...formValues,
       babyName: selectedBaby,
       isShown: true,
