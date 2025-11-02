@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
-import { TABS_TO_ICON, TABS_TO_COLOR } from "../../atoms/selectedTabAtom";
+import { TABS_TO_ICON } from "../../atoms/selectedTabAtom";
 import useTabSummary from "../../hooks/useTabSummary";
 
 interface Props {
@@ -16,7 +16,6 @@ export const RANGES = ["Last Week", "Last Month", "Last Year"] as const;
 function SummaryItem({ tab }: Props) {
   const [range, setRange] = useState(RANGES[0]);
   const Icon = TABS_TO_ICON[tab];
-  const color = TABS_TO_COLOR[tab];
   const summaries = useTabSummary({ tab, range });
 
   return (
@@ -24,8 +23,8 @@ function SummaryItem({ tab }: Props) {
       sx={{
         px: 1,
         py: 1,
-        bgcolor: `${color}.main`,
-        color: `${color}.contrastText`,
+        bgcolor: `${tab}.main`,
+        color: `${tab}.contrastText`,
       }}
     >
       <Stack spacing={1}>

@@ -107,15 +107,6 @@ export const COLUMNS = {
 	],
 };
 
-export const TABS_TO_COLOR = {
-	summary: 'blue',
-	sleep: 'purple',
-	diaper: 'green',
-	nursing: 'yellow',
-	bottle: 'orange',
-	pumping: 'red',
-}
-
 export const TABS_TO_ICON = {
 	summary: ChildFriendlyIcon,
 	sleep: CribIcon,
