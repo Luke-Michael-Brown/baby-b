@@ -98,7 +98,7 @@ export default function useGoogleAPI() {
       // Traverse folders
       for (const folderName of parts) {
         const folderRes = await fetch(
-          `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and '${parentId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false&fields=files(id,name)`,
+          `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and '${parentId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
           { headers: { Authorization: `Bearer ${accessToken}` } },
         );
         const folderData = await folderRes.json();
@@ -110,7 +110,7 @@ export default function useGoogleAPI() {
 
       // Find the file
       const fileRes = await fetch(
-        `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and '${parentId}' in parents and trashed=false&fields=files(id,name)`,
+        `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and '${parentId}' in parents and trashed=false&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       const fileData = await fileRes.json();
@@ -141,7 +141,7 @@ export default function useGoogleAPI() {
       // 1️⃣ Traverse or create folders
       for (const folderName of parts) {
         const folderRes = await fetch(
-          `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and '${parentId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false&fields=files(id,name)`,
+          `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and '${parentId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
           { headers: { Authorization: `Bearer ${accessToken}` } },
         );
         const folderData = await folderRes.json();
@@ -172,7 +172,7 @@ export default function useGoogleAPI() {
 
       // 2️⃣ Check if file exists
       const fileRes = await fetch(
-        `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and '${parentId}' in parents and trashed=false&fields=files(id,name)`,
+        `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and '${parentId}' in parents and trashed=false&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       const fileData = await fileRes.json();
