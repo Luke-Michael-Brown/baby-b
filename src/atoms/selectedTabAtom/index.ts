@@ -96,7 +96,7 @@ export const COLUMNS = {
 			field: "extra1",
 			headerName: "Left or Right",
 			formType: "select",
-			selectFields: ["Left", "Right"],
+			selectFields: ["Left", "Right", "Both"],
 		},
 	],
 };

@@ -1,0 +1,10 @@
+- Make order most recent first
+- Add a toast when data updates
+- Populate summary tab
+- Add more fun colors
+- fix date picker ui for mobile
+- fix re-sign on opening first tab
+
+- Being able to edit
+- Being able to remove entries
+- Be able to add more babies
