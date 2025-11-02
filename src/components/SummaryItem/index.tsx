@@ -52,7 +52,18 @@ function SummaryItem({ tab }: Props) {
           size="small"
         >
           {RANGES.map((r) => (
-            <ToggleButton key={r} value={r}>
+            <ToggleButton
+              sx={{
+                color: `${tab}.contrastText`,
+                fontWeight: 'normal',
+                "&.Mui-selected": {
+                  color: `${tab}.contrastText`,
+                  fontWeight: 900,
+                },
+              }}
+              key={r}
+              value={r}
+            >
               {r}
             </ToggleButton>
           ))}
