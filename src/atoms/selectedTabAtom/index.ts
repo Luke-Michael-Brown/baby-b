@@ -1,4 +1,10 @@
 import { atom } from "jotai";
+import ChildFriendlyIcon from "@mui/icons-material/ChildFriendly";
+import CribIcon from '@mui/icons-material/Crib';
+import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
+import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import JoinInnerIcon from '@mui/icons-material/JoinInner';
 
 export const COLUMNS = {
 	sleep: [
@@ -108,6 +114,15 @@ export const TABS_TO_COLOR = {
 	nursing: 'yellow',
 	bottle: 'orange',
 	pumping: 'red',
+}
+
+export const TABS_TO_ICON = {
+	summary: ChildFriendlyIcon,
+	sleep: CribIcon,
+	diaper: BabyChangingStationIcon,
+	nursing: PregnantWomanIcon,
+	bottle: WaterDropIcon,
+	pumping: JoinInnerIcon,
 }
 
 export const TABS = [

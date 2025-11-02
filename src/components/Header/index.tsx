@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useQueryClient } from "@tanstack/react-query";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -23,6 +23,7 @@ import { useTheme } from "@mui/material/styles";
 import selectedBabyAtom from "../../atoms/selectedBabyAtom";
 import useBabiesList from "../../hooks/useBabiesList";
 import ThemedAppBar from "../ThemedAppBar";
+import selectedTabAtom, { TABS, TABS_TO_ICON } from '../../atoms/selectedTabAtom';
 
 const settings = ["Logout"];
 
@@ -39,6 +40,8 @@ function Header({ setMode }: Props) {
   };
   const { data: babiesList } = useBabiesList();
   const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
+  const selectedTab = useAtomValue(selectedTabAtom);
+  const tab = TABS[selectedTab];
   const onBabySelected = (event: SelectChangeEvent) => {
     setSelectedBaby(event.target.value as string);
   };
@@ -51,12 +54,13 @@ function Header({ setMode }: Props) {
     });
   };
 
+  const Icon = TABS_TO_ICON[tab];
   return (
     <Box>
       <ThemedAppBar color="primary" position="static">
         <Stack sx={{ px: 2, py: 1 }} direction="row" alignItems="center">
           <Stack spacing={1} direction="row" alignItems="center">
-            <ChildFriendlyIcon />
+            <Icon />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Baby B
             </Typography>
