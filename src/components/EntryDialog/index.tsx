@@ -1,6 +1,6 @@
 import * as React from "react";
 import dayjs from "dayjs";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useQueryClient } from "@tanstack/react-query";
 import Button from "@mui/material/Button";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -18,6 +18,8 @@ import { COLUMNS } from "../../atoms/selectedTabAtom";
 import selectedBabyAtom from "../../atoms/selectedBabyAtom";
 import useBabiesData from "../../hooks/useBabiesData";
 import useGoogleAPI from "../../hooks/useGoogleAPI";
+import useAddEntry from "../../hooks/useAddEntry";
+import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom';
 
 export const DEFAULT_ENTRY_DIALOG_PROPS = {
   tab: "",
@@ -32,10 +34,10 @@ interface Props {
 }
 
 export default function EntryDialog({ tab, open, handleClose }: Props) {
-  const qc = useQueryClient();
   const { data: babiesData } = useBabiesData();
-  const { uploadJsonToDrive } = useGoogleAPI();
   const selectedBaby = useAtomValue(selectedBabyAtom);
+  const addEntry = useAddEntry();
+  const setSelectedTab = useSetAtom(selectedTabAtom);
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<Record<string, any>>({});
@@ -66,23 +68,15 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    babiesData[selectedBaby][tab].unshift({
-      ...formValues,
-      babyName: selectedBaby,
-      isShown: true,
-      timestamp: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
-      id: crypto.randomUUID(),
-    });
-
     setIsLoading(true);
     try {
-      await uploadJsonToDrive(babiesData);
-    } catch {
+      await addEntry(selectedBaby, tab, formValues);
+      setSelectedTab(TABS.indexOf(tab));
+      handleClose();
+    } catch (err) {
+      console.error(err);
       setIsLoading(false);
     }
-
-    qc.invalidateQueries({ queryKey: ["babies-data"], exact: true });
-    handleClose();
   };
 
   return (
