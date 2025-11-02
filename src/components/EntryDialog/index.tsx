@@ -105,6 +105,27 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
                       value={value}
                       onChange={(newValue) => handleChange(field, newValue)}
                       slotProps={{
+                        popper: {
+                          modifiers: [
+                            {
+                              name: "flip",
+                              enabled: true,
+                              options: {
+                                altBoundary: true,
+                                rootBoundary: "viewport",
+                                padding: 8,
+                              },
+                            },
+                            {
+                              name: "preventOverflow",
+                              enabled: true,
+                              options: {
+                                altAxis: true,
+                                tether: true,
+                              },
+                            },
+                          ],
+                        },
                         textField: { required: true, fullWidth: true },
                       }}
                     />

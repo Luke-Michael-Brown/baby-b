@@ -1,6 +1,5 @@
 - Populate summary tab
 - Add more fun colors
-- fix date picker ui for mobile
 - fix tab sizes for mobile
 
 - Being able to edit
