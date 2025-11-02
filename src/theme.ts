@@ -88,17 +88,22 @@ const lightPalette: ThemeOptions['palette'] = {
 // Dark mode palette (subtler)
 const darkPalette: ThemeOptions['palette'] = {
   mode: 'dark',
-  primary: { main: '#90caf9' },
-  secondary: { main: '#b785c4' },
-  neutral: { main: '#94a3b8', contrastText: '#000' },
-  blue: { main: '#70a1d7', contrastText: '#000' },
-  purple: { main: '#b494c9', contrastText: '#000' },
-  green: { main: '#81c784', contrastText: '#000' },
-  yellow: { main: '#fff59d', contrastText: '#000' },
-  red: { main: '#ef9a9a', contrastText: '#000' },
-  orange: { main: '#ffb74d', contrastText: '#000' },
-  background: { default: '#121212', paper: '#1e1e1e' },
-  divider: 'rgba(255,255,255,0.12)',
+  primary: { main: '#90caf9', contrastText: '#121212' },   // soft blue
+  secondary: { main: '#b785c4', contrastText: '#121212' }, // richer purple
+  neutral: { main: '#64748b', contrastText: '#ffffff' },   // darker gray-blue
+  blue: { main: '#4a90e2', contrastText: '#ffffff' },      // deeper blue
+  purple: { main: '#8e44ad', contrastText: '#ffffff' },    // darker purple
+  green: { main: '#43a047', contrastText: '#ffffff' },     // deeper green
+  yellow: { main: '#fbc02d', contrastText: '#121212' },    // richer gold
+  red: { main: '#e53935', contrastText: '#ffffff' },       // stronger red
+  orange: { main: '#fb8c00', contrastText: '#ffffff' },    // deeper orange
+  background: { default: '#101010', paper: '#1c1c1c' },   // very dark backgrounds
+  divider: 'rgba(255,255,255,0.2)',                       // slightly brighter divider
+  text: {
+    primary: '#ffffff', // main text
+    secondary: '#cfd8dc', // secondary text
+    disabled: '#78909c', // disabled text
+  },
 };
 
 // Theme builder function

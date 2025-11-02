@@ -65,9 +65,13 @@ function App({ setMode }: Props) {
 }
 
 function AppContainer() {
-  const [mode, setMode] = useState<"light" | "dark">(
+  const [mode, _setMode] = useState<"light" | "dark">(
     localStorage.getItem("mode") === "dark" ? "dark" : "light",
   );
+  const setMode = (newMode) => {
+    _setMode(newMode);
+    localStorage.setItem("mode", newMode);
+  }
   const theme = useTheme(mode);
   const { isSignedIn, signIn, accessToken } = useGoogleAPI();
 
