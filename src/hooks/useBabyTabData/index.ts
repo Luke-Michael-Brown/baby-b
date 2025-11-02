@@ -14,10 +14,14 @@ const DATE_OPTIONS = {
   hour12: true,
 };
 
-export default function useBabyTabData() {
+interface Props {
+  overrideTab?: string;
+}
+
+export default function useBabyTabData({ overrideTab }: Props) {
   const { fetchJsonFromDrive } = useGoogleAPI();
   const selectedTab = useAtomValue(selectedTabAtom);
-  const tab = TABS[selectedTab];
+  const tab = overrideTab ?? TABS[selectedTab];
   const selectedBaby = useAtomValue(selectedBabyAtom);
 
   return useQuery({

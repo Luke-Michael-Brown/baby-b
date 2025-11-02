@@ -1,8 +1,12 @@
+import { TAB_TO_SUMMARY_DATA } from '../../atoms/selectedTabAtom';
+import useBabyTabData from '../../hooks/useBabyTabData';
+
 interface Props {
   tab: string;
   range: string
 }
 
 export default ({ tab, range }: Props): string[] => {
-  return ['Average 8 pees per day', 'Averages 5 poops per day'];
+  const { data: tabData } = useBabyTabData({ overrideTab: tab });
+  return TAB_TO_SUMMARY_DATA[tab](tabData, range);
 }
