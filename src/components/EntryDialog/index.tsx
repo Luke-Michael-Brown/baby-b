@@ -35,18 +35,22 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
   const { uploadJsonToDrive } = useGoogleAPI();
   const selectedBaby = useAtomValue(selectedBabyAtom);
 
+  const [isLoading, setIsLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<Record<string, any>>({});
 
   // Initialize form values when tab changes
   React.useEffect(() => {
-    const initialValues: Record<string, any> = {};
-    COLUMNS[tab]?.forEach((col) => {
-      if (col.formType === "datePicker") initialValues[col.field] = dayjs();
-      else if (col.formType === "number") initialValues[col.field] = "";
-      else initialValues[col.field] = "";
-    });
-    setFormValues(initialValues);
-  }, [tab]);
+    if (open) {
+      const initialValues: Record<string, any> = {};
+      COLUMNS[tab]?.forEach((col) => {
+        if (col.formType === "datePicker") initialValues[col.field] = dayjs();
+        else if (col.formType === "number") initialValues[col.field] = "";
+        else initialValues[col.field] = "";
+      });
+      setIsLoading(false);
+      setFormValues(initialValues);
+    }
+  }, [open]);
 
   const handleChange = (field: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [field]: value }));
@@ -68,7 +72,12 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
       id: crypto.randomUUID(),
     });
 
-    await uploadJsonToDrive(babiesData);
+    setIsLoading(true);
+    try {
+      await uploadJsonToDrive(babiesData);      
+    } catch {
+      setIsLoading(false);
+    }
 
     handleClose();
   };
@@ -146,11 +155,12 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button disabled={isLoading} onClick={handleClose}>Cancel</Button>
         <Button
+          loading={isLoading}
           type="submit"
           form="add-entry-form"
-          disabled={!allFilled}
+          disabled={isLoading || !allFilled}
           variant="contained"
         >
           Add Entry
