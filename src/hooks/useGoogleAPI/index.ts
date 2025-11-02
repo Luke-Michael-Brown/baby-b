@@ -6,7 +6,7 @@ export default function useGoogleAPI() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [tokenClient, setTokenClient] = useState<any>(null);
 
-  // ✅ Cache folder & file IDs (lives across hook calls in memory)
+  // ✅ Cache folder & file IDs (in-memory)
   const idCache = useRef<Map<string, string>>(new Map());
 
   // -------------------------------
@@ -35,13 +35,21 @@ export default function useGoogleAPI() {
           "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly",
         callback: (tokenResponse: any) => {
           if (tokenResponse.access_token) {
+            const expiresAt =
+              Date.now() + (tokenResponse.expires_in || 3600) * 1000;
+
+            // ✅ Save token & expiry
+            localStorage.setItem(
+              "baby_b_gapi_auth",
+              JSON.stringify({
+                token: tokenResponse.access_token,
+                expiresAt,
+              }),
+            );
+
             setAccessToken(tokenResponse.access_token);
             setSignedIn(true);
             setCurrentUser({ name: "Google User" });
-            localStorage.setItem(
-              "baby_b_gapi_user",
-              JSON.stringify({ signedIn: true, timestamp: Date.now() }),
-            );
           }
         },
       });
@@ -50,14 +58,21 @@ export default function useGoogleAPI() {
     }
   }, []);
 
-  // 🔹 Silent re-auth on reload
+  // -------------------------------
+  // 🔹 Restore saved token (no popup)
+  // -------------------------------
   useEffect(() => {
-    const saved = localStorage.getItem("baby_b_gapi_user");
-    if (saved) {
-      const userData = JSON.parse(saved);
-      if (userData.signedIn && tokenClient) {
-        tokenClient.requestAccessToken({ prompt: "" });
-      }
+    const saved = localStorage.getItem("baby_b_gapi_auth");
+    if (!saved) return;
+
+    const { token, expiresAt } = JSON.parse(saved);
+    if (token && Date.now() < expiresAt) {
+      setAccessToken(token);
+      setSignedIn(true);
+      setCurrentUser({ name: "Google User" });
+    } else if (tokenClient) {
+      // Token expired → try silent refresh
+      tokenClient.requestAccessToken({ prompt: "" });
     }
   }, [tokenClient]);
 
@@ -80,17 +95,28 @@ export default function useGoogleAPI() {
         console.warn("Token revoke failed", err);
       }
     }
-    localStorage.removeItem("baby_b_gapi_user");
+    localStorage.removeItem("baby_b_gapi_auth");
+    setAccessToken(undefined);
+    setSignedIn(false);
+    setCurrentUser(null);
     window.location.reload();
   }, [accessToken]);
 
   const getAccessToken = useCallback(async () => {
-    if (!accessToken && tokenClient) tokenClient.requestAccessToken({ prompt: "" });
+    const saved = localStorage.getItem("baby_b_gapi_auth");
+    if (saved) {
+      const { token, expiresAt } = JSON.parse(saved);
+      if (token && Date.now() < expiresAt) return token;
+    }
+
+    if (tokenClient) {
+      tokenClient.requestAccessToken({ prompt: "" });
+    }
     return accessToken;
   }, [accessToken, tokenClient]);
 
   // -------------------------------
-  // 🔹 Internal helper: find or create folder / file IDs with caching
+  // 🔹 Internal helper: resolve folder/file IDs with caching
   // -------------------------------
   const resolvePath = useCallback(
     async (filePath: string, createMissing = false) => {
@@ -161,7 +187,7 @@ export default function useGoogleAPI() {
   );
 
   // -------------------------------
-  // 🔹 Fetch JSON (cached folder IDs reused)
+  // 🔹 Fetch JSON
   // -------------------------------
   const fetchJsonFromDrive = useCallback(
     async (filePath: string = "baby_b_tracker/babies_data.json") => {
@@ -179,7 +205,7 @@ export default function useGoogleAPI() {
   );
 
   // -------------------------------
-  // 🔹 Upload JSON (cached folder IDs reused)
+  // 🔹 Upload JSON
   // -------------------------------
   const uploadJsonToDrive = useCallback(
     async (data: any, filePath: string = "baby_b_tracker/babies_data.json") => {
