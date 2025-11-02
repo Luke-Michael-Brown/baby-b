@@ -104,6 +104,12 @@ export const COLUMNS = {
 			formType: "select",
 			selectFields: ["Left", "Right", "Both"],
 		},
+		{
+			minWidth: 100,
+			field: "extra2",
+			headerName: "Amount (oz)",
+			formType: "number",
+		},
 	],
 };
 
@@ -234,11 +240,12 @@ export const TAB_TO_SUMMARY_DATA = {
 
 		let totalLeftMs = 0;
 		let totalRightMs = 0;
+		let totalOz = 0; // new
 
 		filteredData.forEach((entry) => {
 			const start = new Date(entry.start_time);
 			const end = new Date(entry.end_time);
-			const duration = end - start; // milliseconds
+			const duration = end.getTime() - start.getTime(); // milliseconds
 
 			const side = entry.extra1.toLowerCase();
 			if (side === "left") {
@@ -249,15 +256,22 @@ export const TAB_TO_SUMMARY_DATA = {
 				totalLeftMs += duration / 2;
 				totalRightMs += duration / 2;
 			}
+
+			// accumulate ounces
+			const oz = parseFloat(entry.extra2);
+			if (!isNaN(oz)) totalOz += oz;
 		});
 
 		const days = getDaysInRange(range);
-		const avgLeft = totalLeftMs / (days * 1000 * 60); // convert ms → minutes
-		const avgRight = totalRightMs / (days * 1000 * 60); // convert ms → minutes
+
+		const avgLeft = totalLeftMs / (days * 1000 * 60); // ms → minutes
+		const avgRight = totalRightMs / (days * 1000 * 60); // ms → minutes
+		const avgOz = totalOz / days; // average oz per day
 
 		return [
-			`Averages ${avgLeft.toFixed(2)}mins per day on left`,
-			`Averages ${avgRight.toFixed(2)}mins per day on right`,
+			`Averages ${avgLeft.toFixed(2)} mins per day on left`,
+			`Averages ${avgRight.toFixed(2)} mins per day on right`,
+			`Averages ${avgOz.toFixed(2)} oz per day`, // new
 		];
 	},
 	sleep: (data, range) => {
