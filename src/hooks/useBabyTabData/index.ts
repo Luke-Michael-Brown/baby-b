@@ -5,14 +5,14 @@ import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom';
 import selectedBabyAtom from '../../atoms/selectedBabyAtom';
 
 export default function useBabyTabData() {
-	const { fetchCsvFromDrive } = useGoogleAPI();
+	const { fetchJsonFromDrive } = useGoogleAPI();
 	const selectedTab = useAtomValue(selectedTabAtom);
 	const tab = TABS[selectedTab];
 	const selectedBaby = useAtomValue(selectedBabyAtom);
 
 	return useQuery({
 		queryKey: ['babies-data'],
-		queryFn: () => fetchCsvFromDrive(),
+		queryFn: () => fetchJsonFromDrive(),
 		select: (data) => data[selectedBaby][tab].filter((entry) => entry.isShown).map((entry) => ({
 			...entry,
 			start_time: new Date(entry.start_time).toLocaleString(),

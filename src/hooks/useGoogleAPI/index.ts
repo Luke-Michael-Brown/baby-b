@@ -163,7 +163,7 @@ export default function useGoogleAPI() {
   // -------------------------------
   // 🔹 Fetch JSON (cached folder IDs reused)
   // -------------------------------
-  const fetchCsvFromDrive = useCallback(
+  const fetchJsonFromDrive = useCallback(
     async (filePath: string = "baby_b_tracker/babies_data.json") => {
       const { fileId } = await resolvePath(filePath);
       if (!fileId) throw new Error(`File "${filePath}" not found in Drive.`);
@@ -236,7 +236,7 @@ export default function useGoogleAPI() {
     accessToken,
     getAccessToken,
     currentUser,
-    fetchCsvFromDrive,
+    fetchJsonFromDrive,
     uploadJsonToDrive,
   };
 }
