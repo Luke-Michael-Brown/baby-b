@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import TabBar from "./components/TabBar";
 import TabContent from "./components/TabContent";
 import Footer from "./components/Footer";
+import UpdateToast from "./components/UpdateToast";
 import Box from "@mui/material/Box";
 import { getTheme } from "./theme";
 import useGoogleAPI from "./hooks/useGoogleAPI";
@@ -58,6 +59,7 @@ function App({ setMode }: Props) {
         <TabContent />
       </Box>
       <Footer />
+      <UpdateToast />
     </Box>
   );
 }

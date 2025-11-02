@@ -1,6 +1,7 @@
 import * as React from "react";
 import dayjs from "dayjs";
-import { useAtomValue } from 'jotai';
+import { useAtomValue } from "jotai";
+import { useQueryClient } from "@tanstack/react-query";
 import Button from "@mui/material/Button";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Dialog from "@mui/material/Dialog";
@@ -15,8 +16,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { COLUMNS } from "../../atoms/selectedTabAtom";
 import selectedBabyAtom from "../../atoms/selectedBabyAtom";
-import useBabiesData from '../../hooks/useBabiesData';
-import useGoogleAPI from '../../hooks/useGoogleAPI';
+import useBabiesData from "../../hooks/useBabiesData";
+import useGoogleAPI from "../../hooks/useGoogleAPI";
 
 export const DEFAULT_ENTRY_DIALOG_PROPS = {
   tab: "",
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export default function EntryDialog({ tab, open, handleClose }: Props) {
+  const qc = useQueryClient();
   const { data: babiesData } = useBabiesData();
   const { uploadJsonToDrive } = useGoogleAPI();
   const selectedBaby = useAtomValue(selectedBabyAtom);
@@ -68,17 +70,18 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
       ...formValues,
       babyName: selectedBaby,
       isShown: true,
-      timestamp: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+      timestamp: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
       id: crypto.randomUUID(),
     });
 
     setIsLoading(true);
     try {
-      await uploadJsonToDrive(babiesData);      
+      await uploadJsonToDrive(babiesData);
     } catch {
       setIsLoading(false);
     }
 
+    qc.invalidateQueries({ queryKey: ["babies-data"], exact: true });
     handleClose();
   };
 
@@ -155,7 +158,9 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button disabled={isLoading} onClick={handleClose}>Cancel</Button>
+        <Button disabled={isLoading} onClick={handleClose}>
+          Cancel
+        </Button>
         <Button
           loading={isLoading}
           type="submit"
