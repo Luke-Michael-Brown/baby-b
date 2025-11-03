@@ -87,10 +87,13 @@ export default function useGoogleAPI() {
   const signOut = useCallback(async () => {
     if (accessToken) {
       try {
-        await fetch(`https://oauth2.googleapis.com/revoke?token=${accessToken}`, {
-          method: "POST",
-          headers: { "Content-type": "application/x-www-form-urlencoded" },
-        });
+        await fetch(
+          `https://oauth2.googleapis.com/revoke?token=${accessToken}`,
+          {
+            method: "POST",
+            headers: { "Content-type": "application/x-www-form-urlencoded" },
+          },
+        );
       } catch (err) {
         console.warn("Token revoke failed", err);
       }
@@ -125,7 +128,7 @@ export default function useGoogleAPI() {
 
       const parts = filePath.split("/");
       const fileName = parts.pop()!;
-      let parentId = "root";
+      let parentId: string | null = "root";
 
       for (const folderName of parts) {
         const cacheKey = `${parentId}/${folderName}`;
@@ -134,8 +137,9 @@ export default function useGoogleAPI() {
           continue;
         }
 
+        // Search for folder either in My Drive or shared with me
         const folderRes = await fetch(
-          `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and '${parentId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
+          `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
           { headers: { Authorization: `Bearer ${accessToken}` } },
         );
         const folderData = await folderRes.json();
@@ -143,34 +147,45 @@ export default function useGoogleAPI() {
         if (folderData.files?.length) {
           parentId = folderData.files[0].id;
           idCache.current.set(cacheKey, parentId);
-        } else if (createMissing) {
-          const createRes = await fetch(`https://www.googleapis.com/drive/v3/files`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
+        } else if (createMissing && parentId !== "root") {
+          // Only create if inside a known parent folder
+          const createRes = await fetch(
+            `https://www.googleapis.com/drive/v3/files`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: folderName,
+                mimeType: "application/vnd.google-apps.folder",
+                parents: [parentId],
+              }),
             },
-            body: JSON.stringify({
-              name: folderName,
-              mimeType: "application/vnd.google-apps.folder",
-              parents: [parentId],
-            }),
-          });
+          );
           const created = await createRes.json();
           parentId = created.id;
           idCache.current.set(cacheKey, parentId);
         } else {
-          throw new Error(`Folder "${folderName}" not found.`);
+          throw new Error(
+            `Folder "${folderName}" not found or not shared with you.`,
+          );
         }
       }
 
       const fileCacheKey = `${parentId}/${fileName}`;
       if (idCache.current.has(fileCacheKey)) {
-        return { parentId, fileName, fileId: idCache.current.get(fileCacheKey)! };
+        return {
+          parentId,
+          fileName,
+          fileId: idCache.current.get(fileCacheKey)!,
+        };
       }
 
+      // Search for file in My Drive or shared with me
       const fileRes = await fetch(
-        `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and '${parentId}' in parents and trashed=false&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
+        `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       const fileData = await fileRes.json();
