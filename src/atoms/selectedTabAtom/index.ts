@@ -11,9 +11,9 @@ export type TabKey =
 	| "summary"
 	| "sleep"
 	| "diaper"
-	| "nursing"
+	| "nurse"
 	| "bottle"
-	| "pumping";
+	| "pump";
 
 export type RangeOption = "Last Week" | "Last Month" | "Last Year";
 
@@ -69,7 +69,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			selectFields: ["Pee", "Poo", "Pee & Poo"],
 		},
 	],
-	nursing: [
+	nurse: [
 		{
 			flex: 1,
 			field: "start_time",
@@ -99,7 +99,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 		},
 		{ flex: 1, field: "extra1", headerName: "Amount (oz)", formType: "number" },
 	],
-	pumping: [
+	pump: [
 		{
 			flex: 1,
 			field: "start_time",
@@ -121,9 +121,9 @@ export const TABS_TO_ICON: { [key: string]: any } = {
 	summary: ChildFriendlyIcon,
 	sleep: CribIcon,
 	diaper: BabyChangingStationIcon,
-	nursing: PregnantWomanIcon,
+	nurse: PregnantWomanIcon,
 	bottle: WaterDropIcon,
-	pumping: JoinInnerIcon,
+	pump: JoinInnerIcon,
 };
 
 // --- Helpers ---
@@ -205,7 +205,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		];
 	},
 
-	nursing: (data, range) => {
+	nurse: (data, range) => {
 		const filteredData = filterByRange(data, range);
 		if (filteredData.length === 0) return ["No data yet"];
 
@@ -236,7 +236,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		];
 	},
 
-	pumping: (data, range) => {
+	pump: (data, range) => {
 		const filteredData = filterByRange(data, range);
 		if (filteredData.length === 0) return ["No data yet"];
 
@@ -310,9 +310,9 @@ export const TABS: string[] = [
 	"summary",
 	"sleep",
 	"diaper",
-	"nursing",
+	"nurse",
 	"bottle",
-	"pumping",
+	"pump",
 ];
 
 export const selectedTabAtom = atom<number>(0);

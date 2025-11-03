@@ -10,8 +10,8 @@ declare module '@mui/material/styles' {
     summary: Palette['primary'];
     sleep: Palette['primary'];
     diaper: Palette['primary'];
-    nursing: Palette['primary'];
-    pumping: Palette['primary'];
+    nurse: Palette['primary'];
+    pump: Palette['primary'];
     bottle: Palette['primary'];
   }
   interface PaletteOptions {
@@ -19,8 +19,8 @@ declare module '@mui/material/styles' {
     summary?: PaletteOptions['primary'];
     sleep?: PaletteOptions['primary'];
     diaper?: PaletteOptions['primary'];
-    nursing?: PaletteOptions['primary'];
-    pumping?: PaletteOptions['primary'];
+    nurse?: PaletteOptions['primary'];
+    pump?: PaletteOptions['primary'];
     bottle?: PaletteOptions['primary'];
   }
 }
@@ -63,8 +63,8 @@ const lightPalette: ThemeOptions['palette'] = {
   summary: { main: '#4dabf5', contrastText: '#fff' },    // subtle blue
   sleep: { main: '#b39ddb', contrastText: '#fff' },      // soft purple
   diaper: { main: '#81c784', contrastText: '#fff' },     // soft green
-  nursing: { main: '#fff176', contrastText: '#121212' }, // muted yellow
-  pumping: { main: '#e57373', contrastText: '#fff' },    // soft red
+  nurse: { main: '#fff176', contrastText: '#121212' }, // muted yellow
+  pump: { main: '#e57373', contrastText: '#fff' },    // soft red
   bottle: { main: '#ffb74d', contrastText: '#121212' },  // soft orange
   background: { default: '#f9f9f9', paper: '#ffffff' },
   divider: '#e0e0e0',
@@ -79,8 +79,8 @@ const darkPalette: ThemeOptions['palette'] = {
   summary: { main: '#42a5f5', contrastText: '#121212' },    // gentle blue
   sleep: { main: '#9575cd', contrastText: '#121212' },      // muted purple
   diaper: { main: '#66bb6a', contrastText: '#121212' },     // muted green
-  nursing: { main: '#ffee58', contrastText: '#121212' },    // soft yellow
-  pumping: { main: '#ef5350', contrastText: '#ffffff' },    // muted red
+  nurse: { main: '#ffee58', contrastText: '#121212' },    // soft yellow
+  pump: { main: '#ef5350', contrastText: '#ffffff' },    // muted red
   bottle: { main: '#ffa726', contrastText: '#121212' },     // soft orange
   background: { default: '#101010', paper: '#1c1c1c' },
   divider: 'rgba(255,255,255,0.2)',

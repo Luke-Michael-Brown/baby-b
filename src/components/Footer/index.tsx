@@ -31,11 +31,9 @@ function Footer() {
 			>
 				<Stack
 					sx={{ px: 2, py: 1 }}
-					direction="row"
 					spacing={2}
-					alignItems="center"
 				>
-					<Typography variant="subtitle2">Add Entry:</Typography>
+					<Typography variant="subtitle2">Add Entry</Typography>
 					<ButtonGroup size="large" variant="contained" color="primary">
 						{TABS.slice(1).map((tab) => (
 							<Button onClick={() => onAddButtonClicked(tab)} key={tab}>

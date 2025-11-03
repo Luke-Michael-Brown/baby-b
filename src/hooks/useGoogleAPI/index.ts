@@ -147,7 +147,7 @@ export default function useGoogleAPI() {
         if (folderData.files?.length) {
           parentId = folderData.files[0].id;
           if (parentId) {
-          idCache.current.set(cacheKey, parentId);            
+            idCache.current.set(cacheKey, parentId);            
           }
         } else if (createMissing && parentId !== "root") {
           // Only create if inside a known parent folder
