@@ -214,7 +214,13 @@ export default function useGoogleAPI() {
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       if (!jsonRes.ok) throw new Error("Failed to fetch JSON file.");
-      return await jsonRes.json();
+      let json = null;
+      try {
+        json = await jsonRes.json();
+      } catch (err) {
+        console.error(err);
+      }
+      return json;
     },
     [accessToken, resolvePath],
   );

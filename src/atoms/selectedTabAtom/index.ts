@@ -73,12 +73,6 @@ export const COLUMNS = {
 		},
 		{
 			flex: 1,
-			field: "end_time",
-			headerName: "End Time",
-			formType: "datePicker",
-		},
-		{
-			flex: 1,
 			field: "extra1",
 			headerName: "Amount (oz)",
 			formType: "number",
@@ -89,12 +83,6 @@ export const COLUMNS = {
 			flex: 1,
 			field: "start_time",
 			headerName: "Start Time",
-			formType: "datePicker",
-		},
-		{
-			flex: 1,
-			field: "end_time",
-			headerName: "End Time",
 			formType: "datePicker",
 		},
 		{
@@ -168,8 +156,7 @@ export const TAB_TO_SUMMARY_DATA = {
 
 		let totalOz = 0;
 		filteredData.forEach((entry) => {
-			const ozMatch = entry.extra1.match(/([\d.]+)\s*oz/i);
-			if (ozMatch) totalOz += parseFloat(ozMatch[1]);
+			totalOz += entry.extra1;
 		});
 
 		const days = getDaysInRange(range);
