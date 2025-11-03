@@ -49,7 +49,6 @@ function SummaryItem({ tab }: Props) {
           onChange={(event, newRange) => {
             if (newRange !== null) setRange(newRange);
           }}
-          size="small"
         >
           {RANGES.map((r) => (
             <ToggleButton

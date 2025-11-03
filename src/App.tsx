@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAtom } from 'jotai';
+import { useAtom } from "jotai";
 import {
   ThemeProvider,
   CssBaseline,
@@ -27,7 +27,7 @@ function App({ setMode }: Props) {
   const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
   useEffect(() => {
     if (selectedBaby === null && !isLoading) {
-      setSelectedBaby(babiesList[0])
+      setSelectedBaby(babiesList[0]);
     }
   }, [selectedBaby, babiesList]);
 
@@ -38,6 +38,7 @@ function App({ setMode }: Props) {
         flex: 1,
         flexDirection: "column",
         height: "100vh",
+        width: '100%',
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -48,18 +49,25 @@ function App({ setMode }: Props) {
     <Box
       sx={{
         display: "flex",
-        flex: 1,
         flexDirection: "column",
         height: "100vh",
+        width: '100%',
       }}
     >
       <Header setMode={setMode} />
       <TabBar />
-      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", p: 2 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
+          pb: "64px",
+        }}
+      >
         <TabContent />
       </Box>
       <Footer />
-      <UpdateToast />
     </Box>
   );
 }
@@ -71,7 +79,7 @@ function AppContainer() {
   const setMode = (newMode) => {
     _setMode(newMode);
     localStorage.setItem("mode", newMode);
-  }
+  };
   const theme = useTheme(mode);
   const { isSignedIn, signIn, accessToken } = useGoogleAPI();
 
@@ -88,6 +96,7 @@ function AppContainer() {
             flex: 1,
             flexDirection: "column",
             height: "100vh",
+            width: '100%',
           }}
         >
           <Alert severity="info" sx={{ mb: 2 }}>

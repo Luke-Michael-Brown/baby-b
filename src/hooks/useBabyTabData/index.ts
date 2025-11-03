@@ -18,7 +18,7 @@ interface Props {
   overrideTab?: string;
 }
 
-export default function useBabyTabData({ overrideTab }: Props) {
+export default function useBabyTabData({ overrideTab }: Props = {}) {
   const { fetchJsonFromDrive } = useGoogleAPI();
   const selectedTab = useAtomValue(selectedTabAtom);
   const tab = overrideTab ?? TABS[selectedTab];

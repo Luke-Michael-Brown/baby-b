@@ -13,7 +13,7 @@ function DataTab() {
 	const { data: tabData, error } = useBabyTabData();
 
 	return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, px: 1, py: 1 }}>
 			<Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
 	      <DataGrid
 	        rows={tabData}
