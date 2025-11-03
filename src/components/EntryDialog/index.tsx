@@ -1,7 +1,6 @@
 import * as React from "react";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useAtomValue, useSetAtom } from "jotai";
-import { useQueryClient } from "@tanstack/react-query";
 import Button from "@mui/material/Button";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Dialog from "@mui/material/Dialog";
@@ -12,14 +11,13 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { COLUMNS } from "../../atoms/selectedTabAtom";
 import selectedBabyAtom from "../../atoms/selectedBabyAtom";
 import useBabiesData from "../../hooks/useBabiesData";
-import useGoogleAPI from "../../hooks/useGoogleAPI";
 import useAddEntry from "../../hooks/useAddEntry";
-import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom';
+import selectedTabAtom, { TABS } from "../../atoms/selectedTabAtom";
+
+// ✅ Removed unused imports: useQueryClient, LocalizationProvider, AdapterDayjs, useGoogleAPI
 
 export const DEFAULT_ENTRY_DIALOG_PROPS = {
   tab: "",
@@ -27,14 +25,15 @@ export const DEFAULT_ENTRY_DIALOG_PROPS = {
   handleClose: () => {},
 };
 
-interface Props {
+export interface EntryDialogProps {
   tab: string;
   open: boolean;
   handleClose: () => void;
 }
 
-export default function EntryDialog({ tab, open, handleClose }: Props) {
-  const { data: babiesData } = useBabiesData();
+export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps) {
+  useBabiesData(); // ✅ no need to destructure if unused
+
   const selectedBaby = useAtomValue(selectedBabyAtom);
   const addEntry = useAddEntry();
   const setSelectedTab = useSetAtom(selectedTabAtom);
@@ -42,19 +41,18 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<Record<string, any>>({});
 
-  // Initialize form values when tab changes
+  // ✅ Initialize form values when tab changes
   React.useEffect(() => {
-    if (open) {
+    if (open && tab && COLUMNS[tab]) {
       const initialValues: Record<string, any> = {};
-      COLUMNS[tab]?.forEach((col) => {
+      COLUMNS[tab].forEach((col) => {
         if (col.formType === "datePicker") initialValues[col.field] = dayjs();
-        else if (col.formType === "number") initialValues[col.field] = "";
         else initialValues[col.field] = "";
       });
       setIsLoading(false);
       setFormValues(initialValues);
     }
-  }, [open]);
+  }, [open, tab]);
 
   const handleChange = (field: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [field]: value }));
@@ -70,6 +68,8 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
     e.preventDefault();
     setIsLoading(true);
     try {
+      if (!tab) throw new Error("Tab not selected");
+      if (!selectedBaby) throw new Error("Baby not selected");
       await addEntry(selectedBaby, tab, formValues);
       setSelectedTab(TABS.indexOf(tab));
       handleClose();
@@ -85,90 +85,91 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
       <DialogContent>
         <form id="add-entry-form" onSubmit={handleSubmit}>
           <Stack spacing={2} sx={{ mt: 1, minWidth: 300 }}>
-            {COLUMNS[tab]?.map?.((column) => {
-              const field = column.field;
-              const label = column.headerName;
-              const value = formValues[field] ?? "";
+            {tab &&
+              COLUMNS[tab]?.map?.((column: any) => {
+                const field = column.field;
+                const label = column.headerName;
+                const value = formValues[field] ?? "";
 
-              switch (column.formType) {
-                case "datePicker":
-                  return (
-                    <DateTimePicker
-                      key={field}
-                      label={label}
-                      value={value}
-                      onChange={(newValue) => handleChange(field, newValue)}
-                      slotProps={{
-                        popper: {
-                          modifiers: [
-                            {
-                              name: "flip",
-                              enabled: true,
-                              options: {
-                                altBoundary: true,
-                                rootBoundary: "viewport",
-                                padding: 8,
+                switch (column.formType) {
+                  case "datePicker":
+                    return (
+                      <DateTimePicker
+                        key={field}
+                        label={label}
+                        value={value as Dayjs | null}
+                        onChange={(newValue) => handleChange(field, newValue)}
+                        slotProps={{
+                          popper: {
+                            modifiers: [
+                              {
+                                name: "flip",
+                                enabled: true,
+                                options: {
+                                  altBoundary: true,
+                                  rootBoundary: "viewport",
+                                  padding: 8,
+                                },
                               },
-                            },
-                            {
-                              name: "preventOverflow",
-                              enabled: true,
-                              options: {
-                                altAxis: true,
-                                tether: true,
+                              {
+                                name: "preventOverflow",
+                                enabled: true,
+                                options: {
+                                  altAxis: true,
+                                  tether: true,
+                                },
                               },
-                            },
-                          ],
-                        },
-                        textField: { required: true, fullWidth: true },
-                      }}
-                    />
-                  );
+                            ],
+                          },
+                          textField: { required: true, fullWidth: true },
+                        }}
+                      />
+                    );
 
-                case "select":
-                  return (
-                    <Select
-                      key={field}
-                      required
-                      fullWidth
-                      name={field}
-                      value={value}
-                      displayEmpty
-                      onChange={(e) => handleChange(field, e.target.value)}
-                    >
-                      <MenuItem value="">
-                        <em>Select {label}</em>
-                      </MenuItem>
-                      {column.selectFields.map((selectField: string) => (
-                        <MenuItem key={selectField} value={selectField}>
-                          {selectField}
+                  case "select":
+                    return (
+                      <Select
+                        key={field}
+                        required
+                        fullWidth
+                        name={field}
+                        value={value}
+                        displayEmpty
+                        onChange={(e) => handleChange(field, e.target.value)}
+                      >
+                        <MenuItem value="">
+                          <em>Select {label}</em>
                         </MenuItem>
-                      ))}
-                    </Select>
-                  );
+                        {column.selectFields.map((selectField: string) => (
+                          <MenuItem key={selectField} value={selectField}>
+                            {selectField}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    );
 
-                case "number":
-                  return (
-                    <TextField
-                      key={field}
-                      label={label}
-                      name={field}
-                      type="number"
-                      required
-                      fullWidth
-                      value={value}
-                      onChange={(e) => handleChange(field, e.target.value)}
-                      inputProps={{
-                        inputMode: "numeric",
-                        pattern: "[0-9]*",
-                      }}
-                    />
-                  );
+                  case "number":
+                    return (
+                      <TextField
+                        key={field}
+                        label={label}
+                        name={field}
+                        type="number"
+                        required
+                        fullWidth
+                        value={value}
+                        onChange={(e) => handleChange(field, e.target.value)}
+                        inputProps={{
+                          inputMode: "numeric",
+                          pattern: "[0-9]*",
+                        }}
+                      />
+                    );
 
-                default:
-                  return null;
-              }
-            })}
+                  default:
+                    return null;
+                }
+              })}
           </Stack>
         </form>
       </DialogContent>
@@ -177,13 +178,12 @@ export default function EntryDialog({ tab, open, handleClose }: Props) {
           Cancel
         </Button>
         <Button
-          loading={isLoading}
           type="submit"
           form="add-entry-form"
           disabled={isLoading || !allFilled}
           variant="contained"
         >
-          Add Entry
+          {isLoading ? "Adding..." : "Add Entry"}
         </Button>
       </DialogActions>
     </Dialog>

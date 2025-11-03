@@ -10,7 +10,7 @@ export default function BasicTabs() {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
 

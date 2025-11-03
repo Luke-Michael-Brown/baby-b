@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Snackbar, Alert } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { Snackbar } from '@mui/material';
 import useBabiesData from '../../hooks/useBabiesData';
 
 export default function UpdateToast() {

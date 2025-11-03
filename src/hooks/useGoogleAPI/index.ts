@@ -131,7 +131,7 @@ export default function useGoogleAPI() {
       let parentId: string | null = "root";
 
       for (const folderName of parts) {
-        const cacheKey = `${parentId}/${folderName}`;
+        const cacheKey: string = `${parentId}/${folderName}`;
         if (idCache.current.has(cacheKey)) {
           parentId = idCache.current.get(cacheKey)!;
           continue;
@@ -146,7 +146,9 @@ export default function useGoogleAPI() {
 
         if (folderData.files?.length) {
           parentId = folderData.files[0].id;
-          idCache.current.set(cacheKey, parentId);
+          if (parentId) {
+          idCache.current.set(cacheKey, parentId);            
+          }
         } else if (createMissing && parentId !== "root") {
           // Only create if inside a known parent folder
           const createRes = await fetch(
@@ -165,8 +167,12 @@ export default function useGoogleAPI() {
             },
           );
           const created = await createRes.json();
-          parentId = created.id;
-          idCache.current.set(cacheKey, parentId);
+          if (created.id) {
+            parentId = created.id;            
+          }
+          if (parentId) {
+            idCache.current.set(cacheKey, parentId);            
+          }
         } else {
           throw new Error(
             `Folder "${folderName}" not found or not shared with you.`,

@@ -1,27 +1,34 @@
 import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { TABS } from "../../atoms/selectedTabAtom";
-import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from '../EntryDialog';
-import ThemedAppBar from '../ThemedAppBar';
+import type { EntryDialogProps } from "../EntryDialog";
+import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from "../EntryDialog";
+import ThemedAppBar from "../ThemedAppBar";
 
 function Footer() {
-	const [entryDialogProps, setEntryDialogProps] = useState(DEFAULT_ENTRY_DIALOG_PROPS);
-	const onAddButtonClicked = (tab) => {
+	const [entryDialogProps, setEntryDialogProps] = useState<EntryDialogProps>(
+		DEFAULT_ENTRY_DIALOG_PROPS,
+	);
+	const onAddButtonClicked = (tab: string) => {
 		setEntryDialogProps({
 			tab,
 			open: true,
-			handleClose: () => setEntryDialogProps((oldProps) => ({ ...oldProps, open: false })),
+			handleClose: () =>
+				setEntryDialogProps((oldProps) => ({ ...oldProps, open: false })),
 		});
 	};
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
-			<ThemedAppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }}>
+			<ThemedAppBar
+				position="fixed"
+				color="primary"
+				sx={{ top: "auto", bottom: 0 }}
+			>
 				<Stack
 					sx={{ px: 2, py: 1 }}
 					direction="row"

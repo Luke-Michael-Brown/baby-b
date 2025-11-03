@@ -11,7 +11,6 @@ import Header from "./components/Header";
 import TabBar from "./components/TabBar";
 import TabContent from "./components/TabContent";
 import Footer from "./components/Footer";
-import UpdateToast from "./components/UpdateToast";
 import Box from "@mui/material/Box";
 import { useTheme } from "./theme";
 import useGoogleAPI from "./hooks/useGoogleAPI";
@@ -26,7 +25,7 @@ function App({ setMode }: Props) {
   const { data: babiesList, isLoading } = useBabiesList();
   const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
   useEffect(() => {
-    if (selectedBaby === null && !isLoading) {
+    if (selectedBaby === null && !isLoading && babiesList && babiesList.length > 0) {
       setSelectedBaby(babiesList[0]);
     }
   }, [selectedBaby, babiesList]);
@@ -76,12 +75,12 @@ function AppContainer() {
   const [mode, _setMode] = useState<"light" | "dark">(
     localStorage.getItem("mode") === "dark" ? "dark" : "light",
   );
-  const setMode = (newMode) => {
+  const setMode = (newMode: "light" | "dark") => {
     _setMode(newMode);
     localStorage.setItem("mode", newMode);
   };
   const theme = useTheme(mode);
-  const { isSignedIn, signIn, accessToken } = useGoogleAPI();
+  const { isSignedIn, signIn } = useGoogleAPI();
 
   return (
     <ThemeProvider theme={theme}>

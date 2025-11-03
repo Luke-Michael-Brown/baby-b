@@ -8,17 +8,18 @@ const paginationModel = { page: 0, pageSize: 10 };
 function DataTab() {
 	const selectedTab = useAtomValue(selectedTabAtom);
 	const tab = TABS[selectedTab];
-	const { data: tabData, error } = useBabyTabData();
+	const { data: tabData } = useBabyTabData();
 
-	return (
+	const columns = COLUMNS[tab];
+	return columns ? (
 		<DataGrid
 			rows={tabData}
-			columns={COLUMNS[tab]}
+			columns={columns}
 			initialState={{ pagination: { paginationModel } }}
 			pageSizeOptions={[5, 10]}
 			sx={{ border: 0 }}
 		/>
-	);
+	) : null;
 }
 
 export default DataTab;

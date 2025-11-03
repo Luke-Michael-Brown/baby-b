@@ -1,30 +1,16 @@
 import React from "react";
 import { Box, useTheme } from "@mui/material";
+import type { Palette, PaletteColor } from "@mui/material/styles";
 
 interface ThemedAppBarProps {
   position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
-  color?:
-    | "primary"
-    | "secondary"
-    | "neutral"
-    | "blue"
-    | "purple"
-    | "green"
-    | "yellow"
-    | "red"
-    | "orange";
+  color?: keyof Palette | string;
   sx?: any;
   children?: React.ReactNode;
 }
 
 /**
- * A theme-aware AppBar replacement that supports custom palette colors
- * and ensures all child MUI components (icons, selects, buttons)
- * use the correct contrast color automatically.
- *
- * Usage:
- *  <ThemedAppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
- *  <ThemedAppBar color="purple" position="static">
+ * A theme-aware AppBar replacement that supports custom palette colors.
  */
 export default function ThemedAppBar({
   position = "static",
@@ -33,7 +19,10 @@ export default function ThemedAppBar({
   children,
 }: ThemedAppBarProps) {
   const theme = useTheme();
-  const paletteColor = theme.palette[color] || theme.palette.primary;
+
+  // Try to get a known palette color safely
+  const paletteColor: PaletteColor =
+    (theme.palette[color as keyof Palette] as PaletteColor) || theme.palette.primary;
 
   return (
     <Box
@@ -74,7 +63,7 @@ export default function ThemedAppBar({
           color: paletteColor.contrastText,
         },
 
-        ...sx, // allow user overrides like standard AppBar
+        ...sx,
       }}
     >
       {children}

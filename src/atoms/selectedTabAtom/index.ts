@@ -6,7 +6,33 @@ import PregnantWomanIcon from "@mui/icons-material/PregnantWoman";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import JoinInnerIcon from "@mui/icons-material/JoinInner";
 
-export const COLUMNS = {
+// --- Types ---
+export type TabKey =
+	| "summary"
+	| "sleep"
+	| "diaper"
+	| "nursing"
+	| "bottle"
+	| "pumping";
+
+export type RangeOption = "Last Week" | "Last Month" | "Last Year";
+
+type COLUMN_ENTRY =
+	| {
+			flex: number;
+			field: string;
+			headerName: string;
+			formType: string;
+	  }
+	| {
+			flex: number;
+			field: string;
+			headerName: string;
+			formType: "select";
+			selectFields: string[];
+	  };
+
+export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 	sleep: [
 		{
 			flex: 1,
@@ -71,12 +97,7 @@ export const COLUMNS = {
 			headerName: "Start Time",
 			formType: "datePicker",
 		},
-		{
-			flex: 1,
-			field: "extra1",
-			headerName: "Amount (oz)",
-			formType: "number",
-		},
+		{ flex: 1, field: "extra1", headerName: "Amount (oz)", formType: "number" },
 	],
 	pumping: [
 		{
@@ -92,16 +113,11 @@ export const COLUMNS = {
 			formType: "select",
 			selectFields: ["Left", "Right", "Both"],
 		},
-		{
-			flex: 1,
-			field: "extra2",
-			headerName: "Amount (oz)",
-			formType: "number",
-		},
+		{ flex: 1, field: "extra2", headerName: "Amount (oz)", formType: "number" },
 	],
 };
 
-export const TABS_TO_ICON = {
+export const TABS_TO_ICON: { [key: string]: any } = {
 	summary: ChildFriendlyIcon,
 	sleep: CribIcon,
 	diaper: BabyChangingStationIcon,
@@ -110,10 +126,10 @@ export const TABS_TO_ICON = {
 	pumping: JoinInnerIcon,
 };
 
-// Helper: get start date based on range
-function getStartDate(range) {
+// --- Helpers ---
+function getStartDate(range: RangeOption): Date {
 	const now = new Date();
-	let startDate;
+	let startDate: Date;
 
 	switch (range) {
 		case "Last Week":
@@ -135,38 +151,39 @@ function getStartDate(range) {
 	return startDate;
 }
 
-// Helper: filters entries by a date range
-function filterByRange(data, range) {
+function filterByRange(data: any[], range: RangeOption): any[] {
 	const startDate = getStartDate(range);
 	return data.filter((entry) => new Date(entry.timestamp) >= startDate);
 }
 
-// Helper: computes number of days between start date and now
-function getDaysInRange(range) {
+function getDaysInRange(range: RangeOption): number {
 	const now = new Date();
 	const startDate = getStartDate(range);
-	return (now - startDate) / (1000 * 60 * 60 * 24); // milliseconds → days
+	return (now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
 }
 
-export const TAB_TO_SUMMARY_DATA = {
+// --- Summary Generators ---
+export const TAB_TO_SUMMARY_DATA: Record<
+	string,
+	(data: any[], range: RangeOption) => string[]
+> = {
 	bottle: (data, range) => {
 		const filteredData = filterByRange(data, range);
-
 		if (filteredData.length === 0) return ["No data yet"];
 
 		let totalOz = 0;
 		filteredData.forEach((entry) => {
-			totalOz += entry.extra1;
+			const oz = parseFloat(entry.extra1);
+			if (!isNaN(oz)) totalOz += oz;
 		});
 
 		const days = getDaysInRange(range);
 		const avgPerDay = totalOz / days;
-
 		return [`Averages ${avgPerDay.toFixed(2)}oz per day`];
 	},
+
 	diaper: (data, range) => {
 		const filteredData = filterByRange(data, range);
-
 		if (filteredData.length === 0) return ["No data yet"];
 
 		let totalPee = 0;
@@ -187,9 +204,9 @@ export const TAB_TO_SUMMARY_DATA = {
 			`Averages ${avgPoo.toFixed(2)} poops per day`,
 		];
 	},
+
 	nursing: (data, range) => {
 		const filteredData = filterByRange(data, range);
-
 		if (filteredData.length === 0) return ["No data yet"];
 
 		let totalLeftMs = 0;
@@ -197,73 +214,67 @@ export const TAB_TO_SUMMARY_DATA = {
 
 		filteredData.forEach((entry) => {
 			const start = new Date(entry.start_time);
-			const end = new Date(entry.end_time);
-			const duration = end - start; // milliseconds
+			const end = new Date(entry.end_time ?? start);
+			const duration = end.getTime() - start.getTime();
 
 			const side = entry.extra1.toLowerCase();
-			if (side === "left") {
-				totalLeftMs += duration;
-			} else if (side === "right") {
-				totalRightMs += duration;
-			} else if (side === "both") {
+			if (side === "left") totalLeftMs += duration;
+			else if (side === "right") totalRightMs += duration;
+			else if (side === "both") {
 				totalLeftMs += duration / 2;
 				totalRightMs += duration / 2;
 			}
 		});
 
 		const days = getDaysInRange(range);
-		const avgLeft = totalLeftMs / (days * 1000 * 60); // convert ms → minutes
-		const avgRight = totalRightMs / (days * 1000 * 60); // convert ms → minutes
+		const avgLeft = totalLeftMs / (days * 1000 * 60);
+		const avgRight = totalRightMs / (days * 1000 * 60);
 
 		return [
 			`Averages ${avgLeft.toFixed(2)}mins per day on left`,
 			`Averages ${avgRight.toFixed(2)}mins per day on right`,
 		];
 	},
+
 	pumping: (data, range) => {
 		const filteredData = filterByRange(data, range);
-
 		if (filteredData.length === 0) return ["No data yet"];
 
 		let totalLeftMs = 0;
 		let totalRightMs = 0;
-		let totalOz = 0; // new
+		let totalOz = 0;
 
 		filteredData.forEach((entry) => {
 			const start = new Date(entry.start_time);
-			const end = new Date(entry.end_time);
-			const duration = end.getTime() - start.getTime(); // milliseconds
+			const end = new Date(entry.end_time ?? start);
+			const duration = end.getTime() - start.getTime();
 
 			const side = entry.extra1.toLowerCase();
-			if (side === "left") {
-				totalLeftMs += duration;
-			} else if (side === "right") {
-				totalRightMs += duration;
-			} else if (side === "both") {
+			if (side === "left") totalLeftMs += duration;
+			else if (side === "right") totalRightMs += duration;
+			else if (side === "both") {
 				totalLeftMs += duration / 2;
 				totalRightMs += duration / 2;
 			}
 
-			// accumulate ounces
-			const oz = parseFloat(entry.extra2);
+			const oz = parseFloat(entry.extra2 as string);
 			if (!isNaN(oz)) totalOz += oz;
 		});
 
 		const days = getDaysInRange(range);
-
-		const avgLeft = totalLeftMs / (days * 1000 * 60); // ms → minutes
-		const avgRight = totalRightMs / (days * 1000 * 60); // ms → minutes
-		const avgOz = totalOz / days; // average oz per day
+		const avgLeft = totalLeftMs / (days * 1000 * 60);
+		const avgRight = totalRightMs / (days * 1000 * 60);
+		const avgOz = totalOz / days;
 
 		return [
 			`Averages ${avgLeft.toFixed(2)} mins per day on left`,
 			`Averages ${avgRight.toFixed(2)} mins per day on right`,
-			`Averages ${avgOz.toFixed(2)} oz per day`, // new
+			`Averages ${avgOz.toFixed(2)} oz per day`,
 		];
 	},
+
 	sleep: (data, range) => {
 		const filteredData = filterByRange(data, range);
-
 		if (filteredData.length === 0) return ["No data yet"];
 
 		let totalSleepMs = 0;
@@ -272,18 +283,16 @@ export const TAB_TO_SUMMARY_DATA = {
 
 		filteredData.forEach((entry) => {
 			const start = new Date(entry.start_time);
-			const end = new Date(entry.end_time);
-			const duration = end - start;
+			const end = new Date(entry.end_time ?? start);
+			const duration = end.getTime() - start.getTime();
 
 			totalSleepMs += duration;
-
 			const type = entry.extra1.toLowerCase();
 			if (type === "nap") totalNapMs += duration;
 			else if (type === "night sleep") totalNightMs += duration;
 		});
 
 		const days = getDaysInRange(range);
-
 		const avgTotal = totalSleepMs / (days * 1000 * 60);
 		const avgNap = totalNapMs / (days * 1000 * 60);
 		const avgNight = totalNightMs / (days * 1000 * 60);
@@ -296,13 +305,15 @@ export const TAB_TO_SUMMARY_DATA = {
 	},
 };
 
-export const TABS = [
+// --- Tabs ---
+export const TABS: string[] = [
 	"summary",
 	"sleep",
 	"diaper",
 	"nursing",
 	"bottle",
 	"pumping",
-] as const;
-export const selectedTabAtom = atom<TabKey>(0);
+];
+
+export const selectedTabAtom = atom<number>(0);
 export default selectedTabAtom;

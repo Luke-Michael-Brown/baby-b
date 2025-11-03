@@ -46,7 +46,7 @@ function SummaryItem({ tab }: Props) {
         <ToggleButtonGroup
           value={range}
           exclusive
-          onChange={(event, newRange) => {
+          onChange={(_event, newRange) => {
             if (newRange !== null) setRange(newRange);
           }}
         >
