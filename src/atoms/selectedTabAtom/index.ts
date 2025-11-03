@@ -9,19 +9,19 @@ import JoinInnerIcon from "@mui/icons-material/JoinInner";
 export const COLUMNS = {
 	sleep: [
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "end_time",
 			headerName: "End Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 100,
+			flex: 1,
 			field: "extra1",
 			headerName: "Type",
 			formType: "select",
@@ -30,13 +30,13 @@ export const COLUMNS = {
 	],
 	diaper: [
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "extra1",
 			headerName: "Type",
 			formType: "select",
@@ -45,19 +45,19 @@ export const COLUMNS = {
 	],
 	nursing: [
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "end_time",
 			headerName: "End Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 100,
+			flex: 1,
 			field: "extra1",
 			headerName: "Left or Right",
 			formType: "select",
@@ -66,19 +66,19 @@ export const COLUMNS = {
 	],
 	bottle: [
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "end_time",
 			headerName: "End Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 100,
+			flex: 1,
 			field: "extra1",
 			headerName: "Amount (oz)",
 			formType: "number",
@@ -86,26 +86,26 @@ export const COLUMNS = {
 	],
 	pumping: [
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 175,
+			flex: 1,
 			field: "end_time",
 			headerName: "End Time",
 			formType: "datePicker",
 		},
 		{
-			minWidth: 100,
+			flex: 1,
 			field: "extra1",
 			headerName: "Left or Right",
 			formType: "select",
 			selectFields: ["Left", "Right", "Both"],
 		},
 		{
-			minWidth: 100,
+			flex: 1,
 			field: "extra2",
 			headerName: "Amount (oz)",
 			formType: "number",
