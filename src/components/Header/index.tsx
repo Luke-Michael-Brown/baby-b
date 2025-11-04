@@ -12,13 +12,17 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LogoutIcon from "@mui/icons-material/Logout";
 import type { SelectChangeEvent } from "@mui/material/Select";
+import { useState } from "react";
 
 import useGoogleAPI from "../../hooks/useGoogleAPI";
 import { useTheme } from "@mui/material/styles";
 import selectedBabyAtom from "../../atoms/selectedBabyAtom";
 import useBabiesList from "../../hooks/useBabiesList";
 import ThemedAppBar from "../ThemedAppBar";
-import selectedTabAtom, { TABS, TABS_TO_ICON } from "../../atoms/selectedTabAtom";
+import selectedTabAtom, {
+  TABS,
+  TABS_TO_ICON,
+} from "../../atoms/selectedTabAtom";
 
 interface Props {
   setMode: (newMode: "light" | "dark") => void;
@@ -43,11 +47,18 @@ function Header({ setMode }: Props) {
   };
 
   const qc = useQueryClient();
-  const refreshData = () => {
-    qc.invalidateQueries({
-      queryKey: ["babies-data"],
-      exact: true,
-    });
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const refreshData = async () => {
+    setIsRefreshing(true);
+    try {
+      await qc.invalidateQueries({
+        queryKey: ["babies-data"],
+        exact: true,
+      });
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const Icon = TABS_TO_ICON[tab];
@@ -75,17 +86,36 @@ function Header({ setMode }: Props) {
             </Select>
           </Stack>
 
-          <Stack sx={{ ml: "auto" }} direction="row" spacing={1} alignItems="center">
+          <Stack
+            sx={{ ml: "auto" }}
+            direction="row"
+            spacing={1}
+            alignItems="center"
+          >
             <Tooltip title="Toggle theme">
               <IconButton onClick={onToggleMode}>
                 {mode === "light" ? <DarkModeIcon /> : <LightModeIcon />}
               </IconButton>
             </Tooltip>
+
             <Tooltip title="Refresh data">
-              <IconButton onClick={refreshData}>
-                <RefreshIcon />
-              </IconButton>
+              <Box sx={{ position: "relative", display: "inline-flex" }}>
+                <IconButton onClick={refreshData} disabled={isRefreshing}>
+                  <RefreshIcon
+                    sx={{
+                      ...(isRefreshing && {
+                        animation: "spin 1s linear infinite",
+                        "@keyframes spin": {
+                          "0%": { transform: "rotate(0deg)" },
+                          "100%": { transform: "rotate(360deg)" },
+                        },
+                      }),
+                    }}
+                  />
+                </IconButton>
+              </Box>
             </Tooltip>
+
             <Tooltip title="Sign out">
               <IconButton onClick={signOut}>
                 <LogoutIcon />

@@ -129,7 +129,7 @@ export const TABS_TO_ICON: { [key: string]: any } = {
 				height: "3em",
 				verticalAlign: "middle",
 				filter:
-					theme.palette.mode === "dark"
+					theme.palette.mode === "light"
 						? "invert(1) brightness(1.2)"
 						: "none",
 			})}
