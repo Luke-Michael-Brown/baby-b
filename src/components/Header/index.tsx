@@ -57,7 +57,7 @@ function Header({ setMode }: Props) {
       <ThemedAppBar color="primary" position="static">
         <Stack sx={{ px: 2, py: 1 }} direction="row" alignItems="center">
           <Stack spacing={1} direction="row" alignItems="center">
-            <Icon />
+            <Icon sx={{ fontSize: "3em" }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Baby B
             </Typography>

@@ -1,10 +1,11 @@
 import { atom } from "jotai";
-import ChildFriendlyIcon from "@mui/icons-material/ChildFriendly";
+import Box from "@mui/material/Box";
 import CribIcon from "@mui/icons-material/Crib";
 import BabyChangingStationIcon from "@mui/icons-material/BabyChangingStation";
 import PregnantWomanIcon from "@mui/icons-material/PregnantWoman";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import JoinInnerIcon from "@mui/icons-material/JoinInner";
+import appIconUrl from "../../assets/baby_b_svg.svg";
 
 // --- Types ---
 export type TabKey =
@@ -118,7 +119,22 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 };
 
 export const TABS_TO_ICON: { [key: string]: any } = {
-	summary: ChildFriendlyIcon,
+	summary: () => (
+		<Box
+			component="img"
+			src={appIconUrl}
+			alt="Example"
+			sx={(theme) => ({
+				width: "3em",
+				height: "3em",
+				verticalAlign: "middle",
+				filter:
+					theme.palette.mode === "dark"
+						? "invert(1) brightness(1.2)"
+						: "none",
+			})}
+		/>
+	),
 	sleep: CribIcon,
 	diaper: BabyChangingStationIcon,
 	nurse: PregnantWomanIcon,
