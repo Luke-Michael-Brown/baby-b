@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import useBabyTabData from "../../hooks/useBabyTabData";
 import selectedTabAtom, { TABS, COLUMNS } from "../../atoms/selectedTabAtom";
 
-const paginationModel = { page: 0, pageSize: 10 };
+const paginationModel = { page: 0, pageSize: 8 };
 
 function DataTab() {
 	const selectedTab = useAtomValue(selectedTabAtom);
@@ -16,7 +16,6 @@ function DataTab() {
 			rows={tabData}
 			columns={columns}
 			initialState={{ pagination: { paginationModel } }}
-			pageSizeOptions={[5, 10]}
 			sx={{ border: 0 }}
 		/>
 	) : null;

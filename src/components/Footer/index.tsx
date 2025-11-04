@@ -8,6 +8,7 @@ import { TABS } from "../../atoms/selectedTabAtom";
 import type { EntryDialogProps } from "../EntryDialog";
 import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from "../EntryDialog";
 import ThemedAppBar from "../ThemedAppBar";
+import AddIcon from '@mui/icons-material/Add';
 
 function Footer() {
 	const [entryDialogProps, setEntryDialogProps] = useState<EntryDialogProps>(
@@ -30,14 +31,17 @@ function Footer() {
 				sx={{ top: "auto", bottom: 0 }}
 			>
 				<Stack
-					sx={{ px: 2, py: 1 }}
+					sx={{ px: 2, py: 1, justifyContent: 'center' }}
 					spacing={2}
 				>
-					<Typography variant="subtitle2">Add Entry</Typography>
+					<Stack direction="row">
+						<AddIcon />
+						<Typography variant="body1">Add Entry</Typography>
+					</Stack>
 					<ButtonGroup size="large" variant="contained" color="primary">
 						{TABS.slice(1).map((tab) => (
 							<Button onClick={() => onAddButtonClicked(tab)} key={tab}>
-								{tab}
+								{tab.charAt(0).toUpperCase() + tab.slice(1)}
 							</Button>
 						))}
 					</ButtonGroup>

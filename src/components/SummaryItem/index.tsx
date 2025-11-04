@@ -28,8 +28,18 @@ function SummaryItem({ tab }: Props) {
       }}
     >
       <Stack spacing={1}>
-        <Stack spacing={1} direction="row">
-          <Icon />
+        <Stack spacing={1}>
+          <Stack spacing={1} direction="row">
+            <Icon />
+            <Typography
+              key={`summary-${tab}-label`}
+              variant="body1"
+              component="span"
+              sx={{ flexGrow: 1 }}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </Typography>
+          </Stack>
           <Stack spacing={0}>
             {summaries.map((summary, index) => (
               <Typography
@@ -38,7 +48,7 @@ function SummaryItem({ tab }: Props) {
                 component="span"
                 sx={{ flexGrow: 1 }}
               >
-                {summary}
+                {`• ${summary}`}
               </Typography>
             ))}
           </Stack>
@@ -54,7 +64,7 @@ function SummaryItem({ tab }: Props) {
             <ToggleButton
               sx={{
                 color: `${tab}.contrastText`,
-                fontWeight: 'normal',
+                fontWeight: "normal",
                 "&.Mui-selected": {
                   color: `${tab}.contrastText`,
                   fontWeight: 900,

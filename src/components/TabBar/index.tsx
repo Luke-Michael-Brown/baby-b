@@ -32,7 +32,7 @@ export default function BasicTabs() {
           scrollButtons="auto"
           sx={{
             "& .MuiTab-root": {
-              fontSize: "0.75rem", // smaller font size
+              fontSize: "0.8rem", // smaller font size
               minWidth: "4rem", // narrower tab width
               padding: "0.3rem 0.5rem", // compact padding
               textTransform: "none", // optional: keeps label case
@@ -42,7 +42,7 @@ export default function BasicTabs() {
           {TABS.map((tab) => (
             <Tab
               key={tab}
-              label={tab}
+              label={tab.charAt(0).toUpperCase() + tab.slice(1)}
               sx={{
                 color: theme.palette.text.primary,
                 "&.Mui-selected": {

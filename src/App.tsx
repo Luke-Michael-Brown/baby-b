@@ -61,7 +61,7 @@ function App({ setMode }: Props) {
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
-          pb: "64px",
+          pb: "98px",
         }}
       >
         <TabContent />
