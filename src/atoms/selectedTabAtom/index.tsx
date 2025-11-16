@@ -98,7 +98,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			headerName: "Start Time",
 			formType: "datePicker",
 		},
-		{ flex: 1, field: "extra1", headerName: "Amount (oz)", formType: "number" },
+		{ flex: 1, field: "extra1", headerName: "Amount (ml)", formType: "number" },
 	],
 	pump: [
 		{
@@ -114,7 +114,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			formType: "select",
 			selectFields: ["Left", "Right", "Both"],
 		},
-		{ flex: 1, field: "extra2", headerName: "Amount (oz)", formType: "number" },
+		{ flex: 1, field: "extra2", headerName: "Amount (ml)", formType: "number" },
 	],
 };
 
@@ -187,15 +187,15 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		const filteredData = filterByRange(data, range);
 		if (filteredData.length === 0) return ["No data yet"];
 
-		let totalOz = 0;
+		let totalMl = 0;
 		filteredData.forEach((entry) => {
-			const oz = parseFloat(entry.extra1);
-			if (!isNaN(oz)) totalOz += oz;
+			const ml = parseFloat(entry.extra1);
+			if (!isNaN(ml)) totalMl += ml;
 		});
 
 		const days = getDaysInRange(range);
-		const avgPerDay = totalOz / days;
-		return [`Averages ${avgPerDay.toFixed(2)}oz per day`];
+		const avgPerDay = totalMl / days;
+		return [`Averages ${avgPerDay.toFixed(2)}ml per day`];
 	},
 
 	diaper: (data, range) => {
@@ -258,7 +258,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 
 		let totalLeftMs = 0;
 		let totalRightMs = 0;
-		let totalOz = 0;
+		let totalMl = 0;
 
 		filteredData.forEach((entry) => {
 			const start = new Date(entry.start_time);
@@ -273,19 +273,19 @@ export const TAB_TO_SUMMARY_DATA: Record<
 				totalRightMs += duration / 2;
 			}
 
-			const oz = parseFloat(entry.extra2 as string);
-			if (!isNaN(oz)) totalOz += oz;
+			const ml = parseFloat(entry.extra2 as string);
+			if (!isNaN(ml)) totalMl += ml;
 		});
 
 		const days = getDaysInRange(range);
 		const avgLeft = totalLeftMs / (days * 1000 * 60);
 		const avgRight = totalRightMs / (days * 1000 * 60);
-		const avgOz = totalOz / days;
+		const avgml = totalMl / days;
 
 		return [
 			`Averages ${avgLeft.toFixed(2)} mins per day on left`,
 			`Averages ${avgRight.toFixed(2)} mins per day on right`,
-			`Averages ${avgOz.toFixed(2)} oz per day`,
+			`Averages ${avgml.toFixed(2)} ml per day`,
 		];
 	},
 
