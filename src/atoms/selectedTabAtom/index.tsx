@@ -143,6 +143,16 @@ export const TABS_TO_ICON: { [key: string]: any } = {
 };
 
 // --- Helpers ---
+function getDaysWithData(filteredData: any[]): number {
+	const uniqueDays = new Set<string>();
+	filteredData.forEach((entry) => {
+		const d = new Date(entry.timestamp || entry.start_time);
+		const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
+		uniqueDays.add(key);
+	});
+	return uniqueDays.size;
+}
+
 function getStartDate(range: RangeOption): Date {
 	const now = new Date();
 	let startDate: Date;
@@ -172,12 +182,6 @@ function filterByRange(data: any[], range: RangeOption): any[] {
 	return data.filter((entry) => new Date(entry.timestamp) >= startDate);
 }
 
-function getDaysInRange(range: RangeOption): number {
-	const now = new Date();
-	const startDate = getStartDate(range);
-	return (now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
-}
-
 // --- Summary Generators ---
 export const TAB_TO_SUMMARY_DATA: Record<
 	string,
@@ -193,7 +197,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			if (!isNaN(ml)) totalMl += ml;
 		});
 
-		const days = getDaysInRange(range);
+		const days = getDaysWithData(filteredData);
 		const avgPerDay = totalMl / days;
 		return [`Averages ${avgPerDay.toFixed(2)}ml per day`];
 	},
@@ -211,7 +215,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			if (val.includes("poo")) totalPoo += 1;
 		});
 
-		const days = getDaysInRange(range);
+		const days = getDaysWithData(filteredData);
 		const avgPee = totalPee / days;
 		const avgPoo = totalPoo / days;
 
@@ -242,7 +246,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			}
 		});
 
-		const days = getDaysInRange(range);
+		const days = getDaysWithData(filteredData);
 		const avgLeft = totalLeftMs / (days * 1000 * 60);
 		const avgRight = totalRightMs / (days * 1000 * 60);
 
@@ -277,7 +281,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			if (!isNaN(ml)) totalMl += ml;
 		});
 
-		const days = getDaysInRange(range);
+		const days = getDaysWithData(filteredData);
 		const avgLeft = totalLeftMs / (days * 1000 * 60);
 		const avgRight = totalRightMs / (days * 1000 * 60);
 		const avgml = totalMl / days;
@@ -308,7 +312,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			else if (type === "night sleep") totalNightMs += duration;
 		});
 
-		const days = getDaysInRange(range);
+		const days = getDaysWithData(filteredData);
 		const avgTotal = totalSleepMs / (days * 1000 * 60);
 		const avgNap = totalNapMs / (days * 1000 * 60);
 		const avgNight = totalNightMs / (days * 1000 * 60);
