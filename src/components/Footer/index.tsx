@@ -10,6 +10,8 @@ import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from "../EntryDialog";
 import ThemedAppBar from "../ThemedAppBar";
 import AddIcon from '@mui/icons-material/Add';
 
+const APP_VERSION = '1.1.0';
+
 function Footer() {
 	const [entryDialogProps, setEntryDialogProps] = useState<EntryDialogProps>(
 		DEFAULT_ENTRY_DIALOG_PROPS,
@@ -34,9 +36,10 @@ function Footer() {
 					sx={{ px: 2, py: 1, justifyContent: 'center' }}
 					spacing={2}
 				>
-					<Stack direction="row">
+					<Stack sx={{ alignItems: 'center' }} direction="row">
 						<AddIcon />
 						<Typography variant="body1">Add Entry</Typography>
+						<Typography sx={{ ml: 'auto' }} variant="body2">{`v${APP_VERSION}`}</Typography>
 					</Stack>
 					<ButtonGroup size="large" variant="contained" color="primary">
 						{TABS.slice(1).map((tab) => (
