@@ -129,9 +129,7 @@ export const TABS_TO_ICON: { [key: string]: any } = {
 				height: "3em",
 				verticalAlign: "middle",
 				filter:
-					theme.palette.mode === "light"
-						? "invert(1) brightness(1.2)"
-						: "none",
+					theme.palette.mode === "light" ? "invert(1) brightness(1.2)" : "none",
 			})}
 		/>
 	),
@@ -146,7 +144,7 @@ export const TABS_TO_ICON: { [key: string]: any } = {
 function getDaysWithData(filteredData: any[]): number {
 	const uniqueDays = new Set<string>();
 	filteredData.forEach((entry) => {
-		const d = new Date(entry.timestamp || entry.start_time);
+		const d = new Date(entry.start_time);
 		const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
 		uniqueDays.add(key);
 	});
@@ -179,7 +177,7 @@ function getStartDate(range: RangeOption): Date {
 
 function filterByRange(data: any[], range: RangeOption): any[] {
 	const startDate = getStartDate(range);
-	return data.filter((entry) => new Date(entry.timestamp) >= startDate);
+	return data.filter((entry) => new Date(entry.start_time) >= startDate);
 }
 
 // --- Summary Generators ---
@@ -260,36 +258,30 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		const filteredData = filterByRange(data, range);
 		if (filteredData.length === 0) return ["No data yet"];
 
-		let totalLeftMs = 0;
-		let totalRightMs = 0;
-		let totalMl = 0;
+		let totalLeftMl = 0;
+		let totalRightMl = 0;
 
 		filteredData.forEach((entry) => {
-			const start = new Date(entry.start_time);
-			const end = new Date(entry.end_time ?? start);
-			const duration = end.getTime() - start.getTime();
-
-			const side = entry.extra1.toLowerCase();
-			if (side === "left") totalLeftMs += duration;
-			else if (side === "right") totalRightMs += duration;
-			else if (side === "both") {
-				totalLeftMs += duration / 2;
-				totalRightMs += duration / 2;
-			}
-
+			const side = entry.extra1?.toLowerCase();
 			const ml = parseFloat(entry.extra2 as string);
-			if (!isNaN(ml)) totalMl += ml;
+
+			if (isNaN(ml)) return;
+
+			if (side === "left") totalLeftMl += ml;
+			else if (side === "right") totalRightMl += ml;
+			else if (side === "both") {
+				totalLeftMl += ml / 2;
+				totalRightMl += ml / 2;
+			}
 		});
 
 		const days = getDaysWithData(filteredData);
-		const avgLeft = totalLeftMs / (days * 1000 * 60);
-		const avgRight = totalRightMs / (days * 1000 * 60);
-		const avgml = totalMl / days;
+		const avgLeftMl = totalLeftMl / days;
+		const avgRightMl = totalRightMl / days;
 
 		return [
-			`Averages ${avgLeft.toFixed(2)} mins per day on left`,
-			`Averages ${avgRight.toFixed(2)} mins per day on right`,
-			`Averages ${avgml.toFixed(2)} ml per day`,
+			`Averages ${avgLeftMl.toFixed(2)} ml per day on left`,
+			`Averages ${avgRightMl.toFixed(2)} ml per day on right`,
 		];
 	},
 
