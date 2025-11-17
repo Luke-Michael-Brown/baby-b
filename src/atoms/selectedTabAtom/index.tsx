@@ -174,6 +174,17 @@ export const TABS_TO_ICON: { [key: string]: any } = {
 };
 
 // --- Helpers ---
+function formatMsToMinSec(ms: number): string {
+	if (!ms || ms <= 0) return "0s";
+
+	const totalSeconds = Math.floor(ms / 1000);
+	const mins = Math.floor(totalSeconds / 60);
+	const secs = totalSeconds % 60;
+
+	if (mins > 0) return `${mins}m ${secs}s`;
+	return `${secs}s`;
+}
+
 function getDaysWithData(filteredData: any[]): number {
 	const uniqueDays = new Set<string>();
 	filteredData.forEach((entry) => {
@@ -271,19 +282,17 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			const side = entry.extra1.toLowerCase();
 			if (side === "left") totalLeftMs += duration;
 			else if (side === "right") totalRightMs += duration;
-			else if (side === "both") {
-				totalLeftMs += duration / 2;
-				totalRightMs += duration / 2;
-			}
 		});
 
 		const days = getDaysWithData(filteredData);
-		const avgLeft = totalLeftMs / (days * 1000 * 60);
-		const avgRight = totalRightMs / (days * 1000 * 60);
+
+		// avg time per day in milliseconds
+		const avgLeftMs = totalLeftMs / days;
+		const avgRightMs = totalRightMs / days;
 
 		return [
-			`Averages ${avgLeft.toFixed(2)}mins per day on left`,
-			`Averages ${avgRight.toFixed(2)}mins per day on right`,
+			`Averages ${formatMsToMinSec(avgLeftMs)} per day on left`,
+			`Averages ${formatMsToMinSec(avgRightMs)} per day on right`,
 		];
 	},
 
