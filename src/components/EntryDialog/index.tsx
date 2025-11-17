@@ -93,6 +93,7 @@ export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps
                         label={label}
                         value={value as Dayjs | null}
                         onChange={(newValue) => handleChange(field, newValue)}
+                        openTo="hours"
                         slotProps={{
                           popper: {
                             modifiers: [
