@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import useBabyTabData from "../../hooks/useBabyTabData";
 import selectedTabAtom, { TABS, COLUMNS } from "../../atoms/selectedTabAtom";
 
-const paginationModel = { page: 0, pageSize: 10 };
+const paginationModel = { page: 0, pageSize: 50 };
 
 function DataTab() {
 	const selectedTab = useAtomValue(selectedTabAtom);
