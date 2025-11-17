@@ -24,6 +24,7 @@ type COLUMN_ENTRY =
 			field: string;
 			headerName: string;
 			formType: string;
+			renderCell?: (param: any) => any;
 	  }
 	| {
 			flex: number;
@@ -31,6 +32,7 @@ type COLUMN_ENTRY =
 			headerName: string;
 			formType: "select";
 			selectFields: string[];
+			renderCell?: (param: any) => any;
 	  };
 
 const renderTwoLineDate = (params: any) => {
