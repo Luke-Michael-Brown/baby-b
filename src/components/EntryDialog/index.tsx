@@ -13,11 +13,8 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import { COLUMNS } from "../../atoms/selectedTabAtom";
 import selectedBabyAtom from "../../atoms/selectedBabyAtom";
-import useBabiesData from "../../hooks/useBabiesData";
 import useAddEntry from "../../hooks/useAddEntry";
 import selectedTabAtom, { TABS } from "../../atoms/selectedTabAtom";
-
-// ✅ Removed unused imports: useQueryClient, LocalizationProvider, AdapterDayjs, useGoogleAPI
 
 export const DEFAULT_ENTRY_DIALOG_PROPS = {
   tab: "",
@@ -32,8 +29,6 @@ export interface EntryDialogProps {
 }
 
 export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps) {
-  useBabiesData(); // ✅ no need to destructure if unused
-
   const selectedBaby = useAtomValue(selectedBabyAtom);
   const addEntry = useAddEntry();
   const setSelectedTab = useSetAtom(selectedTabAtom);
@@ -41,7 +36,6 @@ export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps
   const [isLoading, setIsLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<Record<string, any>>({});
 
-  // ✅ Initialize form values when tab changes
   React.useEffect(() => {
     if (open && tab && COLUMNS[tab]) {
       const initialValues: Record<string, any> = {};
