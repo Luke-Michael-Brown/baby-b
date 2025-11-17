@@ -229,21 +229,37 @@ export const TAB_TO_SUMMARY_DATA: Record<
 	string,
 	(data: any[], range: RangeOption) => string[]
 > = {
+	//
+	// ------------------------ BOTTLE ------------------------
+	//
 	bottle: (data, range) => {
-		const filteredData = filterByRange(data, range);
-		if (filteredData.length === 0) return ["No data yet"];
+		const filtered = filterByRange(data, range);
+		if (filtered.length === 0) return ["No data yet"];
 
 		let totalMl = 0;
-		filteredData.forEach((entry) => {
+		let sessionCount = 0;
+
+		filtered.forEach((entry) => {
 			const ml = parseFloat(entry.extra1);
-			if (!isNaN(ml)) totalMl += ml;
+			if (!isNaN(ml)) {
+				totalMl += ml;
+				sessionCount++;
+			}
 		});
 
-		const days = getDaysWithData(filteredData);
+		const days = getDaysWithData(filtered);
 		const avgPerDay = totalMl / days;
-		return [`Averages ${avgPerDay.toFixed(2)}ml per day`];
+		const avgPerSession = totalMl / sessionCount;
+
+		return [
+			`Averages ${avgPerDay.toFixed(2)} ml per day`,
+			`Averages ${avgPerSession.toFixed(2)} ml per session`,
+		];
 	},
 
+	//
+	// ------------------------ DIAPER (unchanged) ------------------------
+	//
 	diaper: (data, range) => {
 		const filteredData = filterByRange(data, range);
 		if (filteredData.length === 0) return ["No data yet"];
@@ -267,66 +283,93 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		];
 	},
 
+	//
+	// ------------------------ NURSE ------------------------
+	//
 	nurse: (data, range) => {
-		const filteredData = filterByRange(data, range);
-		if (filteredData.length === 0) return ["No data yet"];
+		const filtered = filterByRange(data, range);
+		if (filtered.length === 0) return ["No data yet"];
 
-		let totalLeftMs = 0;
-		let totalRightMs = 0;
+		let leftTotalMs = 0;
+		let rightTotalMs = 0;
+		let leftSessions = 0;
+		let rightSessions = 0;
 
-		filteredData.forEach((entry) => {
+		filtered.forEach((entry) => {
 			const start = new Date(entry.start_time);
-			const end = new Date(entry.end_time ?? start);
+			const end = new Date(entry.end_time ?? entry.start_time);
 			const duration = end.getTime() - start.getTime();
-
-			const side = entry.extra1.toLowerCase();
-			if (side === "left") totalLeftMs += duration;
-			else if (side === "right") totalRightMs += duration;
-		});
-
-		const days = getDaysWithData(filteredData);
-
-		// avg time per day in milliseconds
-		const avgLeftMs = totalLeftMs / days;
-		const avgRightMs = totalRightMs / days;
-
-		return [
-			`Averages ${formatMsToMinSec(avgLeftMs)} per day on left`,
-			`Averages ${formatMsToMinSec(avgRightMs)} per day on right`,
-		];
-	},
-
-	pump: (data, range) => {
-		const filteredData = filterByRange(data, range);
-		if (filteredData.length === 0) return ["No data yet"];
-
-		let totalLeftMl = 0;
-		let totalRightMl = 0;
-
-		filteredData.forEach((entry) => {
 			const side = entry.extra1?.toLowerCase();
-			const ml = parseFloat(entry.extra2 as string);
 
-			if (isNaN(ml)) return;
-
-			if (side === "left") totalLeftMl += ml;
-			else if (side === "right") totalRightMl += ml;
-			else if (side === "both") {
-				totalLeftMl += ml / 2;
-				totalRightMl += ml / 2;
+			if (side === "left") {
+				leftTotalMs += duration;
+				leftSessions++;
+			} else if (side === "right") {
+				rightTotalMs += duration;
+				rightSessions++;
 			}
 		});
 
-		const days = getDaysWithData(filteredData);
-		const avgLeftMl = totalLeftMl / days;
-		const avgRightMl = totalRightMl / days;
+		const days = getDaysWithData(filtered);
 
 		return [
-			`Averages ${avgLeftMl.toFixed(2)} ml per day on left`,
-			`Averages ${avgRightMl.toFixed(2)} ml per day on right`,
+			// LEFT
+			`Left: ${formatMsToMinSec(leftTotalMs / days)} per day`,
+			`Left: ${formatMsToMinSec(leftSessions > 0 ? leftTotalMs / leftSessions : 0)} per session`,
+
+			// RIGHT
+			`Right: ${formatMsToMinSec(rightTotalMs / days)} per day`,
+			`Right: ${formatMsToMinSec(rightSessions > 0 ? rightTotalMs / rightSessions : 0)} per session`,
 		];
 	},
 
+	//
+	// ------------------------ PUMP ------------------------
+	//
+	pump: (data, range) => {
+		const filtered = filterByRange(data, range);
+		if (filtered.length === 0) return ["No data yet"];
+
+		let leftTotalMl = 0;
+		let rightTotalMl = 0;
+		let leftSessions = 0;
+		let rightSessions = 0;
+
+		filtered.forEach((entry) => {
+			const side = entry.extra1?.toLowerCase();
+			const ml = parseFloat(entry.extra2);
+			if (isNaN(ml)) return;
+
+			if (side === "left") {
+				leftTotalMl += ml;
+				leftSessions++;
+			} else if (side === "right") {
+				rightTotalMl += ml;
+				rightSessions++;
+			} else if (side === "both") {
+				leftTotalMl += ml / 2;
+				rightTotalMl += ml / 2;
+				leftSessions++;
+				rightSessions++;
+			}
+		});
+
+		const days = getDaysWithData(filtered);
+
+		return [
+			// LEFT
+			`Left: ${(leftTotalMl / days).toFixed(2)} ml per day`,
+			`Left: ${(leftSessions > 0 ? leftTotalMl / leftSessions : 0).toFixed(2)} ml per session`,
+
+			// RIGHT
+			`Right: ${(rightTotalMl / days).toFixed(2)} ml per day`,
+			`Right: ${(rightSessions > 0 ? rightTotalMl / rightSessions : 0).toFixed(2)} ml per session`,
+		];
+	},
+
+	//
+	// ------------------------ SLEEP (unchanged) ------------------------
+	//
 	sleep: (data, range) => {
 		const filteredData = filterByRange(data, range);
 		if (filteredData.length === 0) return ["No data yet"];
@@ -341,6 +384,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			const duration = end.getTime() - start.getTime();
 
 			totalSleepMs += duration;
+
 			const type = entry.extra1.toLowerCase();
 			if (type === "nap") totalNapMs += duration;
 			else if (type === "night sleep") totalNightMs += duration;
@@ -352,12 +396,13 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		const avgNight = totalNightMs / (days * 1000 * 60);
 
 		return [
-			`Averages ${avgTotal.toFixed(2)}mins of sleep per day`,
-			`Averages ${avgNap.toFixed(2)}mins of naps per day`,
-			`Averages ${avgNight.toFixed(2)}mins of night sleep per day`,
+			`Averages ${avgTotal.toFixed(2)} mins of sleep per day`,
+			`Averages ${avgNap.toFixed(2)} mins of naps per day`,
+			`Averages ${avgNight.toFixed(2)} mins of night sleep per day`,
 		];
 	},
 };
+
 
 // --- Tabs ---
 export const TABS: string[] = [
