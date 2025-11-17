@@ -33,6 +33,32 @@ type COLUMN_ENTRY =
 			selectFields: string[];
 	  };
 
+const renderTwoLineDate = (params: any) => {
+	const value = params.value;
+	if (!value) return "";
+
+	const d = new Date(value);
+
+	const dateStr = d.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	});
+
+	const timeStr = d.toLocaleTimeString("en-US", {
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: true,
+	});
+
+	return (
+		<div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+			<span>{dateStr}</span>
+			<span>{timeStr}</span>
+		</div>
+	);
+};
+
 export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 	sleep: [
 		{
@@ -40,12 +66,14 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
+			renderCell: renderTwoLineDate,
 		},
 		{
 			flex: 1,
 			field: "end_time",
 			headerName: "End Time",
 			formType: "datePicker",
+			renderCell: renderTwoLineDate,
 		},
 		{
 			flex: 1,
@@ -61,6 +89,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
+			renderCell: renderTwoLineDate,
 		},
 		{
 			flex: 1,
@@ -76,12 +105,14 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
+			renderCell: renderTwoLineDate,
 		},
 		{
 			flex: 1,
 			field: "end_time",
 			headerName: "End Time",
 			formType: "datePicker",
+			renderCell: renderTwoLineDate,
 		},
 		{
 			flex: 1,
@@ -97,6 +128,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
+			renderCell: renderTwoLineDate,
 		},
 		{ flex: 1, field: "extra1", headerName: "Amount (ml)", formType: "number" },
 	],
@@ -106,6 +138,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			field: "start_time",
 			headerName: "Start Time",
 			formType: "datePicker",
+			renderCell: renderTwoLineDate,
 		},
 		{
 			flex: 1,
