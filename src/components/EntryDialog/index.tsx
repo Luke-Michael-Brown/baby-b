@@ -51,10 +51,10 @@ export default function EntryDialog({
   React.useEffect(() => {
     if (open && tab && COLUMNS[tab]) {
       const initialValues: Record<string, any> = {};
-      let editEntry = {};
-      if (editId) {
+      let editEntry: any = {};
+      if (editId && selectedBaby && tab) {
         const editIndex = babiesData[selectedBaby][tab].findIndex(
-          (entry) => entry.id === editId,
+          (entry: any) => entry.id === editId,
         );
         if (editIndex !== -1) {
           editEntry = babiesData[selectedBaby][tab][editIndex];

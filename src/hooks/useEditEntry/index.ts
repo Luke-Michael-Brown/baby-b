@@ -9,7 +9,7 @@ export default function useEditEntry() {
   return async (editId: string, babyName: string, tab: string, data: Record<string, any>) => {
     const babiesData = await fetchJsonFromDrive();
 
-    const editIndex = babiesData[babyName][tab].findIndex((entry) => entry.id === editId);
+    const editIndex = babiesData[babyName][tab].findIndex((entry: any) => entry.id === editId);
     if (editIndex === -1) return;
 
     babiesData[babyName][tab][editIndex] = {

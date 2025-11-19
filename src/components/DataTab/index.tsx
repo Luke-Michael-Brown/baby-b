@@ -4,11 +4,13 @@ import { useAtomValue } from "jotai";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 
 import useBabyTabData from "../../hooks/useBabyTabData";
+
 import selectedTabAtom, { TABS, COLUMNS } from "../../atoms/selectedTabAtom";
 import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from "../EntryDialog";
+import type { EntryDialogProps } from "../EntryDialog";
 
 const paginationModel = { page: 0, pageSize: 50 };
 
@@ -27,7 +29,7 @@ function DataTab() {
 				field: "actions",
 				type: "actions",
 				headerName: "Actions",
-				getActions: (params) => [
+				getActions: (params: { row: { id: string } }) => [
 					<GridActionsCellItem
 						icon={<EditIcon />}
 						label="Edit"

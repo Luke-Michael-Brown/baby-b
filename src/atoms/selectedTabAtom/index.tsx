@@ -5,6 +5,7 @@ import BabyChangingStationIcon from "@mui/icons-material/BabyChangingStation";
 import PregnantWomanIcon from "@mui/icons-material/PregnantWoman";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import JoinInnerIcon from "@mui/icons-material/JoinInner";
+import type { GridColType, GridRowParams } from "@mui/x-data-grid";
 import appIconUrl from "../../assets/baby_b_svg.svg";
 
 // --- Types ---
@@ -20,18 +21,22 @@ export type RangeOption = "Last Week" | "Last Month" | "Last Year";
 
 type COLUMN_ENTRY =
 	| {
-			flex: number;
+			flex?: number;
 			field: string;
 			headerName: string;
-			formType: string;
+			formType?: string;
+			type?: GridColType;
+			getActions?: (params: GridRowParams) => React.ReactNode[];
 			renderCell?: (param: any) => any;
 	  }
 	| {
-			flex: number;
+			flex?: number;
 			field: string;
 			headerName: string;
 			formType: "select";
 			selectFields: string[];
+			type?: GridColType;
+			getActions?: (params: GridRowParams) => React.ReactNode[];
 			renderCell?: (param: any) => any;
 	  };
 
@@ -404,7 +409,6 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		];
 	},
 };
-
 
 // --- Tabs ---
 export const TABS: string[] = [
