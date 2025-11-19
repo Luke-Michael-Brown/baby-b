@@ -14,6 +14,8 @@ import Stack from "@mui/material/Stack";
 import { COLUMNS } from "../../atoms/selectedTabAtom";
 import selectedBabyAtom from "../../atoms/selectedBabyAtom";
 import useAddEntry from "../../hooks/useAddEntry";
+import useEditEntry from "../../hooks/useEditEntry";
+import useBabiesData from "../../hooks/useBabiesData";
 import selectedTabAtom, { TABS } from "../../atoms/selectedTabAtom";
 
 export const DEFAULT_ENTRY_DIALOG_PROPS = {
@@ -24,14 +26,24 @@ export const DEFAULT_ENTRY_DIALOG_PROPS = {
 
 export interface EntryDialogProps {
   tab: string;
+  editId?: string;
   open: boolean;
   handleClose: () => void;
 }
 
-export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps) {
+export default function EntryDialog({
+  tab,
+  editId,
+  open,
+  handleClose,
+}: EntryDialogProps) {
+  const { data: babiesData } = useBabiesData();
+
   const selectedBaby = useAtomValue(selectedBabyAtom);
-  const addEntry = useAddEntry();
   const setSelectedTab = useSetAtom(selectedTabAtom);
+
+  const addEntry = useAddEntry();
+  const editEntry = useEditEntry();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<Record<string, any>>({});
@@ -39,10 +51,22 @@ export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps
   React.useEffect(() => {
     if (open && tab && COLUMNS[tab]) {
       const initialValues: Record<string, any> = {};
+      let editEntry = {};
+      if (editId) {
+        const editIndex = babiesData[selectedBaby][tab].findIndex(
+          (entry) => entry.id === editId,
+        );
+        if (editIndex !== -1) {
+          editEntry = babiesData[selectedBaby][tab][editIndex];
+        }
+      }
+
       COLUMNS[tab].forEach((col) => {
-        if (col.formType === "datePicker") initialValues[col.field] = dayjs();
-        else initialValues[col.field] = "";
+        if (col.formType === "datePicker")
+          initialValues[col.field] = dayjs(editEntry[col.field]);
+        else initialValues[col.field] = editEntry[col.field] ?? "";
       });
+
       setIsLoading(false);
       setFormValues(initialValues);
     }
@@ -64,7 +88,11 @@ export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps
     try {
       if (!tab) throw new Error("Tab not selected");
       if (!selectedBaby) throw new Error("Baby not selected");
-      await addEntry(selectedBaby, tab, formValues);
+      if (editId) {
+        await editEntry(editId, selectedBaby, tab, formValues);
+      } else {
+        await addEntry(selectedBaby, tab, formValues);
+      }
       setSelectedTab(TABS.indexOf(tab));
       handleClose();
     } catch (err) {
@@ -178,7 +206,13 @@ export default function EntryDialog({ tab, open, handleClose }: EntryDialogProps
           disabled={isLoading || !allFilled}
           variant="contained"
         >
-          {isLoading ? "Adding..." : "Add Entry"}
+          {isLoading
+            ? editId
+              ? "Editting..."
+              : "Adding..."
+            : editId
+              ? "Edit Entry "
+              : "Add Entry"}
         </Button>
       </DialogActions>
     </Dialog>
