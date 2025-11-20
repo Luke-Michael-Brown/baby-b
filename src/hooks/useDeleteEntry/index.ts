@@ -2,18 +2,19 @@ import dayjs from "dayjs";
 import { useQueryClient } from "@tanstack/react-query";
 import useGoogleAPI from "../../hooks/useGoogleAPI";
 
-export default function useEditEntry() {
+export default function useDeleteEntry() {
   const qc = useQueryClient();
   const { uploadJsonToDrive, fetchJsonFromDrive } = useGoogleAPI();
 
-  return async (editId: string, babyName: string, tab: string, data: Record<string, any>) => {
+  return async (deleteId: string, babyName: string, tab: string) => {
     const babiesData = await fetchJsonFromDrive();
 
-    const editIndex = babiesData[babyName][tab].findIndex((entry: any) => entry.id === editId);
-    if (editIndex === -1) return;
+    const deleteIndex = babiesData[babyName][tab].findIndex((entry: any) => entry.id === deleteId);
+    if (deleteIndex === -1) return;
 
-    babiesData[babyName][tab][editIndex] = {
-      ...data,
+    babiesData[babyName][tab][deleteIndex] = {
+      ...babiesData[babyName][tab][deleteIndex],
+      isShown: false,
       timestamp: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
     };
     await uploadJsonToDrive(babiesData);

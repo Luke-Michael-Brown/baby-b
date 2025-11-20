@@ -103,7 +103,7 @@ export default function EntryDialog({
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{`Add ${tab} entry`}</DialogTitle>
+      <DialogTitle>{editId ? `Edit ${tab} entry` : `Add ${tab} entry`}</DialogTitle>
       <DialogContent>
         <form id="add-entry-form" onSubmit={handleSubmit}>
           <Stack spacing={2} sx={{ mt: 1, minWidth: 300 }}>

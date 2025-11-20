@@ -4,13 +4,15 @@ import { useAtomValue } from "jotai";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 
 import EditIcon from "@mui/icons-material/Edit";
-// import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import useBabyTabData from "../../hooks/useBabyTabData";
 
 import selectedTabAtom, { TABS, COLUMNS } from "../../atoms/selectedTabAtom";
 import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from "../EntryDialog";
 import type { EntryDialogProps } from "../EntryDialog";
+import DeleteDialog from "../DeleteDialog";
+import type { DeleteDialogProps } from "../DeleteDialog";
 
 const paginationModel = { page: 0, pageSize: 50 };
 
@@ -21,6 +23,9 @@ function DataTab() {
 
 	const [entryDialogProps, setEntryDialogProps] = useState<EntryDialogProps>(
 		DEFAULT_ENTRY_DIALOG_PROPS,
+	);
+	const [deleteDialogProps, setDeleteDialogProps] = useState<DeleteDialogProps>(
+		{},
 	);
 
 	const columns = useMemo(() => {
@@ -47,14 +52,21 @@ function DataTab() {
 							});
 						}}
 					/>,
-					// <GridActionsCellItem
-					// 	icon={<DeleteIcon />}
-					// 	label="Delete"
-					// 	onClick={(e) => {
-					// 		e.stopPropagation();
-					// 		console.log("Delete row", params.row);
-					// 	}}
-					// />,
+					<GridActionsCellItem
+						icon={<DeleteIcon />}
+						label="Delete"
+						onClick={(e) => {
+							e.stopPropagation();
+							setDeleteDialogProps({
+								deleteId: params.row.id,
+								handleClose: () =>
+									setDeleteDialogProps((oldProps) => ({
+										...oldProps,
+										deleteId: undefined,
+									})),
+							});
+						}}
+					/>,
 				],
 			},
 		]);
@@ -68,6 +80,7 @@ function DataTab() {
 				sx={{ border: 0 }}
 			/>
 			<EntryDialog {...entryDialogProps} />
+			<DeleteDialog {...deleteDialogProps} />
 		</>
 	) : null;
 }
