@@ -126,7 +126,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			field: "extra1",
 			headerName: "Left or Right",
 			formType: "select",
-			selectFields: ["Left", "Right"],
+			selectFields: ["Left", "Right", "Both"],
 		},
 	],
 	bottle: [
@@ -146,13 +146,6 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			headerName: "Start Time",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
-		},
-		{
-			flex: 1,
-			field: "extra1",
-			headerName: "Left or Right",
-			formType: "select",
-			selectFields: ["Left", "Right", "Both"],
 		},
 		{ flex: 1, field: "extra2", headerName: "Amount (ml)", formType: "number" },
 	],
@@ -314,6 +307,12 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			} else if (side === "right") {
 				rightTotalMs += duration;
 				rightSessions++;
+			} else if (side === "both") {
+				// Split time equally
+				leftTotalMs += duration / 2;
+				rightTotalMs += duration / 2;
+				leftSessions++;
+				rightSessions++;
 			}
 		});
 
@@ -321,12 +320,12 @@ export const TAB_TO_SUMMARY_DATA: Record<
 
 		return [
 			// LEFT
-			`Left: ${formatMsToMinSec(leftTotalMs / days)} per day`,
-			`Left: ${formatMsToMinSec(leftSessions > 0 ? leftTotalMs / leftSessions : 0)} per session`,
+			`Left: Averages ${formatMsToMinSec(leftTotalMs / days)} per day`,
+			`Left: Averages ${formatMsToMinSec(leftSessions > 0 ? leftTotalMs / leftSessions : 0)} per session`,
 
 			// RIGHT
-			`Right: ${formatMsToMinSec(rightTotalMs / days)} per day`,
-			`Right: ${formatMsToMinSec(rightSessions > 0 ? rightTotalMs / rightSessions : 0)} per session`,
+			`Right: Averages ${formatMsToMinSec(rightTotalMs / days)} per day`,
+			`Right: Averages ${formatMsToMinSec(rightSessions > 0 ? rightTotalMs / rightSessions : 0)} per session`,
 		];
 	},
 
@@ -337,40 +336,22 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		const filtered = filterByRange(data, range);
 		if (filtered.length === 0) return ["No data yet"];
 
-		let leftTotalMl = 0;
-		let rightTotalMl = 0;
-		let leftSessions = 0;
-		let rightSessions = 0;
+		let totalMl = 0;
+		let sessions = 0;
 
 		filtered.forEach((entry) => {
-			const side = entry.extra1?.toLowerCase();
 			const ml = parseFloat(entry.extra2);
-			if (isNaN(ml)) return;
-
-			if (side === "left") {
-				leftTotalMl += ml;
-				leftSessions++;
-			} else if (side === "right") {
-				rightTotalMl += ml;
-				rightSessions++;
-			} else if (side === "both") {
-				leftTotalMl += ml / 2;
-				rightTotalMl += ml / 2;
-				leftSessions++;
-				rightSessions++;
+			if (!isNaN(ml)) {
+				totalMl += ml;
+				sessions++;
 			}
 		});
 
 		const days = getDaysWithData(filtered);
 
 		return [
-			// LEFT
-			`Left: ${(leftTotalMl / days).toFixed(2)} ml per day`,
-			`Left: ${(leftSessions > 0 ? leftTotalMl / leftSessions : 0).toFixed(2)} ml per session`,
-
-			// RIGHT
-			`Right: ${(rightTotalMl / days).toFixed(2)} ml per day`,
-			`Right: ${(rightSessions > 0 ? rightTotalMl / rightSessions : 0).toFixed(2)} ml per session`,
+			`Average: ${(totalMl / days).toFixed(2)} ml per day`,
+			`Average: ${(sessions > 0 ? totalMl / sessions : 0).toFixed(2)} ml per session`,
 		];
 	},
 
