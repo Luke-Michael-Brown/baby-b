@@ -28,10 +28,12 @@ export default function DeleteDialog({
   const tab = TABS[selectedTab];
 
   const onSubmit = async () => {
+    if (!deleteId || !selectedBaby || !tab) return;
+
     setIsLoading(true);
     try {
       await onDelete(deleteId, selectedBaby, tab);
-      handleClose();
+      handleClose?.();
       setIsLoading(false);
     } catch (err) {
       console.error(err);
