@@ -69,21 +69,21 @@ const renderTwoLineDate = (params: any) => {
 export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 	sleep: [
 		{
-			flex: 1,
+			flex: 100,
 			field: "start_time",
-			headerName: "Start Time",
+			headerName: "Start",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
 		{
-			flex: 1,
+			flex: 100,
 			field: "end_time",
-			headerName: "End Time",
+			headerName: "End",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
 		{
-			flex: 1,
+			flex: 100,
 			field: "extra1",
 			headerName: "Type",
 			formType: "select",
@@ -92,14 +92,14 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 	],
 	diaper: [
 		{
-			flex: 1,
+			flex: 100,
 			field: "start_time",
-			headerName: "Start Time",
+			headerName: "Start",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
 		{
-			flex: 1,
+			flex: 100,
 			field: "extra1",
 			headerName: "Type",
 			formType: "select",
@@ -108,58 +108,60 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 	],
 	nurse: [
 		{
-			flex: 1,
+			flex: 100,
 			field: "start_time",
-			headerName: "Start Time",
+			headerName: "Start",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
 		{
-			flex: 1,
+			flex: 100,
 			field: "end_time",
-			headerName: "End Time",
+			headerName: "End",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
 		{
-			flex: 1,
+			flex: 100,
 			field: "extra1",
-			headerName: "Left or Right",
+			headerName: "Side",
 			formType: "select",
 			selectFields: ["Left", "Right", "Both"],
 		},
 		{
+			flex: 1,
 			field: "extra2",
-			headerName: "Vitamin D",
+			headerName: "VitD",
 			formType: "checkbox",
 			renderCell: (params) => (params.value ? "✓" : "")
 		},
 	],
 	bottle: [
 		{
-			flex: 1,
+			flex: 100,
 			field: "start_time",
-			headerName: "Start Time",
+			headerName: "Start",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
-		{ flex: 1, field: "extra1", headerName: "Amount (ml)", formType: "number" },
+		{ flex: 100, field: "extra1", headerName: "Amount (ml)", formType: "number" },
 		{
+			flex: 1,
 			field: "extra2",
-			headerName: "Vitamin D",
+			headerName: "VitD",
 			formType: "checkbox",
 			renderCell: (params) => (params.value ? "✓" : "")
 		},
 	],
 	pump: [
 		{
-			flex: 1,
+			flex: 100,
 			field: "start_time",
-			headerName: "Start Time",
+			headerName: "Start",
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
-		{ flex: 1, field: "extra2", headerName: "Amount (ml)", formType: "number" },
+		{ flex: 100, field: "extra2", headerName: "Amount (ml)", formType: "number" },
 	],
 };
 

@@ -10,7 +10,7 @@ import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from "../EntryDialog";
 import ThemedAppBar from "../ThemedAppBar";
 import AddIcon from '@mui/icons-material/Add';
 
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.5.0';
 
 function Footer() {
 	const [entryDialogProps, setEntryDialogProps] = useState<EntryDialogProps>(
