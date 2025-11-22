@@ -129,7 +129,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			selectFields: ["Left", "Right", "Both"],
 		},
 		{
-			flex: 1,
+			flex: 90,
 			field: "extra2",
 			headerName: "VitD",
 			formType: "checkbox",
@@ -146,7 +146,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 		},
 		{ flex: 100, field: "extra1", headerName: "Amount (ml)", formType: "number" },
 		{
-			flex: 1,
+			flex: 60,
 			field: "extra2",
 			headerName: "VitD",
 			formType: "checkbox",
