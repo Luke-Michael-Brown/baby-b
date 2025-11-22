@@ -13,6 +13,7 @@ export default function useEditEntry() {
     if (editIndex === -1) return;
 
     babiesData[babyName][tab][editIndex] = {
+      ...babiesData[babyName][tab][editIndex],
       ...data,
       timestamp: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
     };

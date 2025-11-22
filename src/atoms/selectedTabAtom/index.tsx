@@ -128,6 +128,12 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			formType: "select",
 			selectFields: ["Left", "Right", "Both"],
 		},
+		{
+			field: "extra2",
+			headerName: "Vitamin D",
+			formType: "checkbox",
+			renderCell: (params) => (params.value ? "✓" : "")
+		},
 	],
 	bottle: [
 		{
@@ -138,6 +144,12 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			renderCell: renderTwoLineDate,
 		},
 		{ flex: 1, field: "extra1", headerName: "Amount (ml)", formType: "number" },
+		{
+			field: "extra2",
+			headerName: "Vitamin D",
+			formType: "checkbox",
+			renderCell: (params) => (params.value ? "✓" : "")
+		},
 	],
 	pump: [
 		{

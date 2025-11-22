@@ -64,7 +64,12 @@ export default function EntryDialog({
       COLUMNS[tab].forEach((col) => {
         if (col.formType === "datePicker")
           initialValues[col.field] = dayjs(editEntry[col.field]);
-        else initialValues[col.field] = editEntry[col.field] ?? "";
+        else {
+          initialValues[col.field] =
+            col.formType === "checkbox"
+              ? !!editEntry[col.field]
+              : (editEntry[col.field] ?? "");
+        }
       });
 
       setIsLoading(false);
@@ -77,9 +82,10 @@ export default function EntryDialog({
   };
 
   const allFilled = React.useMemo(() => {
-    return Object.values(formValues).every(
-      (v) => v !== "" && v !== null && v !== undefined,
-    );
+    return Object.entries(formValues).every(([key, v]) => {
+      if (key === "vitaminD") return true; // optional boolean
+      return v !== "" && v !== null && v !== undefined;
+    });
   }, [formValues]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,7 +109,9 @@ export default function EntryDialog({
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{editId ? `Edit ${tab} entry` : `Add ${tab} entry`}</DialogTitle>
+      <DialogTitle>
+        {editId ? `Edit ${tab} entry` : `Add ${tab} entry`}
+      </DialogTitle>
       <DialogContent>
         <form id="add-entry-form" onSubmit={handleSubmit}>
           <Stack spacing={2} sx={{ mt: 1, minWidth: 300 }}>
@@ -169,6 +177,24 @@ export default function EntryDialog({
                           </MenuItem>
                         ))}
                       </Select>
+                    );
+
+                  case "checkbox":
+                    return (
+                      <label
+                        key={field}
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={!!value}
+                          onChange={(e) =>
+                            handleChange(field, e.target.checked)
+                          }
+                          style={{ marginRight: 8 }}
+                        />
+                        {label}
+                      </label>
                     );
 
                   case "number":
