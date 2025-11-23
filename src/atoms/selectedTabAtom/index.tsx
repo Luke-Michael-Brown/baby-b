@@ -133,7 +133,7 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			field: "extra2",
 			headerName: "VitD",
 			formType: "checkbox",
-			renderCell: (params) => (params.value ? "✓" : "")
+			renderCell: (params) => (params.value ? "✓" : ""),
 		},
 	],
 	bottle: [
@@ -144,13 +144,18 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
-		{ flex: 100, field: "extra1", headerName: "Amount (ml)", formType: "number" },
+		{
+			flex: 100,
+			field: "extra1",
+			headerName: "Amount (ml)",
+			formType: "number",
+		},
 		{
 			flex: 60,
 			field: "extra2",
 			headerName: "VitD",
 			formType: "checkbox",
-			renderCell: (params) => (params.value ? "✓" : "")
+			renderCell: (params) => (params.value ? "✓" : ""),
 		},
 	],
 	pump: [
@@ -161,7 +166,12 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			formType: "datePicker",
 			renderCell: renderTwoLineDate,
 		},
-		{ flex: 100, field: "extra2", headerName: "Amount (ml)", formType: "number" },
+		{
+			flex: 100,
+			field: "extra2",
+			headerName: "Amount (ml)",
+			formType: "number",
+		},
 	],
 };
 
@@ -209,51 +219,21 @@ function getDaysWithData(filteredData: any[]): number {
 	return uniqueDays.size;
 }
 
-function getStartDate(range: RangeOption): Date {
-	const now = new Date();
-	let startDate: Date;
-
-	switch (range) {
-		case "Last Week":
-			startDate = new Date();
-			startDate.setDate(now.getDate() - 7);
-			break;
-		case "Last Month":
-			startDate = new Date();
-			startDate.setMonth(now.getMonth() - 1);
-			break;
-		case "Last Year":
-			startDate = new Date();
-			startDate.setFullYear(now.getFullYear() - 1);
-			break;
-		default:
-			throw new Error("Invalid range");
-	}
-
-	return startDate;
-}
-
-function filterByRange(data: any[], range: RangeOption): any[] {
-	const startDate = getStartDate(range);
-	return data.filter((entry) => new Date(entry.start_time) >= startDate);
-}
-
 // --- Summary Generators ---
 export const TAB_TO_SUMMARY_DATA: Record<
 	string,
-	(data: any[], range: RangeOption) => string[]
+	(data: any[], opts: { startDate: Date; endDate: Date }) => string[]
 > = {
 	//
 	// ------------------------ BOTTLE ------------------------
 	//
-	bottle: (data, range) => {
-		const filtered = filterByRange(data, range);
-		if (filtered.length === 0) return ["No data yet"];
+	bottle: (data) => {
+		if (data.length === 0) return ["No data in range"];
 
 		let totalMl = 0;
 		let sessionCount = 0;
 
-		filtered.forEach((entry) => {
+		data.forEach((entry) => {
 			const ml = parseFloat(entry.extra1);
 			if (!isNaN(ml)) {
 				totalMl += ml;
@@ -261,7 +241,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			}
 		});
 
-		const days = getDaysWithData(filtered);
+		const days = getDaysWithData(data);
 		const avgPerDay = totalMl / days;
 		const avgPerSession = totalMl / sessionCount;
 
@@ -272,22 +252,21 @@ export const TAB_TO_SUMMARY_DATA: Record<
 	},
 
 	//
-	// ------------------------ DIAPER (unchanged) ------------------------
+	// ------------------------ DIAPER ------------------------
 	//
-	diaper: (data, range) => {
-		const filteredData = filterByRange(data, range);
-		if (filteredData.length === 0) return ["No data yet"];
+	diaper: (data) => {
+		if (data.length === 0) return ["No data in range"];
 
 		let totalPee = 0;
 		let totalPoo = 0;
 
-		filteredData.forEach((entry) => {
+		data.forEach((entry) => {
 			const val = entry.extra1.toLowerCase();
 			if (val.includes("pee")) totalPee += 1;
 			if (val.includes("poo")) totalPoo += 1;
 		});
 
-		const days = getDaysWithData(filteredData);
+		const days = getDaysWithData(data);
 		const avgPee = totalPee / days;
 		const avgPoo = totalPoo / days;
 
@@ -300,60 +279,39 @@ export const TAB_TO_SUMMARY_DATA: Record<
 	//
 	// ------------------------ NURSE ------------------------
 	//
-	nurse: (data, range) => {
-		const filtered = filterByRange(data, range);
-		if (filtered.length === 0) return ["No data yet"];
+	nurse: (data) => {
+		if (data.length === 0) return ["No data in range"];
 
-		let leftTotalMs = 0;
-		let rightTotalMs = 0;
-		let leftSessions = 0;
-		let rightSessions = 0;
+		let totalMs = 0;
+		let sessions = 0;
 
-		filtered.forEach((entry) => {
+		data.forEach((entry) => {
 			const start = new Date(entry.start_time);
 			const end = new Date(entry.end_time ?? entry.start_time);
 			const duration = end.getTime() - start.getTime();
-			const side = entry.extra1?.toLowerCase();
 
-			if (side === "left") {
-				leftTotalMs += duration;
-				leftSessions++;
-			} else if (side === "right") {
-				rightTotalMs += duration;
-				rightSessions++;
-			} else if (side === "both") {
-				// Split time equally
-				leftTotalMs += duration / 2;
-				rightTotalMs += duration / 2;
-				leftSessions++;
-				rightSessions++;
-			}
+			totalMs += duration;
+			sessions++;
 		});
 
-		const days = getDaysWithData(filtered);
+		const days = getDaysWithData(data);
 
 		return [
-			// LEFT
-			`Left: Averages ${formatMsToMinSec(leftTotalMs / days)} per day`,
-			`Left: Averages ${formatMsToMinSec(leftSessions > 0 ? leftTotalMs / leftSessions : 0)} per session`,
-
-			// RIGHT
-			`Right: Averages ${formatMsToMinSec(rightTotalMs / days)} per day`,
-			`Right: Averages ${formatMsToMinSec(rightSessions > 0 ? rightTotalMs / rightSessions : 0)} per session`,
+			`Averages ${formatMsToMinSec(totalMs / days)} per day`,
+			`Averages ${formatMsToMinSec(sessions > 0 ? totalMs / sessions : 0)} per session`,
 		];
 	},
 
 	//
 	// ------------------------ PUMP ------------------------
 	//
-	pump: (data, range) => {
-		const filtered = filterByRange(data, range);
-		if (filtered.length === 0) return ["No data yet"];
+	pump: (data) => {
+		if (data.length === 0) return ["No data in range"];
 
 		let totalMl = 0;
 		let sessions = 0;
 
-		filtered.forEach((entry) => {
+		data.forEach((entry) => {
 			const ml = parseFloat(entry.extra2);
 			if (!isNaN(ml)) {
 				totalMl += ml;
@@ -361,7 +319,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			}
 		});
 
-		const days = getDaysWithData(filtered);
+		const days = getDaysWithData(data);
 
 		return [
 			`Average: ${(totalMl / days).toFixed(2)} ml per day`,
@@ -370,17 +328,16 @@ export const TAB_TO_SUMMARY_DATA: Record<
 	},
 
 	//
-	// ------------------------ SLEEP (unchanged) ------------------------
+	// ------------------------ SLEEP ------------------------
 	//
-	sleep: (data, range) => {
-		const filteredData = filterByRange(data, range);
-		if (filteredData.length === 0) return ["No data yet"];
+	sleep: (data) => {
+		if (data.length === 0) return ["No data in range"];
 
 		let totalSleepMs = 0;
 		let totalNapMs = 0;
 		let totalNightMs = 0;
 
-		filteredData.forEach((entry) => {
+		data.forEach((entry) => {
 			const start = new Date(entry.start_time);
 			const end = new Date(entry.end_time ?? start);
 			const duration = end.getTime() - start.getTime();
@@ -392,15 +349,12 @@ export const TAB_TO_SUMMARY_DATA: Record<
 			else if (type === "night sleep") totalNightMs += duration;
 		});
 
-		const days = getDaysWithData(filteredData);
-		const avgTotal = totalSleepMs / (days * 1000 * 60);
-		const avgNap = totalNapMs / (days * 1000 * 60);
-		const avgNight = totalNightMs / (days * 1000 * 60);
+		const days = getDaysWithData(data);
 
 		return [
-			`Averages ${avgTotal.toFixed(2)} mins of sleep per day`,
-			`Averages ${avgNap.toFixed(2)} mins of naps per day`,
-			`Averages ${avgNight.toFixed(2)} mins of night sleep per day`,
+			`Averages ${(totalSleepMs / (days * 1000 * 60)).toFixed(2)} mins of sleep per day`,
+			`Averages ${(totalNapMs / (days * 1000 * 60)).toFixed(2)} mins of naps per day`,
+			`Averages ${(totalNightMs / (days * 1000 * 60)).toFixed(2)} mins of night sleep per day`,
 		];
 	},
 };
