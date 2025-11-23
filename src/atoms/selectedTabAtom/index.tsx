@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { Dayjs } from "dayjs";
 import Box from "@mui/material/Box";
 import CribIcon from "@mui/icons-material/Crib";
 import BabyChangingStationIcon from "@mui/icons-material/BabyChangingStation";
@@ -222,7 +223,7 @@ function getDaysWithData(filteredData: any[]): number {
 // --- Summary Generators ---
 export const TAB_TO_SUMMARY_DATA: Record<
 	string,
-	(data: any[], opts: { startDate: Date; endDate: Date }) => string[]
+	(data: any[], opts: { startDate: Dayjs; endDate: Dayjs }) => string[]
 > = {
 	//
 	// ------------------------ BOTTLE ------------------------
