@@ -8,10 +8,7 @@ import dayjs from "dayjs";
 
 import { TABS } from "../../atoms/selectedTabAtom";
 import SummaryItem from "../SummaryItem";
-import {
-  summayStartDateAtom,
-  summaryEndDateAtom,
-} from "../../atoms/summaryDatesAtom";
+import { summayStartDateAtom, summaryEndDateAtom } from "../../atoms/summaryDatesAtom";
 
 export const RANGES = ["Last Week", "Last 2 Weeks", "Last Month", "Last Year"] as const;
 
@@ -39,33 +36,35 @@ function SummaryTab() {
         flexGrow: 1,
         display: "grid",
         gridTemplateColumns: "repeat(1, 1fr)",
-        gap: 1.5,
-        px: 1.5,
-        py: 1.5,
+        gap: 1,
+        px: 1,
+        py: 1,
       }}
     >
       <Paper sx={{ p: 1 }}>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          {/* Left side: Start & End stacked */}
-          <Stack spacing={1}>
+        {/* Vertical stack: DatePickers row on top, Range buttons below */}
+        <Stack spacing={1}>
+          {/* DatePickers side by side */}
+          <Stack direction="row" spacing={1}>
             <DatePicker
               label="Start"
               value={startDate}
               onChange={(v) => v && setStartDate(v)}
+              sx={{ flex: 1 }}
             />
             <DatePicker
               label="End"
               value={endDate}
               onChange={(v) => v && setEndDate(v)}
+              sx={{ flex: 1 }}
             />
           </Stack>
 
-          {/* Right side: Range buttons in 2x2 */}
+          {/* Range buttons grid */}
           <Box
             sx={{
               display: "grid",
               gridTemplateColumns: "repeat(2, 1fr)",
-              gridTemplateRows: "repeat(2, auto)",
               gap: 1,
             }}
           >
@@ -80,7 +79,7 @@ function SummaryTab() {
               </ToggleButton>
             ))}
           </Box>
-        </Box>
+        </Stack>
       </Paper>
 
       {TABS.slice(1).map((tab) => (
