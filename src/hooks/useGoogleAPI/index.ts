@@ -1,143 +1,108 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 export default function useGoogleAPI() {
-  const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
+  const [accessToken, setAccessToken] = useState<string | undefined>();
   const [isSignedIn, setSignedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [tokenClient, setTokenClient] = useState<any>(null);
+  const scriptLoaded = useRef(false);
+
+  const STORAGE_KEY = "baby_b_gapi_auth";
 
   // In-memory Drive ID cache
   const idCache = useRef<Map<string, string>>(new Map());
 
-  // ---------------------------------------------------------
-  // 🔹 Load Google Identity Services (GIS) script once
-  // ---------------------------------------------------------
+  // ---------------------------------------------------------------------
+  // Load GIS script once
+  // ---------------------------------------------------------------------
   useEffect(() => {
-    const scriptId = "gis-script";
+    if (scriptLoaded.current) return;
 
-    function initClient() {
-      if (!(window as any).google) return;
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      scriptLoaded.current = true;
+      initGoogleClients();
+    };
 
-      const client = (window as any).google.accounts.oauth2.initTokenClient({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID!,
-        scope:
-          "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly",
-        callback: (tokenResponse: any) => {
-          if (tokenResponse.access_token) {
-            const expiresAt =
-              Date.now() + (tokenResponse.expires_in || 3600) * 1000;
-
-            // Save token
-            localStorage.setItem(
-              "baby_b_gapi_auth",
-              JSON.stringify({ token: tokenResponse.access_token, expiresAt }),
-            );
-
-            setAccessToken(tokenResponse.access_token);
-            setSignedIn(true);
-            setCurrentUser({ name: "Google User" });
-          }
-        },
-      });
-
-      setTokenClient(client);
-    }
-
-    // If script already exists, reuse it
-    if (document.getElementById(scriptId)) {
-      initClient();
-      return;
-    }
-
-    // Otherwise load the script
-    const s = document.createElement("script");
-    s.id = scriptId;
-    s.src = "https://accounts.google.com/gsi/client";
-    s.async = true;
-    s.defer = true;
-    s.onload = initClient;
-    document.body.appendChild(s);
+    document.body.appendChild(script);
   }, []);
 
-  // ---------------------------------------------------------
-  // 🔹 Unified restore function (used on mount + resume)
-  // ---------------------------------------------------------
-  const tryRestoreToken = useCallback(() => {
-    const saved = localStorage.getItem("baby_b_gapi_auth");
-    if (!saved || !tokenClient) return;
+  // ---------------------------------------------------------------------
+  // Initialize GIS clients (accounts.id + tokenClient)
+  // ---------------------------------------------------------------------
+  const initGoogleClients = useCallback(() => {
+    const google = (window as any).google;
+    if (!google?.accounts) return;
 
-    const { token, expiresAt } = JSON.parse(saved);
+    // Restore cached token immediately if valid
+    const saved = localStorage.getItem(STORAGE_KEY);
+    let restored = false;
 
-    if (token && Date.now() < expiresAt) {
-      // Valid token
-      setAccessToken(token);
-      setSignedIn(true);
-      setCurrentUser({ name: "Google User" });
-    } else {
-      // Attempt silent refresh
-      tokenClient.requestAccessToken({ prompt: "" });
+    if (saved) {
+      const { token, expiresAt } = JSON.parse(saved);
+      if (token && Date.now() < expiresAt) {
+        setAccessToken(token);
+        setSignedIn(true);
+        setCurrentUser({ name: "Google User" });
+        restored = true;
+      }
     }
-  }, [tokenClient]);
 
-  // ---------------------------------------------------------
-  // 🔹 Run restore when tokenClient becomes available
-  // ---------------------------------------------------------
-  useEffect(() => {
-    if (tokenClient) tryRestoreToken();
-  }, [tokenClient, tryRestoreToken]);
+    // Token client (can request access tokens)
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID!,
+      scope:
+        "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly",
+      callback: (tokenResponse: any) => {
+        if (!tokenResponse?.access_token) return;
 
-  // ---------------------------------------------------------
-  // 🔹 Listen for app resume (iOS PWA, Android PWA, tabs)
-  // ---------------------------------------------------------
-  useEffect(() => {
-    if (!tokenClient) return;
+        const expiresAt =
+          Date.now() + (tokenResponse.expires_in || 3600) * 1000;
 
-    const onVisible = () => {
-      if (document.visibilityState === "visible") {
-        tryRestoreToken();
-      }
-    };
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ token: tokenResponse.access_token, expiresAt }),
+        );
 
-    window.addEventListener("focus", tryRestoreToken);
-    document.addEventListener("visibilitychange", onVisible);
+        setAccessToken(tokenResponse.access_token);
+        setSignedIn(true);
+        setCurrentUser({ name: "Google User" });
+      },
+    });
 
-    return () => {
-      window.removeEventListener("focus", tryRestoreToken);
-      document.removeEventListener("visibilitychange", onVisible);
-    };
-  }, [tokenClient, tryRestoreToken]);
+    setTokenClient(client);
 
-  // ---------------------------------------------------------
-  // 🔹 Detect iOS "frozen → resume" (Safari PWA quirk)
-  // ---------------------------------------------------------
-  useEffect(() => {
-    if (!tokenClient) return;
+    // iOS auto-login magic:
+    // `accounts.id.initialize + prompt` allows silent refresh on iOS
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID!,
+      auto_select: true,
+      callback: () => {
+        // Once Google confirms identity, silent token request is now allowed
+        client.requestAccessToken({ prompt: "" });
+      },
+    });
 
-    let last = Date.now();
+    // Only call `prompt()` if NOT already restored
+    if (!restored) {
+      google.accounts.id.prompt();
+    }
+  }, []);
 
-    const interval = setInterval(() => {
-      const now = Date.now();
-      // If >3s gap = app was suspended
-      if (now - last > 3000) {
-        tryRestoreToken();
-      }
-      last = now;
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [tokenClient, tryRestoreToken]);
-
-  // ---------------------------------------------------------
-  // 🔹 Sign in
-  // ---------------------------------------------------------
+  // ---------------------------------------------------------------------
+  // Sign In (user initiated)
+  // ---------------------------------------------------------------------
   const signIn = useCallback(() => {
-    if (!tokenClient) throw new Error("GIS not initialized");
+    if (!tokenClient) return;
     tokenClient.requestAccessToken({ prompt: "consent" });
   }, [tokenClient]);
 
-  // ---------------------------------------------------------
-  // 🔹 Sign out
-  // ---------------------------------------------------------
+  // ---------------------------------------------------------------------
+  // Sign Out
+  // ---------------------------------------------------------------------
   const signOut = useCallback(async () => {
     if (accessToken) {
       try {
@@ -148,28 +113,27 @@ export default function useGoogleAPI() {
             headers: { "Content-type": "application/x-www-form-urlencoded" },
           },
         );
-      } catch (err) {
-        console.warn("Token revoke failed", err);
-      }
+      } catch {}
     }
 
-    localStorage.removeItem("baby_b_gapi_auth");
+    localStorage.removeItem(STORAGE_KEY);
     setAccessToken(undefined);
     setSignedIn(false);
     setCurrentUser(null);
     window.location.reload();
   }, [accessToken]);
 
-  // ---------------------------------------------------------
-  // 🔹 Get Access Token (auto-refresh if expired)
-  // ---------------------------------------------------------
+  // ---------------------------------------------------------------------
+  // Get Access Token (auto-refresh)
+  // ---------------------------------------------------------------------
   const getAccessToken = useCallback(() => {
-    const saved = localStorage.getItem("baby_b_gapi_auth");
+    const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const { token, expiresAt } = JSON.parse(saved);
       if (token && Date.now() < expiresAt) return token;
     }
 
+    // iOS-safe silent refresh
     if (tokenClient) {
       tokenClient.requestAccessToken({ prompt: "" });
     }
@@ -177,95 +141,85 @@ export default function useGoogleAPI() {
     return accessToken;
   }, [accessToken, tokenClient]);
 
-  // ---------------------------------------------------------
-  // 🔹 Resolve Drive path (folder + file)
-  // ---------------------------------------------------------
-  const resolvePath = useCallback(
-    async (filePath: string, createMissing = false) => {
-      if (!accessToken)
-        throw new Error("No access token. Please sign in first.");
+  // ---------------------------------------------------------------------
+  // Drive helpers (unchanged)
+  // ---------------------------------------------------------------------
+  const resolvePath = useCallback(async (filePath: string, createMissing = false) => {
+    if (!accessToken) throw new Error("No access token. Please sign in first.");
 
-      const parts = filePath.split("/");
-      const fileName = parts.pop()!;
-      let parentId: string = "root";
+    const parts = filePath.split("/");
+    const fileName = parts.pop()!;
+    let parentId: string = "root";
 
-      // Walk folder structure
-      for (const folderName of parts) {
-        const cacheKey = `${parentId}/${folderName}`;
-        if (idCache.current.has(cacheKey)) {
-          parentId = idCache.current.get(cacheKey)!;
-          continue;
-        }
-
-        const folderRes = await fetch(
-          `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
-          { headers: { Authorization: `Bearer ${accessToken}` } },
-        );
-
-        const data = await folderRes.json();
-        if (data.files?.length) {
-          parentId = data.files[0].id;
-          idCache.current.set(cacheKey, parentId);
-          continue;
-        }
-
-        // Create folder if missing
-        if (createMissing) {
-          const createRes = await fetch(
-            "https://www.googleapis.com/drive/v3/files",
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: folderName,
-                mimeType: "application/vnd.google-apps.folder",
-                parents: [parentId],
-              }),
-            },
-          );
-
-          const created = await createRes.json();
-          parentId = created.id;
-          idCache.current.set(cacheKey, parentId);
-          continue;
-        }
-
-        throw new Error(`Folder "${folderName}" not found.`);
+    for (const folderName of parts) {
+      const cacheKey = `${parentId}/${folderName}`;
+      if (idCache.current.has(cacheKey)) {
+        parentId = idCache.current.get(cacheKey)!;
+        continue;
       }
 
-      const fileCacheKey = `${parentId}/${fileName}`;
-      if (idCache.current.has(fileCacheKey)) {
-        return {
-          parentId,
-          fileName,
-          fileId: idCache.current.get(fileCacheKey)!,
-        };
-      }
-
-      // Look for the file
-      const fileRes = await fetch(
-        `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
+      const folderRes = await fetch(
+        `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
 
-      const fileData = await fileRes.json();
-      if (fileData.files?.length) {
-        const fileId = fileData.files[0].id;
-        idCache.current.set(fileCacheKey, fileId);
-        return { parentId, fileName, fileId };
+      const data = await folderRes.json();
+      if (data.files?.length) {
+        parentId = data.files[0].id;
+        idCache.current.set(cacheKey, parentId);
+        continue;
       }
 
-      return { parentId, fileName, fileId: null };
-    },
-    [accessToken],
-  );
+      if (createMissing) {
+        const createRes = await fetch(
+          "https://www.googleapis.com/drive/v3/files",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: folderName,
+              mimeType: "application/vnd.google-apps.folder",
+              parents: [parentId],
+            }),
+          },
+        );
 
-  // ---------------------------------------------------------
-  // 🔹 Fetch JSON from Drive
-  // ---------------------------------------------------------
+        const created = await createRes.json();
+        parentId = created.id;
+        idCache.current.set(cacheKey, parentId);
+        continue;
+      }
+
+      throw new Error(`Folder "${folderName}" not found.`);
+    }
+
+    const fileCacheKey = `${parentId}/${fileName}`;
+    if (idCache.current.has(fileCacheKey)) {
+      return {
+        parentId,
+        fileName,
+        fileId: idCache.current.get(fileCacheKey)!,
+      };
+    }
+
+    const fileRes = await fetch(
+      `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+
+    const fileData = await fileRes.json();
+    if (fileData.files?.length) {
+      const fileId = fileData.files[0].id;
+      idCache.current.set(fileCacheKey, fileId);
+      return { parentId, fileName, fileId };
+    }
+
+    return { parentId, fileName, fileId: null };
+  }, [accessToken]);
+
   const fetchJsonFromDrive = useCallback(
     async (filePath = "baby_b_tracker/babies_data.json") => {
       const { fileId } = await resolvePath(filePath);
@@ -281,9 +235,6 @@ export default function useGoogleAPI() {
     [accessToken, resolvePath],
   );
 
-  // ---------------------------------------------------------
-  // 🔹 Upload JSON to Drive
-  // ---------------------------------------------------------
   const uploadJsonToDrive = useCallback(
     async (data: any, filePath = "baby_b_tracker/babies_data.json") => {
       const { parentId, fileName, fileId } = await resolvePath(filePath, true);
@@ -292,7 +243,6 @@ export default function useGoogleAPI() {
       });
 
       if (fileId) {
-        // Update existing file
         const res = await fetch(
           `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,
           {
@@ -306,7 +256,6 @@ export default function useGoogleAPI() {
         return { updated: true, fileId };
       }
 
-      // Create new file
       const metadata = { name: fileName, parents: [parentId] };
       const form = new FormData();
       form.append(
