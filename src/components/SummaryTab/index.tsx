@@ -50,13 +50,13 @@ function SummaryTab() {
               label="Start"
               value={startDate}
               onChange={(v) => v && setStartDate(v)}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1, width: '100px' }}
             />
             <DatePicker
               label="End"
               value={endDate}
               onChange={(v) => v && setEndDate(v)}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1, width: '100px' }}
             />
           </Stack>
 
