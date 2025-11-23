@@ -1,13 +1,16 @@
+import { useAtomValue } from 'jotai';
 import { TAB_TO_SUMMARY_DATA } from '../../atoms/selectedTabAtom';
+import { summayStartDateAtom, summaryEndDateAtom } from '../../atoms/summaryDatesAtom';
 import useBabyTabData from '../../hooks/useBabyTabData';
 
 interface Props {
   tab: string;
-  startDate: Date;
-  endDate: Date;
 }
 
-export default ({ tab, startDate, endDate }: Props): string[] => {
+export default ({ tab }: Props): string[] => {
+  const startDate = useAtomValue(summayStartDateAtom);
+  const endDate = useAtomValue(summaryEndDateAtom);
+
   const { data: tabData } = useBabyTabData({ overrideTab: tab });
   const getSummary = TAB_TO_SUMMARY_DATA[tab];
 
