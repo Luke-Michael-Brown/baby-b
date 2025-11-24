@@ -269,20 +269,24 @@ export const TAB_TO_SUMMARY_DATA: Record<
 
 		let totalPee = 0;
 		let totalPoo = 0;
+		let totalEither = 0;
 
 		data.forEach((entry) => {
 			const val = entry.extra1.toLowerCase();
 			if (val.includes("pee")) totalPee += 1;
 			if (val.includes("poo")) totalPoo += 1;
+			totalEither += 1;
 		});
 
 		const days = getDaysWithData(data);
 		const avgPee = totalPee / days;
 		const avgPoo = totalPoo / days;
+		const avgEither = totalEither / days;
 
 		return [
 			`Averages ${avgPee.toFixed(2)} pees per day`,
 			`Averages ${avgPoo.toFixed(2)} poops per day`,
+			`Averages ${avgEither.toFixed(2)} diapers per day`,
 		];
 	},
 
