@@ -14,7 +14,7 @@ import type { EntryDialogProps } from "../EntryDialog";
 import DeleteDialog from "../DeleteDialog";
 import type { DeleteDialogProps } from "../DeleteDialog";
 
-const paginationModel = { page: 0, pageSize: 50 };
+const paginationModel = { page: 0, pageSize: 100 };
 
 function DataTab() {
 	const selectedTab = useAtomValue(selectedTabAtom);
