@@ -252,10 +252,12 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		const days = getDaysWithData(data);
 		const avgPerDay = totalMl / days;
 		const avgPerSession = totalMl / sessionCount;
+		const avgSessionsPerDay = sessionCount / days;
 
 		return [
 			`Averages ${avgPerDay.toFixed(2)} ml per day`,
-			`Averages ${avgPerSession.toFixed(2)} ml per session`,
+			`Averages ${avgPerSession.toFixed(2)} ml per feed`,
+			`Averages ${avgSessionsPerDay.toFixed(2)} feeds per day`,
 		];
 	},
 
@@ -303,10 +305,12 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		});
 
 		const days = getDaysWithData(data);
+		const avgSessionsPerDay = sessions / days;
 
 		return [
 			`Averages ${formatMsToMinSec(totalMs / days)} per day`,
-			`Averages ${formatMsToMinSec(sessions > 0 ? totalMs / sessions : 0)} per session`,
+			`Averages ${formatMsToMinSec(sessions > 0 ? totalMs / sessions : 0)} per nurse`,
+			`Averages ${avgSessionsPerDay.toFixed(2)} nurses per day`,
 		];
 	},
 
@@ -328,10 +332,12 @@ export const TAB_TO_SUMMARY_DATA: Record<
 		});
 
 		const days = getDaysWithData(data);
+		const avgSessionsPerDay = sessions / days;
 
 		return [
 			`Average: ${(totalMl / days).toFixed(2)} ml per day`,
-			`Average: ${(sessions > 0 ? totalMl / sessions : 0).toFixed(2)} ml per session`,
+			`Average: ${(sessions > 0 ? totalMl / sessions : 0).toFixed(2)} ml per pump`,
+			`Average: ${avgSessionsPerDay.toFixed(2)} pumps per day`,
 		];
 	},
 

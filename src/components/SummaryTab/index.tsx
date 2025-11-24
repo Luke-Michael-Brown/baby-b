@@ -26,8 +26,8 @@ function SummaryTab() {
       "Last Year": 365,
     };
 
-    setStartDate(dayjs().subtract(ranges[value], "day"));
-    setEndDate(dayjs());
+    setStartDate(dayjs().subtract(ranges[value] + 1, "day"));
+    setEndDate(dayjs().subtract(1, "day"));
   };
 
   return (
