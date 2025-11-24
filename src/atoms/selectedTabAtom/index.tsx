@@ -146,9 +146,9 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			renderCell: renderTwoLineDate,
 		},
 		{
-			flex: 100,
+			flex: 60,
 			field: "extra1",
-			headerName: "Amount (ml)",
+			headerName: "mL",
 			formType: "number",
 		},
 		{
@@ -168,10 +168,17 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
 			renderCell: renderTwoLineDate,
 		},
 		{
-			flex: 100,
+			flex: 60,
 			field: "extra2",
-			headerName: "Amount (ml)",
+			headerName: "mL",
 			formType: "number",
+		},
+		{
+			flex: 60,
+			field: "extra3",
+			headerName: "Power",
+			formType: "checkbox",
+			renderCell: (params) => (params.value ? "✓" : ""),
 		},
 	],
 };
