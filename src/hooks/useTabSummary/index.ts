@@ -22,7 +22,7 @@ export default ({ tab }: Props): string[] => {
 
   // Filter data by date range using Dayjs
   const filteredData = tabData.filter((item: any) => {
-    const itemDate = dayjs(item.startTime || item.date || item.timestamp);
+    const itemDate = dayjs(item.start_time);
     return (
       itemDate.isSame(startDate) ||
       itemDate.isSame(endDate) ||
