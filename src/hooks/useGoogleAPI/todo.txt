@@ -1,6 +1,0 @@
-- Get up to date data
-- Fix scorlling on summary tab
-- fix tab sizes for mobile
-- Being able to edit
-- Being able to remove entries
-- Be able to add more babies
