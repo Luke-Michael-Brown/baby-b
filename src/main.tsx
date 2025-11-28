@@ -9,6 +9,14 @@ import './index.css';
 import App from './App';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("America/Toronto");
+
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(

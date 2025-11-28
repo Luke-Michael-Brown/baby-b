@@ -26,8 +26,8 @@ function SummaryTab() {
       "Last Year": 365,
     };
 
-    setStartDate(dayjs().subtract(ranges[value] + 1, "day"));
-    setEndDate(dayjs().subtract(1, "day"));
+    setStartDate(dayjs().startOf("day").subtract(ranges[value] + 1, "day"));
+    setEndDate(dayjs().endOf("day").subtract(1, "day"));
   };
 
   return (
@@ -49,13 +49,13 @@ function SummaryTab() {
             <DatePicker
               label="Start"
               value={startDate}
-              onChange={(v) => v && setStartDate(v)}
+              onChange={(v) => v && setStartDate(v.startOf("day"))}
               sx={{ flex: 1, width: '100px' }}
             />
             <DatePicker
               label="End"
               value={endDate}
-              onChange={(v) => v && setEndDate(v)}
+              onChange={(v) => v && setEndDate(v.endOf("day"))}
               sx={{ flex: 1, width: '100px' }}
             />
           </Stack>

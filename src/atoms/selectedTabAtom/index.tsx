@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import Box from "@mui/material/Box";
 import CribIcon from "@mui/icons-material/Crib";
 import BabyChangingStationIcon from "@mui/icons-material/BabyChangingStation";
@@ -218,13 +218,14 @@ function formatMsToMinSec(ms: number): string {
 }
 
 function getDaysWithData(filteredData: any[]): number {
-	const uniqueDays = new Set<string>();
-	filteredData.forEach((entry) => {
-		const d = new Date(entry.start_time);
-		const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
-		uniqueDays.add(key);
-	});
-	return uniqueDays.size;
+  const uniqueDays = new Set<string>();
+
+  filteredData.forEach((entry) => {
+    const localDay = dayjs(entry.start_time).format("YYYY-MM-DD");
+    uniqueDays.add(localDay);
+  });
+
+  return uniqueDays.size;
 }
 
 // --- Summary Generators ---

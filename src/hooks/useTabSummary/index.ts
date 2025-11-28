@@ -24,8 +24,8 @@ export default ({ tab }: Props): string[] => {
   const filteredData = tabData.filter((item: any) => {
     const itemDate = dayjs(item.start_time);
     return (
-      itemDate.isSame(startDate) ||
-      itemDate.isSame(endDate) ||
+      itemDate.isSame(startDate, "day") ||
+      itemDate.isSame(endDate, "day") ||
       (itemDate.isAfter(startDate) && itemDate.isBefore(endDate))
     );
   });
