@@ -27,28 +27,11 @@ function App({ setMode }: Props) {
   }, [selectedBaby, babiesList, isLoading, setSelectedBaby])
 
   return isLoading || !selectedBaby ? (
-    <Box
-      sx={{
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'column',
-        height: '100vh',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <CircularProgress />
     </Box>
   ) : (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        width: '100%',
-      }}
-    >
+    <>
       <Header setMode={setMode} />
       <TabBar />
       <Box
@@ -65,7 +48,7 @@ function App({ setMode }: Props) {
       <Footer />
       <EntryDialog />
       <DeleteDialog />
-    </Box>
+    </>
   )
 }
 
@@ -83,27 +66,28 @@ function AppContainer() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
-      {isSignedIn ? (
-        <App setMode={setMode} />
-      ) : (
-        <Box
-          sx={{
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            height: '100vh',
-            width: '100%',
-          }}
-        >
-          <Alert severity="info" sx={{ mb: 2 }}>
-            Please sign in with Google Drive to use Baby B.
-          </Alert>
-          <Button variant="contained" onClick={signIn}>
-            Sign in
-          </Button>
-        </Box>
-      )}
+      <Box
+        sx={{
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'column',
+          height: '100vh',
+          width: '100%',
+        }}
+      >
+        {isSignedIn ? (
+          <App setMode={setMode} />
+        ) : (
+          <>
+            <Alert severity="info" sx={{ mb: 2 }}>
+              Please sign in with Google Drive to use Baby B.
+            </Alert>
+            <Button variant="contained" onClick={signIn}>
+              Sign in
+            </Button>
+          </>
+        )}
+      </Box>
     </ThemeProvider>
   )
 }
