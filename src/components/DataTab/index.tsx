@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { useAtomValue } from 'jotai'
+import { useMemo } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid'
 
@@ -9,10 +9,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import useBabyTabData from '../../hooks/useBabyTabData'
 
 import selectedTabAtom, { TABS, COLUMNS } from '../../atoms/selectedTabAtom'
-import EntryDialog, { DEFAULT_ENTRY_DIALOG_PROPS } from '../EntryDialog'
-import type { EntryDialogProps } from '../EntryDialog'
-import DeleteDialog from '../DeleteDialog'
-import type { DeleteDialogProps } from '../DeleteDialog'
+import entryDialogPropsAtom from '../../atoms/entryDialogPropsAtom'
+import { deleteDialogPropsAtom } from '../../atoms/deleteDialogPropsAtom'
 
 const paginationModel = { page: 0, pageSize: 100 }
 
@@ -20,11 +18,8 @@ function DataTab() {
   const selectedTab = useAtomValue(selectedTabAtom)
   const tab = TABS[selectedTab]
   const { data: tabData } = useBabyTabData()
-
-  const [entryDialogProps, setEntryDialogProps] = useState<EntryDialogProps>(
-    DEFAULT_ENTRY_DIALOG_PROPS
-  )
-  const [deleteDialogProps, setDeleteDialogProps] = useState<DeleteDialogProps>({})
+  const setEntryDialogProps = useSetAtom(entryDialogPropsAtom)
+  const setDeleteDialogProps = useSetAtom(deleteDialogPropsAtom)
 
   const columns = useMemo(() => {
     return COLUMNS[tab].concat([
@@ -77,8 +72,6 @@ function DataTab() {
         initialState={{ pagination: { paginationModel } }}
         sx={{ border: 0 }}
       />
-      <EntryDialog {...entryDialogProps} />
-      <DeleteDialog {...deleteDialogProps} />
     </>
   ) : null
 }

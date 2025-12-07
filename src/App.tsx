@@ -10,6 +10,8 @@ import { useTheme } from './theme'
 import useGoogleAPI from './hooks/useGoogleAPI'
 import useBabiesList from './hooks/useBabiesList'
 import selectedBabyAtom from './atoms/selectedBabyAtom'
+import EntryDialog from './components/EntryDialog'
+import DeleteDialog from './components/DeleteDialog'
 
 interface Props {
   setMode: (newMode: 'light' | 'dark') => void
@@ -61,6 +63,8 @@ function App({ setMode }: Props) {
         <TabContent />
       </Box>
       <Footer />
+      <EntryDialog />
+      <DeleteDialog />
     </Box>
   )
 }

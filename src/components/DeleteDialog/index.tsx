@@ -10,13 +10,10 @@ import Button from '@mui/material/Button'
 import useDeleteEntry from '../../hooks/useDeleteEntry'
 import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
+import { deleteDialogPropsAtom } from '../../atoms/deleteDialogPropsAtom'
 
-export interface DeleteDialogProps {
-  deleteId?: string
-  handleClose?: () => void
-}
-
-export default function DeleteDialog({ deleteId, handleClose }: DeleteDialogProps) {
+export default function DeleteDialog() {
+  const { deleteId, handleClose } = useAtomValue(deleteDialogPropsAtom)
   const [isLoading, setIsLoading] = React.useState(false)
   const onDelete = useDeleteEntry()
 

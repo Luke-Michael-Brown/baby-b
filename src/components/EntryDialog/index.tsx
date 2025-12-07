@@ -17,21 +17,10 @@ import useAddEntry from '../../hooks/useAddEntry'
 import useEditEntry from '../../hooks/useEditEntry'
 import useBabiesData from '../../hooks/useBabiesData'
 import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
+import entryDialogPropsAtom from '../../atoms/entryDialogPropsAtom'
 
-export const DEFAULT_ENTRY_DIALOG_PROPS = {
-  tab: '',
-  open: false,
-  handleClose: () => {},
-}
-
-export interface EntryDialogProps {
-  tab: string
-  editId?: string
-  open: boolean
-  handleClose: () => void
-}
-
-export default function EntryDialog({ tab, editId, open, handleClose }: EntryDialogProps) {
+export default function EntryDialog() {
+  const { tab, editId, open, handleClose } = useAtomValue(entryDialogPropsAtom)
   const { data: babiesData } = useBabiesData()
 
   const selectedBaby = useAtomValue(selectedBabyAtom)
