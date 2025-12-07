@@ -1,36 +1,33 @@
-import { useAtomValue } from "jotai";
-import { TAB_TO_SUMMARY_DATA } from "../../atoms/selectedTabAtom";
-import {
-  summayStartDateAtom,
-  summaryEndDateAtom,
-} from "../../atoms/summaryDatesAtom";
-import useBabyTabData from "../../hooks/useBabyTabData";
-import dayjs, { Dayjs } from "dayjs";
+import { useAtomValue } from 'jotai'
+import { TAB_TO_SUMMARY_DATA } from '../../atoms/selectedTabAtom'
+import { summayStartDateAtom, summaryEndDateAtom } from '../../atoms/summaryDatesAtom'
+import useBabyTabData from '../../hooks/useBabyTabData'
+import dayjs, { Dayjs } from 'dayjs'
 
 interface Props {
-  tab: string;
+  tab: string
 }
 
 export default ({ tab }: Props): string[] => {
-  const startDate: Dayjs = useAtomValue(summayStartDateAtom);
-  const endDate: Dayjs = useAtomValue(summaryEndDateAtom);
+  const startDate: Dayjs = useAtomValue(summayStartDateAtom)
+  const endDate: Dayjs = useAtomValue(summaryEndDateAtom)
 
-  const { data: tabData } = useBabyTabData({ overrideTab: tab });
-  const getSummary = TAB_TO_SUMMARY_DATA[tab];
+  const { data: tabData } = useBabyTabData({ overrideTab: tab })
+  const getSummary = TAB_TO_SUMMARY_DATA[tab]
 
-  if (!tabData || !getSummary) return ["No data yet"];
+  if (!tabData || !getSummary) return ['No data yet']
 
   // Filter data by date range using Dayjs
   const filteredData = tabData.filter((item: any) => {
-    const itemDate = dayjs(item.start_time);
+    const itemDate = dayjs(item.start_time)
     return (
-      itemDate.isSame(startDate, "day") ||
-      itemDate.isSame(endDate, "day") ||
+      itemDate.isSame(startDate, 'day') ||
+      itemDate.isSame(endDate, 'day') ||
       (itemDate.isAfter(startDate) && itemDate.isBefore(endDate))
-    );
-  });
+    )
+  })
 
-  if (filteredData.length === 0) return ["No data in range"];
+  if (filteredData.length === 0) return ['No data in range']
 
-  return getSummary(filteredData, { startDate, endDate });
-};
+  return getSummary(filteredData, { startDate, endDate })
+}

@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { useAtomValue } from 'jotai';
-import useGoogleAPI from '../useGoogleAPI';
-import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom';
-import selectedBabyAtom from '../../atoms/selectedBabyAtom';
+import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
+import useGoogleAPI from '../useGoogleAPI'
+import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
+import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   year: 'numeric',
@@ -11,41 +11,41 @@ const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   hour: '2-digit',
   minute: '2-digit',
   hour12: true,
-};
+}
 
 interface Entry {
-  id: string;
-  start_time: string;
-  end_time?: string;
-  isShown?: boolean;
-  [key: string]: any;
+  id: string
+  start_time: string
+  end_time?: string
+  isShown?: boolean
+  [key: string]: any
 }
 
 interface BabyData {
-  [tab: string]: Entry[];
+  [tab: string]: Entry[]
 }
 
 interface Data {
-  [babyName: string]: BabyData;
+  [babyName: string]: BabyData
 }
 
 interface Props {
-  overrideTab?: string;
+  overrideTab?: string
 }
 
 export default function useBabyTabData({ overrideTab }: Props = {}) {
-  const { fetchJsonFromDrive } = useGoogleAPI();
-  const selectedTab = useAtomValue(selectedTabAtom);
-  const tab = overrideTab ?? TABS[selectedTab];
-  const selectedBaby = useAtomValue(selectedBabyAtom);
+  const { fetchJsonFromDrive } = useGoogleAPI()
+  const selectedTab = useAtomValue(selectedTabAtom)
+  const tab = overrideTab ?? TABS[selectedTab]
+  const selectedBaby = useAtomValue(selectedBabyAtom)
 
   return useQuery({
     queryKey: ['babies-data'],
     queryFn: () => fetchJsonFromDrive() as Promise<Data>,
     select: (data: Data) => {
-      if (!selectedBaby || !data[selectedBaby]) return [];
+      if (!selectedBaby || !data[selectedBaby]) return []
 
-      const entries = data[selectedBaby]?.[tab] ?? [];
+      const entries = data[selectedBaby]?.[tab] ?? []
 
       return entries
         .filter((entry: Entry) => entry.isShown)
@@ -59,7 +59,7 @@ export default function useBabyTabData({ overrideTab }: Props = {}) {
           end_time: entry.end_time
             ? new Date(entry.end_time).toLocaleString('en-US', DATE_OPTIONS)
             : undefined,
-        }));
+        }))
     },
-  });
+  })
 }

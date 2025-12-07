@@ -1,45 +1,39 @@
-import { useState, useEffect } from "react";
-import { useAtom } from "jotai";
-import {
-  ThemeProvider,
-  CssBaseline,
-  Alert,
-  Button,
-  CircularProgress,
-} from "@mui/material";
-import Header from "./components/Header";
-import TabBar from "./components/TabBar";
-import TabContent from "./components/TabContent";
-import Footer from "./components/Footer";
-import Box from "@mui/material/Box";
-import { useTheme } from "./theme";
-import useGoogleAPI from "./hooks/useGoogleAPI";
-import useBabiesList from "./hooks/useBabiesList";
-import selectedBabyAtom from "./atoms/selectedBabyAtom";
+import { useState, useEffect } from 'react'
+import { useAtom } from 'jotai'
+import { ThemeProvider, CssBaseline, Alert, Button, CircularProgress } from '@mui/material'
+import Header from './components/Header'
+import TabBar from './components/TabBar'
+import TabContent from './components/TabContent'
+import Footer from './components/Footer'
+import Box from '@mui/material/Box'
+import { useTheme } from './theme'
+import useGoogleAPI from './hooks/useGoogleAPI'
+import useBabiesList from './hooks/useBabiesList'
+import selectedBabyAtom from './atoms/selectedBabyAtom'
 
 interface Props {
-  setMode: (newMode: "light" | "dark") => void;
+  setMode: (newMode: 'light' | 'dark') => void
 }
 
 function App({ setMode }: Props) {
-  const { data: babiesList, isLoading } = useBabiesList();
-  const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
+  const { data: babiesList, isLoading } = useBabiesList()
+  const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom)
   useEffect(() => {
     if (selectedBaby === null && !isLoading && babiesList && babiesList.length > 0) {
-      setSelectedBaby(babiesList[0]);
+      setSelectedBaby(babiesList[0])
     }
-  }, [selectedBaby, babiesList]);
+  }, [selectedBaby, babiesList, isLoading, setSelectedBaby])
 
   return isLoading || !selectedBaby ? (
     <Box
       sx={{
-        display: "flex",
+        display: 'flex',
         flex: 1,
-        flexDirection: "column",
-        height: "100vh",
+        flexDirection: 'column',
+        height: '100vh',
         width: '100%',
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <CircularProgress />
@@ -47,9 +41,9 @@ function App({ setMode }: Props) {
   ) : (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
         width: '100%',
       }}
     >
@@ -58,29 +52,29 @@ function App({ setMode }: Props) {
       <Box
         sx={{
           flexGrow: 1,
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          pb: "98px",
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          pb: '98px',
         }}
       >
         <TabContent />
       </Box>
       <Footer />
     </Box>
-  );
+  )
 }
 
 function AppContainer() {
-  const [mode, _setMode] = useState<"light" | "dark">(
-    localStorage.getItem("mode") === "dark" ? "dark" : "light",
-  );
-  const setMode = (newMode: "light" | "dark") => {
-    _setMode(newMode);
-    localStorage.setItem("mode", newMode);
-  };
-  const theme = useTheme(mode);
-  const { isSignedIn, signIn } = useGoogleAPI();
+  const [mode, _setMode] = useState<'light' | 'dark'>(
+    localStorage.getItem('mode') === 'dark' ? 'dark' : 'light'
+  )
+  const setMode = (newMode: 'light' | 'dark') => {
+    _setMode(newMode)
+    localStorage.setItem('mode', newMode)
+  }
+  const theme = useTheme(mode)
+  const { isSignedIn, signIn } = useGoogleAPI()
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,10 +85,10 @@ function AppContainer() {
       ) : (
         <Box
           sx={{
-            display: "flex",
+            display: 'flex',
             flex: 1,
-            flexDirection: "column",
-            height: "100vh",
+            flexDirection: 'column',
+            height: '100vh',
             width: '100%',
           }}
         >
@@ -107,7 +101,7 @@ function AppContainer() {
         </Box>
       )}
     </ThemeProvider>
-  );
+  )
 }
 
-export default AppContainer;
+export default AppContainer

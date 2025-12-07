@@ -1,16 +1,16 @@
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { TABS_TO_ICON } from "../../atoms/selectedTabAtom";
-import useTabSummary from "../../hooks/useTabSummary";
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import { TABS_TO_ICON } from '../../atoms/selectedTabAtom'
+import useTabSummary from '../../hooks/useTabSummary'
 
 interface Props {
-  tab: string;
+  tab: string
 }
 
 function SummaryItem({ tab }: Props) {
-  const Icon = TABS_TO_ICON[tab];
-  const summaries = useTabSummary({ tab });
+  const Icon = TABS_TO_ICON[tab]
+  const summaries = useTabSummary({ tab })
 
   return (
     <Paper
@@ -40,7 +40,7 @@ function SummaryItem({ tab }: Props) {
         </Stack>
       </Stack>
     </Paper>
-  );
+  )
 }
 
-export default SummaryItem;
+export default SummaryItem

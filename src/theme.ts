@@ -1,27 +1,27 @@
-import { useAtomValue } from 'jotai';
-import { createTheme } from '@mui/material/styles';
-import type { ThemeOptions } from '@mui/material/styles';
-import { deepmerge } from '@mui/utils';
-import selectedTabAtom, { TABS } from './atoms/selectedTabAtom';
+import { useAtomValue } from 'jotai'
+import { createTheme } from '@mui/material/styles'
+import type { ThemeOptions } from '@mui/material/styles'
+import { deepmerge } from '@mui/utils'
+import selectedTabAtom, { TABS } from './atoms/selectedTabAtom'
 
 declare module '@mui/material/styles' {
   interface Palette {
-    neutral: Palette['primary'];
-    summary: Palette['primary'];
-    sleep: Palette['primary'];
-    diaper: Palette['primary'];
-    nurse: Palette['primary'];
-    pump: Palette['primary'];
-    bottle: Palette['primary'];
+    neutral: Palette['primary']
+    summary: Palette['primary']
+    sleep: Palette['primary']
+    diaper: Palette['primary']
+    nurse: Palette['primary']
+    pump: Palette['primary']
+    bottle: Palette['primary']
   }
   interface PaletteOptions {
-    neutral?: PaletteOptions['primary'];
-    summary?: PaletteOptions['primary'];
-    sleep?: PaletteOptions['primary'];
-    diaper?: PaletteOptions['primary'];
-    nurse?: PaletteOptions['primary'];
-    pump?: PaletteOptions['primary'];
-    bottle?: PaletteOptions['primary'];
+    neutral?: PaletteOptions['primary']
+    summary?: PaletteOptions['primary']
+    sleep?: PaletteOptions['primary']
+    diaper?: PaletteOptions['primary']
+    nurse?: PaletteOptions['primary']
+    pump?: PaletteOptions['primary']
+    bottle?: PaletteOptions['primary']
   }
 }
 
@@ -52,7 +52,7 @@ const baseTheme: ThemeOptions = {
       styleOverrides: { root: { transition: 'background-color 0.3s ease' } },
     },
   },
-};
+}
 
 // Light mode palette
 const lightPalette: ThemeOptions['palette'] = {
@@ -60,15 +60,15 @@ const lightPalette: ThemeOptions['palette'] = {
   primary: { main: '#1976d2' },
   secondary: { main: '#8e24aa' },
   neutral: { main: '#6b7280', contrastText: '#fff' },
-  summary: { main: '#4dabf5', contrastText: '#fff' },    // subtle blue
-  sleep: { main: '#b39ddb', contrastText: '#fff' },      // soft purple
-  diaper: { main: '#81c784', contrastText: '#fff' },     // soft green
+  summary: { main: '#4dabf5', contrastText: '#fff' }, // subtle blue
+  sleep: { main: '#b39ddb', contrastText: '#fff' }, // soft purple
+  diaper: { main: '#81c784', contrastText: '#fff' }, // soft green
   nurse: { main: '#fff176', contrastText: '#121212' }, // muted yellow
-  pump: { main: '#e57373', contrastText: '#fff' },    // soft red
-  bottle: { main: '#ffb74d', contrastText: '#121212' },  // soft orange
+  pump: { main: '#e57373', contrastText: '#fff' }, // soft red
+  bottle: { main: '#ffb74d', contrastText: '#121212' }, // soft orange
   background: { default: '#f9f9f9', paper: '#ffffff' },
   divider: '#e0e0e0',
-};
+}
 
 // Dark mode palette
 const darkPalette: ThemeOptions['palette'] = {
@@ -76,28 +76,28 @@ const darkPalette: ThemeOptions['palette'] = {
   primary: { main: '#90caf9', contrastText: '#121212' },
   secondary: { main: '#b785c4', contrastText: '#121212' },
   neutral: { main: '#64748b', contrastText: '#ffffff' },
-  summary: { main: '#42a5f5', contrastText: '#121212' },    // gentle blue
-  sleep: { main: '#9575cd', contrastText: '#121212' },      // muted purple
-  diaper: { main: '#66bb6a', contrastText: '#121212' },     // muted green
-  nurse: { main: '#ffee58', contrastText: '#121212' },    // soft yellow
-  pump: { main: '#ef5350', contrastText: '#ffffff' },    // muted red
-  bottle: { main: '#ffa726', contrastText: '#121212' },     // soft orange
+  summary: { main: '#42a5f5', contrastText: '#121212' }, // gentle blue
+  sleep: { main: '#9575cd', contrastText: '#121212' }, // muted purple
+  diaper: { main: '#66bb6a', contrastText: '#121212' }, // muted green
+  nurse: { main: '#ffee58', contrastText: '#121212' }, // soft yellow
+  pump: { main: '#ef5350', contrastText: '#ffffff' }, // muted red
+  bottle: { main: '#ffa726', contrastText: '#121212' }, // soft orange
   background: { default: '#101010', paper: '#1c1c1c' },
   divider: 'rgba(255,255,255,0.2)',
   text: { primary: '#ffffff', secondary: '#cfd8dc', disabled: '#78909c' },
-};
+}
 
 // Theme builder function
 export const useTheme = (mode: 'light' | 'dark') => {
-  const selectedTab = useAtomValue(selectedTabAtom);
-  const tab = TABS[selectedTab];
+  const selectedTab = useAtomValue(selectedTabAtom)
+  const tab = TABS[selectedTab]
 
-  const basePalette = mode === 'light' ? lightPalette : darkPalette;
+  const basePalette = mode === 'light' ? lightPalette : darkPalette
 
   const dynamicPalette = {
     ...basePalette,
     primary: basePalette[tab as keyof typeof basePalette] || basePalette.primary,
-  };
+  }
 
-  return createTheme(deepmerge(baseTheme, { palette: dynamicPalette }));
-};
+  return createTheme(deepmerge(baseTheme, { palette: dynamicPalette }))
+}
