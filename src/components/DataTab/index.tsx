@@ -8,15 +8,14 @@ import DeleteIcon from '@mui/icons-material/Delete'
 
 import useBabyTabData from '../../hooks/useBabyTabData'
 
-import selectedTabAtom, { TABS, COLUMNS } from '../../atoms/selectedTabAtom'
+import selectedTabAtom, { COLUMNS } from '../../atoms/selectedTabAtom'
 import entryDialogPropsAtom from '../../atoms/entryDialogPropsAtom'
 import { deleteDialogPropsAtom } from '../../atoms/deleteDialogPropsAtom'
 
 const paginationModel = { page: 0, pageSize: 100 }
 
 function DataTab() {
-  const selectedTab = useAtomValue(selectedTabAtom)
-  const tab = TABS[selectedTab]
+  const { tab } = useAtomValue(selectedTabAtom)
   const { data: tabData } = useBabyTabData()
   const setEntryDialogProps = useSetAtom(entryDialogPropsAtom)
   const setDeleteDialogProps = useSetAtom(deleteDialogPropsAtom)

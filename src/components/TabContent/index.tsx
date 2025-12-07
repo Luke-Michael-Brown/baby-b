@@ -4,8 +4,8 @@ import DataTab from '../DataTab'
 import selectedTabAtom from '../../atoms/selectedTabAtom'
 
 function TabContent() {
-  const selectedTab = useAtomValue(selectedTabAtom)
-  switch (selectedTab) {
+  const { tabIndex } = useAtomValue(selectedTabAtom)
+  switch (tabIndex) {
     case 0:
       return <SummaryTab />
 

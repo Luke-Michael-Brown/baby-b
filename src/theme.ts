@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai'
 import { createTheme } from '@mui/material/styles'
 import type { ThemeOptions } from '@mui/material/styles'
 import { deepmerge } from '@mui/utils'
-import selectedTabAtom, { TABS } from './atoms/selectedTabAtom'
+import selectedTabAtom from './atoms/selectedTabAtom'
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -89,8 +89,7 @@ const darkPalette: ThemeOptions['palette'] = {
 
 // Theme builder function
 export const useTheme = (mode: 'light' | 'dark') => {
-  const selectedTab = useAtomValue(selectedTabAtom)
-  const tab = TABS[selectedTab]
+  const { tab } = useAtomValue(selectedTabAtom)
 
   const basePalette = mode === 'light' ? lightPalette : darkPalette
 

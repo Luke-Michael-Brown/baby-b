@@ -8,7 +8,7 @@ import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
 
 export default function BasicTabs() {
   const theme = useTheme()
-  const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom)
+  const [{ tabIndex }, setSelectedTab] = useAtom(selectedTabAtom)
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue)
@@ -24,7 +24,7 @@ export default function BasicTabs() {
         }}
       >
         <Tabs
-          value={selectedTab}
+          value={tabIndex}
           onChange={handleChange}
           textColor="primary"
           indicatorColor="primary"

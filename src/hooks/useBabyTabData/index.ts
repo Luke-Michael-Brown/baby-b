@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import useGoogleAPI from '../useGoogleAPI'
-import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
+import selectedTabAtom from '../../atoms/selectedTabAtom'
 import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -35,8 +35,7 @@ interface Props {
 
 export default function useBabyTabData({ overrideTab }: Props = {}) {
   const { fetchJsonFromDrive } = useGoogleAPI()
-  const selectedTab = useAtomValue(selectedTabAtom)
-  const tab = overrideTab ?? TABS[selectedTab]
+  const { tab } = useAtomValue(selectedTabAtom)
   const selectedBaby = useAtomValue(selectedBabyAtom)
 
   return useQuery({
@@ -45,7 +44,7 @@ export default function useBabyTabData({ overrideTab }: Props = {}) {
     select: (data: Data) => {
       if (!selectedBaby || !data[selectedBaby]) return []
 
-      const entries = data[selectedBaby]?.[tab] ?? []
+      const entries = data[selectedBaby]?.[overrideTab ?? tab] ?? []
 
       return entries
         .filter((entry: Entry) => entry.isShown)

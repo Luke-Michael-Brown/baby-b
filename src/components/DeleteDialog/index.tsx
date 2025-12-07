@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 
 import useDeleteEntry from '../../hooks/useDeleteEntry'
 import selectedBabyAtom from '../../atoms/selectedBabyAtom'
-import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
+import selectedTabAtom from '../../atoms/selectedTabAtom'
 import { deleteDialogPropsAtom } from '../../atoms/deleteDialogPropsAtom'
 
 export default function DeleteDialog() {
@@ -18,8 +18,7 @@ export default function DeleteDialog() {
   const onDelete = useDeleteEntry()
 
   const selectedBaby = useAtomValue(selectedBabyAtom)
-  const selectedTab = useAtomValue(selectedTabAtom)
-  const tab = TABS[selectedTab]
+  const { tab } = useAtomValue(selectedTabAtom)
 
   const onSubmit = async () => {
     if (!deleteId || !selectedBaby || !tab) return

@@ -11,12 +11,11 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
-import { COLUMNS } from '../../atoms/selectedTabAtom'
 import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 import useAddEntry from '../../hooks/useAddEntry'
 import useEditEntry from '../../hooks/useEditEntry'
 import useBabiesData from '../../hooks/useBabiesData'
-import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
+import selectedTabAtom, { TABS, COLUMNS } from '../../atoms/selectedTabAtom'
 import entryDialogPropsAtom from '../../atoms/entryDialogPropsAtom'
 
 export default function EntryDialog() {

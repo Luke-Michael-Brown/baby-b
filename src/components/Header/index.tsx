@@ -19,7 +19,7 @@ import { useTheme } from '@mui/material/styles'
 import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 import useBabiesList from '../../hooks/useBabiesList'
 import ThemedAppBar from '../ThemedAppBar'
-import selectedTabAtom, { TABS, TABS_TO_ICON } from '../../atoms/selectedTabAtom'
+import selectedTabAtom from '../../atoms/selectedTabAtom'
 
 interface Props {
   setMode: (newMode: 'light' | 'dark') => void
@@ -36,8 +36,7 @@ function Header({ setMode }: Props) {
 
   const { data: babiesList = [] } = useBabiesList()
   const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom)
-  const selectedTab = useAtomValue(selectedTabAtom)
-  const tab = TABS[selectedTab]
+  const { Icon } = useAtomValue(selectedTabAtom)
 
   const onBabySelected = (event: SelectChangeEvent<string>) => {
     setSelectedBaby(event.target.value)
@@ -57,8 +56,6 @@ function Header({ setMode }: Props) {
       setIsRefreshing(false)
     }
   }
-
-  const Icon = TABS_TO_ICON[tab]
 
   return (
     <Box>
