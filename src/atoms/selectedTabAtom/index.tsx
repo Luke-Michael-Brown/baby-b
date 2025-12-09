@@ -234,12 +234,14 @@ export const TAB_TO_SUMMARY_DATA: Record<
 
     let totalMl = 0
     let sessionCount = 0
+    let vitDCount = 0
 
     data.forEach(entry => {
       const ml = parseFloat(entry.extra1)
       if (!isNaN(ml)) {
         totalMl += ml
         sessionCount++
+        if (entry.extra2) vitDCount++
       }
     })
 
@@ -247,11 +249,13 @@ export const TAB_TO_SUMMARY_DATA: Record<
     const avgPerDay = totalMl / days
     const avgPerSession = totalMl / sessionCount
     const avgSessionsPerDay = sessionCount / days
+    const avgVitDPerDay = vitDCount / days
 
     return [
       `Averages ${avgPerDay.toFixed(2)} ml per day`,
       `Averages ${avgPerSession.toFixed(2)} ml per feed`,
       `Averages ${avgSessionsPerDay.toFixed(2)} feeds per day`,
+      `Averages ${avgVitDPerDay.toFixed(2)} VitD per day`, // NEW
     ]
   },
 
@@ -292,6 +296,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 
     let totalMs = 0
     let sessions = 0
+    let vitDCount = 0
 
     data.forEach(entry => {
       const start = new Date(entry.start_time)
@@ -300,15 +305,19 @@ export const TAB_TO_SUMMARY_DATA: Record<
 
       totalMs += duration
       sessions++
+
+      if (entry.extra2) vitDCount++
     })
 
     const days = getDaysWithData(data)
     const avgSessionsPerDay = sessions / days
+    const avgVitDPerDay = vitDCount / days
 
     return [
       `Averages ${formatMsToMinSec(totalMs / days)} per day`,
       `Averages ${formatMsToMinSec(sessions > 0 ? totalMs / sessions : 0)} per nurse`,
       `Averages ${avgSessionsPerDay.toFixed(2)} nurses per day`,
+      `Averages ${avgVitDPerDay.toFixed(2)} VitD per day`,
     ]
   },
 
@@ -321,21 +330,32 @@ export const TAB_TO_SUMMARY_DATA: Record<
     let totalMl = 0
     let sessions = 0
 
+    let totalPowerMl = 0
+    let powerSessions = 0
+
     data.forEach(entry => {
       const ml = parseFloat(entry.extra2)
       if (!isNaN(ml)) {
         totalMl += ml
         sessions++
+
+        if (entry.extra3) {
+          totalPowerMl += ml
+          powerSessions++
+        }
       }
     })
 
     const days = getDaysWithData(data)
     const avgSessionsPerDay = sessions / days
+    const avgPowerSessionsPerDay = powerSessions / days
 
     return [
       `Average: ${(totalMl / days).toFixed(2)} ml per day`,
       `Average: ${(sessions > 0 ? totalMl / sessions : 0).toFixed(2)} ml per pump`,
       `Average: ${avgSessionsPerDay.toFixed(2)} pumps per day`,
+      `Average: ${(powerSessions > 0 ? totalPowerMl / powerSessions : 0).toFixed(2)} ml per power pump`,
+      `Average: ${avgPowerSessionsPerDay.toFixed(2)} power pumps per day`,
     ]
   },
 
