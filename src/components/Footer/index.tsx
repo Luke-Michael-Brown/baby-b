@@ -9,7 +9,7 @@ import ThemedAppBar from '../ThemedAppBar'
 import AddIcon from '@mui/icons-material/Add'
 import { entryDialogPropsAtom } from '../../atoms/entryDialogPropsAtom'
 
-const APP_VERSION = '1.10.2'
+const APP_VERSION = '1.11.0'
 
 function Footer() {
   const setEntryDialogProps = useSetAtom(entryDialogPropsAtom)
