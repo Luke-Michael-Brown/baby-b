@@ -1,4 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
+import { atom, useAtom } from 'jotai'
+
+const authAtom = atom<{
+  accessToken: string | undefined
+  isSignedIn: boolean
+  tokenClient: any
+}>({
+  accessToken: undefined,
+  isSignedIn: false,
+  tokenClient: null,
+})
 
 let idCache = new Map()
 const raw = localStorage.getItem('baby_b_gapi_idcache')
@@ -17,10 +28,7 @@ const saveCache = () => {
 }
 
 export default function useGoogleAPI() {
-  const [accessToken, setAccessToken] = useState<string | undefined>(undefined)
-  const [isSignedIn, setSignedIn] = useState(false)
-  const [currentUser, setCurrentUser] = useState<any>(null)
-  const [tokenClient, setTokenClient] = useState<any>(null)
+  const [{ accessToken, isSignedIn, tokenClient }, setAuth] = useAtom(authAtom)
 
   // ---------------------------------------------------------
   // GIS Script Loader
@@ -44,14 +52,19 @@ export default function useGoogleAPI() {
               JSON.stringify({ token: tokenResponse.access_token, expiresAt })
             )
 
-            setAccessToken(tokenResponse.access_token)
-            setSignedIn(true)
-            setCurrentUser({ name: 'Google User' })
+            setAuth(oldAuth => ({
+              ...oldAuth,
+              accessToken: tokenResponse.access_token,
+              isSignedIn: true,
+            }))
           }
         },
       })
 
-      setTokenClient(client)
+      setAuth(oldAuth => ({
+        ...oldAuth,
+        tokenClient: client,
+      }))
     }
 
     if (document.getElementById(scriptId)) {
@@ -78,9 +91,11 @@ export default function useGoogleAPI() {
     const { token, expiresAt } = JSON.parse(saved)
 
     if (token && Date.now() < expiresAt) {
-      setAccessToken(token)
-      setSignedIn(true)
-      setCurrentUser({ name: 'Google User' })
+      setAuth(oldAuth => ({
+        ...oldAuth,
+        accessToken: token,
+        isSignedIn: true,
+      }))
     } else {
       tokenClient.requestAccessToken({ prompt: '' })
     }
@@ -151,9 +166,11 @@ export default function useGoogleAPI() {
     localStorage.removeItem('baby_b_gapi_auth')
     localStorage.removeItem('baby_b_gapi_idcache')
 
-    setAccessToken(undefined)
-    setSignedIn(false)
-    setCurrentUser(null)
+    setAuth(oldAuth => ({
+      ...oldAuth,
+      accessToken: undefined,
+      isSignedIn: false,
+    }))
 
     window.location.reload()
   }, [accessToken])
@@ -324,7 +341,6 @@ export default function useGoogleAPI() {
     signIn,
     signOut,
     accessToken,
-    currentUser,
     fetchJsonFromDrive,
     uploadJsonToDrive,
   }
