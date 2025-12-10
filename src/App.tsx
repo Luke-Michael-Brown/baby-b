@@ -7,7 +7,7 @@ import TabContent from './components/TabContent'
 import Footer from './components/Footer'
 import Box from '@mui/material/Box'
 import { useTheme } from './theme'
-import useGoogleAPI from './hooks/useGoogleAPI'
+import useGoogleAPI, { useGoogleAPISetup } from './hooks/useGoogleAPI'
 import useBabiesList from './hooks/useBabiesList'
 import selectedBabyAtom from './atoms/selectedBabyAtom'
 import EntryDialog from './components/EntryDialog'
@@ -53,6 +53,8 @@ function App({ setMode }: Props) {
 }
 
 function AppContainer() {
+  useGoogleAPISetup()
+
   const [mode, _setMode] = useState<'light' | 'dark'>(
     localStorage.getItem('mode') === 'dark' ? 'dark' : 'light'
   )

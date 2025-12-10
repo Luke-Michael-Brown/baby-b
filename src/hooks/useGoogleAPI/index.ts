@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react'
 import { atom, useAtom } from 'jotai'
+import createCacheMap from '../../utils/createCacheMap'
 
 const authAtom = atom<{
   accessToken: string | undefined
@@ -11,24 +12,14 @@ const authAtom = atom<{
   tokenClient: null,
 })
 
-let idCache = new Map()
-const raw = localStorage.getItem('baby_b_gapi_idcache')
-if (raw) {
-  try {
-    const entries = JSON.parse(raw)
-    if (Array.isArray(entries)) {
-      idCache = new Map(entries)
-    }
-  } catch {
-    idCache = new Map()
-  }
-}
-const saveCache = () => {
-  localStorage.setItem('baby_b_gapi_idcache', JSON.stringify(Array.from(idCache.entries())))
-}
+const {
+  cacheMap: idCache,
+  addToCacheMap: addToIdCache,
+  resetCacheMap: resetIdCache,
+} = createCacheMap('baby_b_gapi_idcache')
 
-export default function useGoogleAPI() {
-  const [{ accessToken, isSignedIn, tokenClient }, setAuth] = useAtom(authAtom)
+export function useGoogleAPISetup() {
+  const [{ tokenClient }, setAuth] = useAtom(authAtom)
 
   // ---------------------------------------------------------
   // GIS Script Loader
@@ -142,6 +133,10 @@ export default function useGoogleAPI() {
 
     return () => clearInterval(interval)
   }, [tokenClient, tryRestoreToken])
+}
+
+export default function useGoogleAPI() {
+  const [{ accessToken, isSignedIn, tokenClient }, setAuth] = useAtom(authAtom)
 
   // ---------------------------------------------------------
   // Sign In / Sign Out
@@ -205,8 +200,7 @@ export default function useGoogleAPI() {
 
           if (data.files?.length) {
             parentId = data.files[0].id
-            idCache.set(cacheKey, parentId)
-            saveCache()
+            addToIdCache(cacheKey, parentId)
             continue
           }
 
@@ -227,8 +221,7 @@ export default function useGoogleAPI() {
 
             const created = await createRes.json()
             parentId = created.id
-            idCache.set(cacheKey, parentId)
-            saveCache()
+            addToIdCache(cacheKey, parentId)
             continue
           }
 
@@ -251,8 +244,7 @@ export default function useGoogleAPI() {
 
         if (fileData.files?.length) {
           const id = fileData.files[0].id
-          idCache.set(fileKey, id)
-          saveCache()
+          addToIdCache(fileKey, id)
           return { parentId, fileName, fileId: id }
         }
 
@@ -260,8 +252,7 @@ export default function useGoogleAPI() {
       } catch (err) {
         if (retry) {
           console.warn('ID cache invalidated → clearing and retrying resolvePath()')
-          idCache = new Map()
-          saveCache()
+          resetIdCache()
           return resolvePath(filePath, createMissing, false)
         }
         throw err
@@ -328,8 +319,7 @@ export default function useGoogleAPI() {
 
       const created = await res.json()
 
-      idCache.set(`${parentId}/${fileName}`, created.id)
-      saveCache()
+      addToIdCache(`${parentId}/${fileName}`, created.id)
 
       return { created: true, fileId: created.id }
     },
