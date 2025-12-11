@@ -5,6 +5,5 @@
 - Update readme
 - Make new icon
 - Show header on login
-- Move app version (make it use package.json)
 - Improve login screen
 - Make app header clickable

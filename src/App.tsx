@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAtom } from 'jotai'
 import { ThemeProvider, CssBaseline, Alert, Button, CircularProgress } from '@mui/material'
 import Header from './components/Header'
-import TabBar from './components/TabBar'
+import SecondaryBar from './components/SecondaryBar'
 import TabContent from './components/TabContent'
 import Footer from './components/Footer'
 import Box from '@mui/material/Box'
@@ -33,7 +33,7 @@ function App({ setMode }: Props) {
   ) : (
     <>
       <Header setMode={setMode} />
-      <TabBar />
+      <SecondaryBar />
       <Box
         sx={{
           flexGrow: 1,

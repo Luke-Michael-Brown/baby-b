@@ -395,7 +395,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 export const TABS: string[] = ['summary', 'sleep', 'diaper', 'nurse', 'bottle', 'pump']
 
 // The raw index atom (setter takes only the index)
-const selectedTabAtom = atom<number>(0)
+const selectedTabAtom = atom<string>(TABS[0])
 
 /**
  * A derived atom that returns:
@@ -408,27 +408,22 @@ const selectedTabAtom = atom<number>(0)
  */
 export default atom(
   get => {
-    const tabIndex = get(selectedTabAtom)
-    const tab = TABS[tabIndex] as TabKey
+    const tab = get(selectedTabAtom)
     const Icon = TABS_TO_ICON[tab]
 
-    const getSummary = (
-      data: any[],
-      opts: { startDate: Dayjs; endDate: Dayjs }
-    ) => {
+    const getSummary = (data: any[], opts: { startDate: Dayjs; endDate: Dayjs }) => {
       const fn = TAB_TO_SUMMARY_DATA[tab]
       return fn ? fn(data, opts) : []
     }
 
     return {
-      tabIndex,
+      tabIndex: TABS.indexOf(tab),
       tab,
       Icon,
       getSummary,
     }
   },
-  (_get, set, newIndex: number) => {
-    set(selectedTabAtom, newIndex)
+  (_get, set, newTab: string) => {
+    set(selectedTabAtom, newTab)
   }
 )
-

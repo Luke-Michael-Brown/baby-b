@@ -8,8 +8,6 @@ import ThemedAppBar from '../ThemedAppBar'
 import AddIcon from '@mui/icons-material/Add'
 import { useEntryDialog } from '../../dialogs/EntryDialog'
 
-const APP_VERSION = '1.11.0'
-
 function Footer() {
   const { openEntryDialog } = useEntryDialog()
 
@@ -26,7 +24,6 @@ function Footer() {
           <Stack sx={{ alignItems: 'center' }} direction="row">
             <AddIcon />
             <Typography variant="body1">Add Entry</Typography>
-            <Typography sx={{ ml: 'auto' }} variant="body2">{`v${APP_VERSION}`}</Typography>
           </Stack>
           <ButtonGroup size="large" variant="contained" color="primary">
             {TABS.slice(1).map(tab => (
