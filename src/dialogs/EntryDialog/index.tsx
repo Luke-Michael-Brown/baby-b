@@ -16,10 +16,30 @@ import useAddEntry from '../../hooks/useAddEntry'
 import useEditEntry from '../../hooks/useEditEntry'
 import useBabiesData from '../../hooks/useBabiesData'
 import selectedTabAtom, { TABS, COLUMNS } from '../../atoms/selectedTabAtom'
-import entryDialogPropsAtom from '../../atoms/entryDialogPropsAtom'
+import { atom } from 'jotai'
+
+export interface EntryDialogProps {
+  tab?: string
+  editId?: string
+}
+
+export const entryDialogPropsAtom = atom<EntryDialogProps>({})
+
+export function useEntryDialog() {
+  const setEntryDialogProps = useSetAtom(entryDialogPropsAtom)
+  const openEntryDialog = (props: EntryDialogProps) => {
+    setEntryDialogProps(props)
+  }
+  const closeEntryDialog = () => {
+    setEntryDialogProps({})
+  }
+
+  return { openEntryDialog, closeEntryDialog }
+}
 
 export default function EntryDialog() {
-  const { tab, editId, open, handleClose } = useAtomValue(entryDialogPropsAtom)
+  const { tab, editId } = useAtomValue(entryDialogPropsAtom)
+  const { closeEntryDialog } = useEntryDialog()
   const { data: babiesData } = useBabiesData()
 
   const selectedBaby = useAtomValue(selectedBabyAtom)
@@ -32,7 +52,7 @@ export default function EntryDialog() {
   const [formValues, setFormValues] = React.useState<Record<string, any>>({})
 
   React.useEffect(() => {
-    if (open && tab && COLUMNS[tab]) {
+    if (tab && COLUMNS[tab]) {
       const initialValues: Record<string, any> = {}
       let editEntry: any = {}
       if (editId && selectedBaby && tab) {
@@ -80,7 +100,7 @@ export default function EntryDialog() {
         await addEntry(selectedBaby, tab, formValues)
       }
       setSelectedTab(TABS.indexOf(tab))
-      handleClose()
+      closeEntryDialog()
     } catch (err) {
       console.error(err)
       setIsLoading(false)
@@ -88,7 +108,7 @@ export default function EntryDialog() {
   }
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={!!tab} onClose={closeEntryDialog}>
       <DialogTitle>{editId ? `Edit ${tab} entry` : `Add ${tab} entry`}</DialogTitle>
       <DialogContent>
         <form id="add-entry-form" onSubmit={handleSubmit}>
@@ -196,7 +216,7 @@ export default function EntryDialog() {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button disabled={isLoading} onClick={handleClose}>
+        <Button disabled={isLoading} onClick={closeEntryDialog}>
           Cancel
         </Button>
         <Button

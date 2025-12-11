@@ -1,4 +1,3 @@
-- Update dialog components
 - Make a config file
 - Make it easier to add new tabs
 - Add weight tab

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid'
 
@@ -9,16 +9,16 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import useBabyTabData from '../../hooks/useBabyTabData'
 
 import selectedTabAtom, { COLUMNS } from '../../atoms/selectedTabAtom'
-import entryDialogPropsAtom from '../../atoms/entryDialogPropsAtom'
-import { deleteDialogPropsAtom } from '../../atoms/deleteDialogPropsAtom'
+import { useDeleteDialog } from '../../dialogs/DeleteDialog'
+import { useEntryDialog } from '../../dialogs/EntryDialog'
 
 const paginationModel = { page: 0, pageSize: 100 }
 
 function DataTab() {
   const { tab } = useAtomValue(selectedTabAtom)
   const { data: tabData } = useBabyTabData()
-  const setEntryDialogProps = useSetAtom(entryDialogPropsAtom)
-  const setDeleteDialogProps = useSetAtom(deleteDialogPropsAtom)
+  const { openEntryDialog } = useEntryDialog()
+  const { openDeleteDialog } = useDeleteDialog()
 
   const columns = useMemo(() => {
     return COLUMNS[tab].concat([
@@ -32,15 +32,9 @@ function DataTab() {
             label="Edit"
             onClick={e => {
               e.stopPropagation()
-              setEntryDialogProps({
+              openEntryDialog({
                 tab,
-                open: true,
                 editId: params.row.id,
-                handleClose: () =>
-                  setEntryDialogProps(oldProps => ({
-                    ...oldProps,
-                    open: false,
-                  })),
               })
             }}
           />,
@@ -49,13 +43,8 @@ function DataTab() {
             label="Delete"
             onClick={e => {
               e.stopPropagation()
-              setDeleteDialogProps({
+              openDeleteDialog({
                 deleteId: params.row.id,
-                handleClose: () =>
-                  setDeleteDialogProps(oldProps => ({
-                    ...oldProps,
-                    deleteId: undefined,
-                  })),
               })
             }}
           />,

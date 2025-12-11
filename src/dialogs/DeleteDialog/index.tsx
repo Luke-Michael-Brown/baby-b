@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useAtomValue } from 'jotai'
+import { atom, useAtomValue, useSetAtom } from 'jotai'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
@@ -10,10 +10,28 @@ import Button from '@mui/material/Button'
 import useDeleteEntry from '../../hooks/useDeleteEntry'
 import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 import selectedTabAtom from '../../atoms/selectedTabAtom'
-import { deleteDialogPropsAtom } from '../../atoms/deleteDialogPropsAtom'
+
+interface DeleteDialogProps {
+  deleteId?: string
+}
+
+const deleteDialogPropsAtom = atom<DeleteDialogProps>({})
+
+export function useDeleteDialog() {
+  const setDeleteDialogProps = useSetAtom(deleteDialogPropsAtom)
+  const openDeleteDialog = (props: DeleteDialogProps) => {
+    setDeleteDialogProps(props)
+  }
+  const closeDeleteDialog = () => {
+    setDeleteDialogProps({})
+  }
+
+  return { openDeleteDialog, closeDeleteDialog }
+}
 
 export default function DeleteDialog() {
-  const { deleteId, handleClose } = useAtomValue(deleteDialogPropsAtom)
+  const { deleteId } = useAtomValue(deleteDialogPropsAtom)
+  const { closeDeleteDialog } = useDeleteDialog()
   const [isLoading, setIsLoading] = React.useState(false)
   const onDelete = useDeleteEntry()
 
@@ -26,7 +44,7 @@ export default function DeleteDialog() {
     setIsLoading(true)
     try {
       await onDelete(deleteId, selectedBaby, tab)
-      handleClose?.()
+      closeDeleteDialog()
       setIsLoading(false)
     } catch (err) {
       console.error(err)
@@ -35,7 +53,7 @@ export default function DeleteDialog() {
   }
 
   return (
-    <Dialog open={!!deleteId} onClose={handleClose}>
+    <Dialog open={!!deleteId} onClose={closeDeleteDialog}>
       <DialogTitle>Delete Entry</DialogTitle>
 
       <DialogContent>
@@ -43,7 +61,7 @@ export default function DeleteDialog() {
       </DialogContent>
 
       <DialogActions>
-        <Button disabled={isLoading} onClick={handleClose}>
+        <Button disabled={isLoading} onClick={closeDeleteDialog}>
           Cancel
         </Button>
         <Button disabled={isLoading} onClick={onSubmit} color="error" variant="contained">

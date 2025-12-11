@@ -10,8 +10,8 @@ import { useTheme } from './theme'
 import useGoogleAPI, { useGoogleAPISetup } from './hooks/useGoogleAPI'
 import useBabiesList from './hooks/useBabiesList'
 import selectedBabyAtom from './atoms/selectedBabyAtom'
-import EntryDialog from './components/EntryDialog'
-import DeleteDialog from './components/DeleteDialog'
+import EntryDialog from './dialogs/EntryDialog'
+import DeleteDialog from './dialogs/DeleteDialog'
 
 interface Props {
   setMode: (newMode: 'light' | 'dark') => void

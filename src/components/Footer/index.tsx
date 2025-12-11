@@ -1,4 +1,3 @@
-import { useSetAtom } from 'jotai'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -7,18 +6,16 @@ import ButtonGroup from '@mui/material/ButtonGroup'
 import { TABS } from '../../atoms/selectedTabAtom'
 import ThemedAppBar from '../ThemedAppBar'
 import AddIcon from '@mui/icons-material/Add'
-import { entryDialogPropsAtom } from '../../atoms/entryDialogPropsAtom'
+import { useEntryDialog } from '../../dialogs/EntryDialog'
 
 const APP_VERSION = '1.11.0'
 
 function Footer() {
-  const setEntryDialogProps = useSetAtom(entryDialogPropsAtom)
+  const { openEntryDialog } = useEntryDialog()
 
   const onAddButtonClicked = (tab: string) => {
-    setEntryDialogProps({
+    openEntryDialog({
       tab,
-      open: true,
-      handleClose: () => setEntryDialogProps(oldProps => ({ ...oldProps, open: false })),
     })
   }
 
