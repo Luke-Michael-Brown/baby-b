@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAtom } from 'jotai'
-import { ThemeProvider, CssBaseline, Alert, Button, CircularProgress } from '@mui/material'
+import { ThemeProvider, CssBaseline, CircularProgress } from '@mui/material'
 import Header from './components/Header'
 import SecondaryBar from './components/SecondaryBar'
 import TabContent from './components/TabContent'
@@ -12,47 +12,9 @@ import useBabiesList from './hooks/useBabiesList'
 import selectedBabyAtom from './atoms/selectedBabyAtom'
 import EntryDialog from './dialogs/EntryDialog'
 import DeleteDialog from './dialogs/DeleteDialog'
+import LoginPage from './components/LoginPage'
 
-interface Props {
-  setMode: (newMode: 'light' | 'dark') => void
-}
-
-function App({ setMode }: Props) {
-  const { data: babiesList, isLoading } = useBabiesList()
-  const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom)
-  useEffect(() => {
-    if (selectedBaby === null && !isLoading && babiesList && babiesList.length > 0) {
-      setSelectedBaby(babiesList[0])
-    }
-  }, [selectedBaby, babiesList, isLoading, setSelectedBaby])
-
-  return isLoading || !selectedBaby ? (
-    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <CircularProgress />
-    </Box>
-  ) : (
-    <>
-      <Header setMode={setMode} />
-      <SecondaryBar />
-      <Box
-        sx={{
-          flexGrow: 1,
-          overflowY: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          pb: '98px',
-        }}
-      >
-        <TabContent />
-      </Box>
-      <Footer />
-      <EntryDialog />
-      <DeleteDialog />
-    </>
-  )
-}
-
-function AppContainer() {
+export default function App() {
   useGoogleAPISetup()
 
   const [mode, _setMode] = useState<'light' | 'dark'>(
@@ -63,7 +25,15 @@ function AppContainer() {
     localStorage.setItem('mode', newMode)
   }
   const theme = useTheme(mode)
-  const { isSignedIn, signIn } = useGoogleAPI()
+
+  const { isSignedIn } = useGoogleAPI()
+  const { data: babiesList, isLoading } = useBabiesList()
+  const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom)
+  useEffect(() => {
+    if (selectedBaby === null && !isLoading && babiesList && babiesList.length > 0) {
+      setSelectedBaby(babiesList[0])
+    }
+  }, [selectedBaby, babiesList, isLoading, setSelectedBaby])
 
   return (
     <ThemeProvider theme={theme}>
@@ -77,21 +47,35 @@ function AppContainer() {
           width: '100%',
         }}
       >
+        <Header setMode={setMode} />
+        {!isLoading ? <SecondaryBar /> : null}
         {isSignedIn ? (
-          <App setMode={setMode} />
+          isLoading || !selectedBaby ? (
+            <Box
+              sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                flexGrow: 1,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                pb: '98px',
+              }}
+            >
+              <TabContent />
+            </Box>
+          )
         ) : (
-          <>
-            <Alert severity="info" sx={{ mb: 2 }}>
-              Please sign in with Google Drive to use Baby B.
-            </Alert>
-            <Button variant="contained" onClick={signIn}>
-              Sign in
-            </Button>
-          </>
+          <LoginPage />
         )}
+        {!isLoading ? <Footer /> : null}
+        <EntryDialog />
+        <DeleteDialog />
       </Box>
     </ThemeProvider>
   )
 }
-
-export default AppContainer

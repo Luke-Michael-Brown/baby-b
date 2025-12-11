@@ -12,10 +12,11 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { useState } from 'react'
 
 import packageJson from '../../../package.json'
-import useGoogleAPI from '../../hooks/useGoogleAPI'
 import { useTheme } from '@mui/material/styles'
 import ThemedAppBar from '../ThemedAppBar'
 import selectedTabAtom from '../../atoms/selectedTabAtom'
+import useBabiesList from '../../hooks/useBabiesList'
+import useGoogleAPI from '../../hooks/useGoogleAPI'
 
 interface Props {
   setMode: (newMode: 'light' | 'dark') => void
@@ -23,6 +24,7 @@ interface Props {
 
 function Header({ setMode }: Props) {
   const { signOut } = useGoogleAPI()
+  const { isLoading } = useBabiesList()
   const theme = useTheme()
   const mode = theme?.palette?.mode ?? 'light'
 
@@ -62,33 +64,37 @@ function Header({ setMode }: Props) {
           </Stack>
 
           <Stack sx={{ ml: 'auto' }} direction="row" spacing={1} alignItems="center">
+            {!isLoading ? (
+              <Tooltip title="Refresh data">
+                <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                  <IconButton onClick={refreshData} disabled={isRefreshing}>
+                    <RefreshIcon
+                      sx={{
+                        ...(isRefreshing && {
+                          animation: 'spin 1s linear infinite',
+                          '@keyframes spin': {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' },
+                          },
+                        }),
+                      }}
+                    />
+                  </IconButton>
+                </Box>
+              </Tooltip>
+            ) : null}
+
+            {!isLoading ? (
+              <Tooltip title="Sign out">
+                <IconButton onClick={signOut}>
+                  <LogoutIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+
             <Tooltip title="Toggle theme">
               <IconButton onClick={onToggleMode}>
                 {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title="Refresh data">
-              <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                <IconButton onClick={refreshData} disabled={isRefreshing}>
-                  <RefreshIcon
-                    sx={{
-                      ...(isRefreshing && {
-                        animation: 'spin 1s linear infinite',
-                        '@keyframes spin': {
-                          '0%': { transform: 'rotate(0deg)' },
-                          '100%': { transform: 'rotate(360deg)' },
-                        },
-                      }),
-                    }}
-                  />
-                </IconButton>
-              </Box>
-            </Tooltip>
-
-            <Tooltip title="Sign out">
-              <IconButton onClick={signOut}>
-                <LogoutIcon />
               </IconButton>
             </Tooltip>
           </Stack>
