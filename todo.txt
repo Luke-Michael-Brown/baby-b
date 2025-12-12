@@ -3,7 +3,7 @@
 - Add comments everywhere
 - Update readme
 - Make new icon
-- Use useEvent instead of useCallback
+- Use useEffectEvent instead of useCallback
 - Publish it for google
 - Make filter section collapsible
 - Check eslint/prettier settings
