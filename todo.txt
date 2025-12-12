@@ -1,5 +1,4 @@
 - Make a config file
-- Make it easier to add new tabs
 - Add weight tab
 - Add comments everywhere
 - Update readme

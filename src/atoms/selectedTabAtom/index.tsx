@@ -392,7 +392,7 @@ export const TAB_TO_SUMMARY_DATA: Record<
 }
 
 // --- Tabs ---
-export const TABS: string[] = ['summary', 'sleep', 'diaper', 'nurse', 'bottle', 'pump']
+export const TABS: string[] = ['summary', 'bottle', 'diaper', 'pump', 'nurse', 'sleep']
 
 // The raw index atom (setter takes only the index)
 const selectedTabAtom = atom<string>(TABS[0])

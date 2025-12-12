@@ -1,12 +1,9 @@
 import React from 'react'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
+import { Box, Stack, Typography, Button } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
-import ThemedAppBar from '../ThemedAppBar'
 import { TABS } from '../../atoms/selectedTabAtom'
 import { useEntryDialog } from '../../dialogs/EntryDialog'
+import ThemedAppBar from '../ThemedAppBar'
 
 function Footer() {
   const { openEntryDialog } = useEntryDialog()
@@ -18,7 +15,24 @@ function Footer() {
   // --- GRID LOGIC ---
   const items = TABS.slice(1)
   const count = items.length
-  const cols = Math.min(4, Math.ceil(Math.sqrt(count)))
+
+  const chooseBestCols = (count: number) => {
+    let best = { cols: 1, rows: count, score: Infinity }
+
+    for (let cols = 1; cols <= 4; cols++) {
+      const rows = Math.ceil(count / cols)
+      const fullInLastRow = count % cols === 0 ? cols : count % cols
+      const balancePenalty = (cols - fullInLastRow) / cols
+      const score = rows + balancePenalty
+
+      if (score < best.score) {
+        best = { cols, rows, score }
+      }
+    }
+    return best.cols
+  }
+
+  const cols = chooseBestCols(count)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -49,12 +63,7 @@ function Footer() {
               const isRight = col === cols - 1 || index === count - 1
 
               return (
-                <Box
-                  key={tab}
-                  sx={{
-                    width: `${100 / cols}%`,
-                  }}
-                >
+                <Box key={tab} sx={{ width: `${100 / cols}%` }}>
                   <Button
                     fullWidth
                     variant="contained"
@@ -71,24 +80,11 @@ function Footer() {
                       borderBottom: isBottom
                         ? '1px solid rgba(255,255,255,0.4)'
                         : '1px solid rgba(255,255,255,0.4)',
-
                       borderRadius: 0,
-                      ...(isTop &&
-                        isLeft && {
-                          borderTopLeftRadius: '6px',
-                        }),
-                      ...(isTop &&
-                        isRight && {
-                          borderTopRightRadius: '6px',
-                        }),
-                      ...(isBottom &&
-                        isLeft && {
-                          borderBottomLeftRadius: '6px',
-                        }),
-                      ...(isBottom &&
-                        isRight && {
-                          borderBottomRightRadius: '6px',
-                        }),
+                      ...(isTop && isLeft && { borderTopLeftRadius: '6px' }),
+                      ...(isTop && isRight && { borderTopRightRadius: '6px' }),
+                      ...(isBottom && isLeft && { borderBottomLeftRadius: '6px' }),
+                      ...(isBottom && isRight && { borderBottomRightRadius: '6px' }),
                     }}
                   >
                     {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -102,5 +98,4 @@ function Footer() {
     </Box>
   )
 }
-
 export default React.memo(Footer)
