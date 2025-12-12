@@ -15,19 +15,16 @@ import packageJson from '../../../package.json'
 import { useTheme } from '@mui/material/styles'
 import ThemedAppBar from '../ThemedAppBar'
 import selectedTabAtom from '../../atoms/selectedTabAtom'
-import useBabiesList from '../../hooks/useBabiesList'
 import useGoogleAPI from '../../hooks/useGoogleAPI'
+import { useLightDark } from '../../contexts/LightDarkContext'
+import useCurrentPage from '../../hooks/useCurrentPage'
 
-interface Props {
-  setMode: (newMode: 'light' | 'dark') => void
-}
-
-function Header({ setMode }: Props) {
+function Header() {
+  const currentPage = useCurrentPage()
   const { signOut } = useGoogleAPI()
-  const { isLoading } = useBabiesList()
   const theme = useTheme()
   const mode = theme?.palette?.mode ?? 'light'
-
+  const { setMode } = useLightDark()
   const onToggleMode = () => {
     setMode(mode === 'light' ? 'dark' : 'light')
   }
@@ -64,7 +61,7 @@ function Header({ setMode }: Props) {
           </Stack>
 
           <Stack sx={{ ml: 'auto' }} direction="row" spacing={1} alignItems="center">
-            {!isLoading ? (
+            {currentPage === 'content' ? (
               <Tooltip title="Refresh data">
                 <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                   <IconButton onClick={refreshData} disabled={isRefreshing}>
@@ -84,7 +81,7 @@ function Header({ setMode }: Props) {
               </Tooltip>
             ) : null}
 
-            {!isLoading ? (
+            {currentPage === 'content' ? (
               <Tooltip title="Sign out">
                 <IconButton onClick={signOut}>
                   <LogoutIcon />

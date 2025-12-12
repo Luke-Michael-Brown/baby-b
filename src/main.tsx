@@ -12,6 +12,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
+import { LightDarkProvider } from './contexts/LightDarkContext'
+import DeleteDialog from './dialogs/DeleteDialog'
+import EntryDialog from './dialogs/EntryDialog'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -23,7 +26,12 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <App />
+        <LightDarkProvider>
+          <App />
+
+          <EntryDialog />
+          <DeleteDialog />
+        </LightDarkProvider>
       </LocalizationProvider>
     </QueryClientProvider>
   </StrictMode>
