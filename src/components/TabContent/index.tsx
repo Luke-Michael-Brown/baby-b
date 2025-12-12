@@ -2,24 +2,16 @@ import { useAtomValue } from 'jotai'
 import SummaryTab from '../../tabs/SummaryTab'
 import DataTab from '../../tabs/DataTab'
 import selectedTabAtom from '../../atoms/selectedTabAtom'
-import { Box } from '@mui/material'
 
 function TabContent() {
   const { tabIndex } = useAtomValue(selectedTabAtom)
+  switch (tabIndex) {
+    case 0:
+      return <SummaryTab />
 
-  return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        pb: '98px',
-      }}
-    >
-      {tabIndex === 0 ? <SummaryTab /> : <DataTab />}
-    </Box>
-  )
+    default:
+      return <DataTab />
+  }
 }
 
 export default TabContent
