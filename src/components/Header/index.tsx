@@ -1,4 +1,4 @@
-import { useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -29,7 +29,7 @@ function Header() {
     setMode(mode === 'light' ? 'dark' : 'light')
   }
 
-  const { Icon } = useAtomValue(selectedTabAtom)
+  const [{ Icon }, setSelectedTab] = useAtom(selectedTabAtom)
 
   const qc = useQueryClient()
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -46,11 +46,21 @@ function Header() {
     }
   }
 
+  const onTitleClick = () => {
+    setSelectedTab('summary')
+  }
+
   return (
     <Box>
       <ThemedAppBar color="primary" position="static">
         <Stack sx={{ px: 2, py: 1 }} direction="row" alignItems="center">
-          <Stack spacing={1} direction="row" alignItems="center">
+          <Stack
+            spacing={1}
+            direction="row"
+            alignItems="center"
+            onClick={onTitleClick}
+            sx={{ cursor: 'pointer' }}
+          >
             <Icon sx={{ fontSize: '3em' }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Baby B

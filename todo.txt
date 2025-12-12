@@ -4,8 +4,6 @@
 - Add comments everywhere
 - Update readme
 - Make new icon
-- Show header on login
 - Improve login screen
-- Make app header clickable
 - Use useEvent instead of useCallback
 - Ensure everything uses React.memo
