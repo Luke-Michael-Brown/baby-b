@@ -1,3 +1,4 @@
+import React from 'react'
 import { useAtom } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import Box from '@mui/material/Box'
@@ -111,4 +112,4 @@ function Header() {
   )
 }
 
-export default Header
+export default React.memo(Header)

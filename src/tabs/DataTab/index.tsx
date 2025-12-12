@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid'
@@ -64,4 +64,4 @@ function DataTab() {
   ) : null
 }
 
-export default DataTab
+export default React.memo(DataTab)

@@ -12,12 +12,7 @@ interface ThemedAppBarProps {
 /**
  * A theme-aware AppBar replacement that supports custom palette colors.
  */
-export default function ThemedAppBar({
-  position = 'static',
-  color = 'primary',
-  sx,
-  children,
-}: ThemedAppBarProps) {
+function ThemedAppBar({ position = 'static', color = 'primary', sx, children }: ThemedAppBarProps) {
   const theme = useTheme()
 
   // Try to get a known palette color safely
@@ -70,3 +65,5 @@ export default function ThemedAppBar({
     </Box>
   )
 }
+
+export default React.memo(ThemedAppBar)

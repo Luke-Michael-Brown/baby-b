@@ -1,3 +1,4 @@
+import React from 'react'
 import { useAtomValue } from 'jotai'
 import SummaryTab from '../../tabs/SummaryTab'
 import DataTab from '../../tabs/DataTab'
@@ -14,4 +15,4 @@ function TabContent() {
   }
 }
 
-export default TabContent
+export default React.memo(TabContent)

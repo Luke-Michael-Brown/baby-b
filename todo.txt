@@ -4,9 +4,10 @@
 - Update readme
 - Make new icon
 - Use useEvent instead of useCallback
-- Ensure everything uses React.memo
 - Publish it for google
 - Make filter section collapsible
+- Check eslint/prettier settings
+- Fix prettier
 
 - Compare against average baby
 - Baby edit name

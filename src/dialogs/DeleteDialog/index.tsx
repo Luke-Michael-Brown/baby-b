@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -29,7 +29,7 @@ export function useDeleteDialog() {
   return { openDeleteDialog, closeDeleteDialog }
 }
 
-export default function DeleteDialog() {
+export function DeleteDialog() {
   const { deleteId } = useAtomValue(deleteDialogPropsAtom)
   const { closeDeleteDialog } = useDeleteDialog()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -71,3 +71,5 @@ export default function DeleteDialog() {
     </Dialog>
   )
 }
+
+export default React.memo(DeleteDialog)

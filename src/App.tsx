@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useAtom } from 'jotai'
 import Header from './components/Header'
 import Box from '@mui/material/Box'
@@ -10,7 +10,7 @@ import LoadingPage from './pages/LoadingPage'
 import ContentPage from './pages/ContentPage'
 import useCurrentPage from './hooks/useCurrentPage'
 
-export default function App() {
+export function App() {
   useGoogleAPISetup()
 
   const currentPage = useCurrentPage()
@@ -44,3 +44,5 @@ export default function App() {
     </Box>
   )
 }
+
+export default React.memo(App)

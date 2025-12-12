@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 import { useAtomValue, useSetAtom } from 'jotai'
 import Button from '@mui/material/Button'
@@ -15,7 +15,7 @@ import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 import useAddEntry from '../../hooks/useAddEntry'
 import useEditEntry from '../../hooks/useEditEntry'
 import useBabiesData from '../../hooks/useBabiesData'
-import selectedTabAtom, { TABS, COLUMNS } from '../../atoms/selectedTabAtom'
+import selectedTabAtom, { COLUMNS } from '../../atoms/selectedTabAtom'
 import { atom } from 'jotai'
 
 export interface EntryDialogProps {
@@ -37,7 +37,7 @@ export function useEntryDialog() {
   return { openEntryDialog, closeEntryDialog }
 }
 
-export default function EntryDialog() {
+export function EntryDialog() {
   const { tab, editId } = useAtomValue(entryDialogPropsAtom)
   const { closeEntryDialog } = useEntryDialog()
   const { data: babiesData } = useBabiesData()
@@ -99,7 +99,7 @@ export default function EntryDialog() {
       } else {
         await addEntry(selectedBaby, tab, formValues)
       }
-      setSelectedTab(TABS.indexOf(tab))
+      setSelectedTab(tab)
       closeEntryDialog()
     } catch (err) {
       console.error(err)
@@ -237,3 +237,5 @@ export default function EntryDialog() {
     </Dialog>
   )
 }
+
+export default React.memo(EntryDialog)
