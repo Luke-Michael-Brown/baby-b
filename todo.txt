@@ -7,3 +7,9 @@
 - Improve login screen
 - Use useEvent instead of useCallback
 - Ensure everything uses React.memo
+
+- Compare against average baby
+- Baby edit name
+- Baby delete
+- Share baby
+- Make more fun spinner
