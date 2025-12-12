@@ -7,7 +7,7 @@ import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 
 import { TABS } from '../../atoms/selectedTabAtom'
-import SummaryItem from '../SummaryItem'
+import SummaryItem from '../../components/SummaryItem'
 import { summayStartDateAtom, summaryEndDateAtom } from '../../atoms/summaryDatesAtom'
 
 export const RANGES = ['Last Week', 'Last 2 Weeks', 'Last Month', 'Last Year'] as const

@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
-import SummaryTab from '../SummaryTab'
-import DataTab from '../DataTab'
+import SummaryTab from '../../tabs/SummaryTab'
+import DataTab from '../../tabs/DataTab'
 import selectedTabAtom from '../../atoms/selectedTabAtom'
 import { Box } from '@mui/material'
 
