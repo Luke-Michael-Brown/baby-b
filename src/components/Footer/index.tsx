@@ -37,7 +37,7 @@ function Footer() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <ThemedAppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
-        <Stack sx={{ px: 2, py: 1, justifyContent: 'center' }} spacing={2} direction="row">
+        <Stack sx={{ px: 2, pt: 1, pb: 2, justifyContent: 'center' }} spacing={2} direction="row">
           <Stack sx={{ alignItems: 'center' }} direction="row">
             <AddIcon />
             <Typography variant="body1">Add Entry</Typography>

@@ -6,6 +6,7 @@
 - Use useEvent instead of useCallback
 - Ensure everything uses React.memo
 - Publish it for google
+- Make filter section collapsible
 
 - Compare against average baby
 - Baby edit name
@@ -13,3 +14,4 @@
 - Share baby
 - Make more fun spinner
 - Cache data for quicker load
+- Add charts to summary page
