@@ -3,12 +3,13 @@
 - Add comments everywhere
 - Update readme
 - Make new icon
-- Improve login screen
 - Use useEvent instead of useCallback
 - Ensure everything uses React.memo
+- Publish it for google
 
 - Compare against average baby
 - Baby edit name
 - Baby delete
 - Share baby
 - Make more fun spinner
+- Cache data for quicker load
