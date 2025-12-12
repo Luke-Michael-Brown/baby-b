@@ -14,7 +14,7 @@ export default function createCacheMap(storageKey: string) {
 
   const addToCacheMap = (key: string, value: string) => {
     cacheMap.set(key, value)
-    localStorage.setItem(storageKey, JSON.stringify(Array.from(map.entries())))
+    localStorage.setItem(storageKey, JSON.stringify(Array.from(cacheMap.entries())))
   }
 
   const resetCacheMap = () => {
