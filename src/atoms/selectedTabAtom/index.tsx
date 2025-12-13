@@ -1,13 +1,8 @@
 import { atom } from 'jotai'
 import dayjs, { Dayjs } from 'dayjs'
 import Box from '@mui/material/Box'
-import CribIcon from '@mui/icons-material/Crib'
-import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation'
-import PregnantWomanIcon from '@mui/icons-material/PregnantWoman'
-import WaterDropIcon from '@mui/icons-material/WaterDrop'
-import JoinInnerIcon from '@mui/icons-material/JoinInner'
 import type { GridColType, GridRowParams } from '@mui/x-data-grid'
-import appIconUrl from '../../assets/baby_b_svg.svg'
+import config from '../../config'
 
 // --- Types ---
 export type TabKey = 'summary' | 'sleep' | 'diaper' | 'nurse' | 'bottle' | 'pump'
@@ -175,27 +170,6 @@ export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
       renderCell: params => (params.value ? '✓' : ''),
     },
   ],
-}
-
-export const TABS_TO_ICON: { [key: string]: any } = {
-  summary: () => (
-    <Box
-      component="img"
-      src={appIconUrl}
-      alt="Example"
-      sx={theme => ({
-        width: '3em',
-        height: '3em',
-        verticalAlign: 'middle',
-        filter: theme.palette.mode === 'light' ? 'invert(1) brightness(1.2)' : 'none',
-      })}
-    />
-  ),
-  sleep: CribIcon,
-  diaper: BabyChangingStationIcon,
-  nurse: PregnantWomanIcon,
-  bottle: WaterDropIcon,
-  pump: JoinInnerIcon,
 }
 
 // --- Helpers ---
@@ -401,7 +375,6 @@ const selectedTabAtom = atom<string>(TABS[0])
  * A derived atom that returns:
  * - tabIndex  (number)
  * - tab       (tab key string)
- * - icon      (component)
  * - getSummary(data, { startDate, endDate })
  *
  * The setter takes only the new index.
@@ -409,7 +382,7 @@ const selectedTabAtom = atom<string>(TABS[0])
 export default atom(
   get => {
     const tab = get(selectedTabAtom)
-    const Icon = TABS_TO_ICON[tab]
+    const tabConfig = config[tab]
 
     const getSummary = (data: any[], opts: { startDate: Dayjs; endDate: Dayjs }) => {
       const fn = TAB_TO_SUMMARY_DATA[tab]
@@ -419,7 +392,7 @@ export default atom(
     return {
       tabIndex: TABS.indexOf(tab),
       tab,
-      Icon,
+      tabConfig,
       getSummary,
     }
   },

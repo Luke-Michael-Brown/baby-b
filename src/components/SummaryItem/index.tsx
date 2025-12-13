@@ -2,15 +2,15 @@ import React from 'react'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { TABS_TO_ICON } from '../../atoms/selectedTabAtom'
 import useTabSummary from '../../hooks/useTabSummary'
+import config from '../../config'
 
 interface Props {
   tab: string
 }
 
 function SummaryItem({ tab }: Props) {
-  const Icon = TABS_TO_ICON[tab]
+  const Icon = config[tab].Icon
   const summaries = useTabSummary({ tab })
 
   return (

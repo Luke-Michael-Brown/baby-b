@@ -30,7 +30,12 @@ function Header() {
     setMode(mode === 'light' ? 'dark' : 'light')
   }
 
-  const [{ Icon }, setSelectedTab] = useAtom(selectedTabAtom)
+  const [
+    {
+      tabConfig: { Icon },
+    },
+    setSelectedTab,
+  ] = useAtom(selectedTabAtom)
 
   const qc = useQueryClient()
   const [isRefreshing, setIsRefreshing] = useState(false)

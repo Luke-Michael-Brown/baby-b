@@ -1,8 +1,9 @@
 import { useAtomValue } from 'jotai'
 import { createTheme } from '@mui/material/styles'
-import type { ThemeOptions } from '@mui/material/styles'
+import type { PaletteColorOptions, ThemeOptions } from '@mui/material/styles'
 import { deepmerge } from '@mui/utils'
 import selectedTabAtom from './atoms/selectedTabAtom'
+import config from './config'
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -54,38 +55,38 @@ const baseTheme: ThemeOptions = {
   },
 }
 
-// Light mode palette
-const lightPalette: ThemeOptions['palette'] = {
-  mode: 'light',
-  primary: { main: '#1976d2' },
-  secondary: { main: '#8e24aa' },
-  neutral: { main: '#6b7280', contrastText: '#fff' },
-  summary: { main: '#4dabf5', contrastText: '#fff' }, // subtle blue
-  sleep: { main: '#b39ddb', contrastText: '#fff' }, // soft purple
-  diaper: { main: '#81c784', contrastText: '#fff' }, // soft green
-  nurse: { main: '#fff176', contrastText: '#121212' }, // muted yellow
-  pump: { main: '#e57373', contrastText: '#fff' }, // soft red
-  bottle: { main: '#ffb74d', contrastText: '#121212' }, // soft orange
-  background: { default: '#f9f9f9', paper: '#ffffff' },
-  divider: '#e0e0e0',
-}
+type TabPallet = { [key: string]: PaletteColorOptions }
 
-// Dark mode palette
-const darkPalette: ThemeOptions['palette'] = {
-  mode: 'dark',
-  primary: { main: '#90caf9', contrastText: '#121212' },
-  secondary: { main: '#b785c4', contrastText: '#121212' },
-  neutral: { main: '#64748b', contrastText: '#ffffff' },
-  summary: { main: '#42a5f5', contrastText: '#121212' }, // gentle blue
-  sleep: { main: '#9575cd', contrastText: '#121212' }, // muted purple
-  diaper: { main: '#66bb6a', contrastText: '#121212' }, // muted green
-  nurse: { main: '#ffee58', contrastText: '#121212' }, // soft yellow
-  pump: { main: '#ef5350', contrastText: '#ffffff' }, // muted red
-  bottle: { main: '#ffa726', contrastText: '#121212' }, // soft orange
-  background: { default: '#101010', paper: '#1c1c1c' },
-  divider: 'rgba(255,255,255,0.2)',
-  text: { primary: '#ffffff', secondary: '#cfd8dc', disabled: '#78909c' },
-}
+const lightPalette: TabPallet = Object.keys(config).reduce(
+  (acc, key) => {
+    const entry = config[key]
+    acc[key] = entry.lightPalette
+    return acc
+  },
+  {
+    mode: 'light',
+    primary: { main: '#1976d2' },
+    secondary: { main: '#8e24aa' },
+    background: { default: '#f9f9f9', paper: '#ffffff' },
+    divider: '#e0e0e0',
+  } as TabPallet
+)
+
+const darkPalette: TabPallet = Object.keys(config).reduce(
+  (acc, key) => {
+    const entry = config[key]
+    acc[key] = entry.darkPalette
+    return acc
+  },
+  {
+    mode: 'dark',
+    primary: { main: '#90caf9', contrastText: '#121212' },
+    secondary: { main: '#b785c4', contrastText: '#121212' },
+    background: { default: '#101010', paper: '#1c1c1c' },
+    divider: 'rgba(255,255,255,0.2)',
+    text: { primary: '#ffffff', secondary: '#cfd8dc', disabled: '#78909c' },
+  } as TabPallet
+)
 
 // Theme builder function
 export const useTheme = (mode: 'light' | 'dark') => {
