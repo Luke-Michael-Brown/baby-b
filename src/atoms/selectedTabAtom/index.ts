@@ -1,199 +1,8 @@
 import { atom } from 'jotai'
-import dayjs, { Dayjs } from 'dayjs'
-import Box from '@mui/material/Box'
-import type { GridColType, GridRowParams } from '@mui/x-data-grid'
 import config from '../../config'
-
-// --- Types ---
-export type TabKey = 'summary' | 'sleep' | 'diaper' | 'nurse' | 'bottle' | 'pump'
-
-export type RangeOption = 'Last Week' | 'Last Month' | 'Last Year'
-
-type COLUMN_ENTRY =
-  | {
-      flex?: number
-      field: string
-      headerName: string
-      formType?: string
-      type?: GridColType
-      getActions?: (params: GridRowParams) => React.ReactNode[]
-      renderCell?: (param: any) => any
-    }
-  | {
-      flex?: number
-      field: string
-      headerName: string
-      formType: 'select'
-      selectFields: string[]
-      type?: GridColType
-      getActions?: (params: GridRowParams) => React.ReactNode[]
-      renderCell?: (param: any) => any
-    }
-
-const renderTwoLineDate = (params: any) => {
-  const value = params.value
-  if (!value) return ''
-
-  const d = new Date(value)
-
-  const dateStr = d.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  })
-
-  const timeStr = d.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  })
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
-      <span>{dateStr}</span>
-      <span>{timeStr}</span>
-    </div>
-  )
-}
-
-export const COLUMNS: { [key: string]: COLUMN_ENTRY[] } = {
-  sleep: [
-    {
-      flex: 100,
-      field: 'start_time',
-      headerName: 'Start',
-      formType: 'datePicker',
-      renderCell: renderTwoLineDate,
-    },
-    {
-      flex: 100,
-      field: 'end_time',
-      headerName: 'End',
-      formType: 'datePicker',
-      renderCell: renderTwoLineDate,
-    },
-    {
-      flex: 100,
-      field: 'extra1',
-      headerName: 'Type',
-      formType: 'select',
-      selectFields: ['Night Sleep', 'Nap'],
-    },
-  ],
-  diaper: [
-    {
-      flex: 100,
-      field: 'start_time',
-      headerName: 'Start',
-      formType: 'datePicker',
-      renderCell: renderTwoLineDate,
-    },
-    {
-      flex: 100,
-      field: 'extra1',
-      headerName: 'Type',
-      formType: 'select',
-      selectFields: ['Pee', 'Poo', 'Pee & Poo'],
-    },
-  ],
-  nurse: [
-    {
-      flex: 100,
-      field: 'start_time',
-      headerName: 'Start',
-      formType: 'datePicker',
-      renderCell: renderTwoLineDate,
-    },
-    {
-      flex: 100,
-      field: 'end_time',
-      headerName: 'End',
-      formType: 'datePicker',
-      renderCell: renderTwoLineDate,
-    },
-    {
-      flex: 100,
-      field: 'extra1',
-      headerName: 'Side',
-      formType: 'select',
-      selectFields: ['Left', 'Right', 'Both'],
-    },
-    {
-      flex: 90,
-      field: 'extra2',
-      headerName: 'VitD',
-      formType: 'checkbox',
-      renderCell: params => (params.value ? '✓' : ''),
-    },
-  ],
-  bottle: [
-    {
-      flex: 100,
-      field: 'start_time',
-      headerName: 'Start',
-      formType: 'datePicker',
-      renderCell: renderTwoLineDate,
-    },
-    {
-      flex: 60,
-      field: 'extra1',
-      headerName: 'mL',
-      formType: 'number',
-    },
-    {
-      flex: 60,
-      field: 'extra2',
-      headerName: 'VitD',
-      formType: 'checkbox',
-      renderCell: params => (params.value ? '✓' : ''),
-    },
-  ],
-  pump: [
-    {
-      flex: 100,
-      field: 'start_time',
-      headerName: 'Start',
-      formType: 'datePicker',
-      renderCell: renderTwoLineDate,
-    },
-    {
-      flex: 60,
-      field: 'extra2',
-      headerName: 'mL',
-      formType: 'number',
-    },
-    {
-      flex: 60,
-      field: 'extra3',
-      headerName: 'Power',
-      formType: 'checkbox',
-      renderCell: params => (params.value ? '✓' : ''),
-    },
-  ],
-}
-
-// --- Helpers ---
-function formatMsToMinSec(ms: number): string {
-  if (!ms || ms <= 0) return '0s'
-
-  const totalSeconds = Math.floor(ms / 1000)
-  const mins = Math.floor(totalSeconds / 60)
-  const secs = totalSeconds % 60
-
-  if (mins > 0) return `${mins}m ${secs}s`
-  return `${secs}s`
-}
-
-function getDaysWithData(filteredData: any[]): number {
-  const uniqueDays = new Set<string>()
-
-  filteredData.forEach(entry => {
-    const localDay = dayjs(entry.start_time).format('YYYY-MM-DD')
-    uniqueDays.add(localDay)
-  })
-
-  return uniqueDays.size
-}
+import type { Dayjs } from 'dayjs'
+import formatMsToMinSec from '../../utils/formatMsToMinSec'
+import getDaysWithData from '../../utils/getDaysWithData'
 
 // --- Summary Generators ---
 export const TAB_TO_SUMMARY_DATA: Record<
@@ -366,19 +175,10 @@ export const TAB_TO_SUMMARY_DATA: Record<
 }
 
 // --- Tabs ---
-export const TABS: string[] = ['summary', 'bottle', 'diaper', 'pump', 'nurse', 'sleep']
+export const TABS: string[] = Object.keys(config)
 
-// The raw index atom (setter takes only the index)
 const selectedTabAtom = atom<string>(TABS[0])
 
-/**
- * A derived atom that returns:
- * - tabIndex  (number)
- * - tab       (tab key string)
- * - getSummary(data, { startDate, endDate })
- *
- * The setter takes only the new index.
- */
 export default atom(
   get => {
     const tab = get(selectedTabAtom)
@@ -390,7 +190,6 @@ export default atom(
     }
 
     return {
-      tabIndex: TABS.indexOf(tab),
       tab,
       tabConfig,
       getSummary,

@@ -5,9 +5,9 @@ import DataTab from '../../tabs/DataTab'
 import selectedTabAtom from '../../atoms/selectedTabAtom'
 
 function TabContent() {
-  const { tabIndex } = useAtomValue(selectedTabAtom)
-  switch (tabIndex) {
-    case 0:
+  const { tab } = useAtomValue(selectedTabAtom)
+  switch (tab) {
+    case 'summary':
       return <SummaryTab />
 
     default:

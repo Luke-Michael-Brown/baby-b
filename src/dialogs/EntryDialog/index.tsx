@@ -15,9 +15,10 @@ import selectedBabyAtom from '../../atoms/selectedBabyAtom'
 import useAddEntry from '../../hooks/useAddEntry'
 import useEditEntry from '../../hooks/useEditEntry'
 import useBabiesData from '../../hooks/useBabiesData'
-import selectedTabAtom, { COLUMNS } from '../../atoms/selectedTabAtom'
+import selectedTabAtom from '../../atoms/selectedTabAtom'
 import { atom } from 'jotai'
 import floorTo5 from '../../utils/floorNearest5'
+import config from '../../config'
 
 export interface EntryDialogProps {
   tab?: string
@@ -40,6 +41,7 @@ export function useEntryDialog() {
 
 export function EntryDialog() {
   const { tab, editId } = useAtomValue(entryDialogPropsAtom)
+  const tabConfig = config[tab ?? '']
   const { closeEntryDialog } = useEntryDialog()
   const { data: babiesData } = useBabiesData()
 
@@ -53,7 +55,7 @@ export function EntryDialog() {
   const [formValues, setFormValues] = React.useState<Record<string, any>>({})
 
   React.useEffect(() => {
-    if (tab && COLUMNS[tab]) {
+    if (tab && tabConfig) {
       const initialValues: Record<string, any> = {}
       let editEntry: any = {}
       if (editId && selectedBaby && tab) {
@@ -65,13 +67,17 @@ export function EntryDialog() {
         }
       }
 
-      COLUMNS[tab].forEach(col => {
-        if (col.formType === 'datePicker') {
-          const editEntryDate = editEntry[col.field]
-          initialValues[col.field] = editEntryDate ? dayjs(editEntryDate) : floorTo5(dayjs())
+      tabConfig.fields?.forEach(field => {
+        if (field.formType === 'datePicker') {
+          const editEntryDate = editEntry[field.columnFields.field]
+          initialValues[field.columnFields.field] = editEntryDate
+            ? dayjs(editEntryDate)
+            : floorTo5(dayjs())
         } else {
-          initialValues[col.field] =
-            col.formType === 'checkbox' ? !!editEntry[col.field] : (editEntry[col.field] ?? '')
+          initialValues[field.columnFields.field] =
+            field.formType === 'checkbox'
+              ? !!editEntry[field.columnFields.field]
+              : (editEntry[field.columnFields.field] ?? '')
         }
       })
 
@@ -117,19 +123,19 @@ export function EntryDialog() {
         <form id="add-entry-form" onSubmit={handleSubmit}>
           <Stack spacing={2} sx={{ mt: 1, minWidth: 300 }}>
             {tab &&
-              COLUMNS[tab]?.map?.((column: any) => {
-                const field = column.field
-                const label = column.headerName
-                const value = formValues[field] ?? ''
+              tabConfig?.fields?.map?.(field => {
+                const key = field.columnFields.field
+                const label = field.columnFields.headerName
+                const value = formValues[key] ?? ''
 
-                switch (column.formType) {
+                switch (field.formType) {
                   case 'datePicker':
                     return (
                       <DateTimePicker
-                        key={field}
+                        key={key}
                         label={label}
                         value={value as Dayjs | null}
-                        onChange={newValue => handleChange(field, newValue)}
+                        onChange={newValue => handleChange(key, newValue)}
                         openTo="hours"
                         slotProps={{
                           popper: {
@@ -161,18 +167,18 @@ export function EntryDialog() {
                   case 'select':
                     return (
                       <Select
-                        key={field}
+                        key={key}
                         required
                         fullWidth
-                        name={field}
+                        name={key}
                         value={value}
                         displayEmpty
-                        onChange={e => handleChange(field, e.target.value)}
+                        onChange={e => handleChange(key, e.target.value)}
                       >
                         <MenuItem value="">
                           <em>Select {label}</em>
                         </MenuItem>
-                        {column.selectFields.map((selectField: string) => (
+                        {field?.selectFields?.map((selectField: string) => (
                           <MenuItem key={selectField} value={selectField}>
                             {selectField}
                           </MenuItem>
@@ -182,11 +188,11 @@ export function EntryDialog() {
 
                   case 'checkbox':
                     return (
-                      <label key={field} style={{ display: 'flex', alignItems: 'center' }}>
+                      <label key={key} style={{ display: 'flex', alignItems: 'center' }}>
                         <input
                           type="checkbox"
                           checked={!!value}
-                          onChange={e => handleChange(field, e.target.checked)}
+                          onChange={e => handleChange(key, e.target.checked)}
                           style={{ marginRight: 8 }}
                         />
                         {label}
@@ -196,14 +202,14 @@ export function EntryDialog() {
                   case 'number':
                     return (
                       <TextField
-                        key={field}
+                        key={key}
                         label={label}
-                        name={field}
+                        name={key}
                         type="number"
                         required
                         fullWidth
                         value={value}
-                        onChange={e => handleChange(field, e.target.value)}
+                        onChange={e => handleChange(key, e.target.value)}
                         inputProps={{
                           inputMode: 'numeric',
                           pattern: '[0-9]*',

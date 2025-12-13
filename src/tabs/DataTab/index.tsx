@@ -87,14 +87,12 @@ function DataTab() {
   }, [openDeleteDialog, openEntryDialog, tab, tabConfig])
 
   return columns ? (
-    <>
-      <DataGrid
-        rows={tabData}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        sx={{ border: 0 }}
-      />
-    </>
+    <DataGrid
+      rows={tabData}
+      columns={columns}
+      initialState={{ pagination: { paginationModel } }}
+      sx={{ border: 0 }}
+    />
   ) : null
 }
 
