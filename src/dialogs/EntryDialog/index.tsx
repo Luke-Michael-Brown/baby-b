@@ -17,6 +17,7 @@ import useEditEntry from '../../hooks/useEditEntry'
 import useBabiesData from '../../hooks/useBabiesData'
 import selectedTabAtom, { COLUMNS } from '../../atoms/selectedTabAtom'
 import { atom } from 'jotai'
+import floorTo5 from '../../utils/floorNearest5'
 
 export interface EntryDialogProps {
   tab?: string
@@ -65,8 +66,10 @@ export function EntryDialog() {
       }
 
       COLUMNS[tab].forEach(col => {
-        if (col.formType === 'datePicker') initialValues[col.field] = dayjs(editEntry[col.field])
-        else {
+        if (col.formType === 'datePicker') {
+          const editEntryDate = editEntry[col.field]
+          initialValues[col.field] = editEntryDate ? dayjs(editEntryDate) : floorTo5(dayjs())
+        } else {
           initialValues[col.field] =
             col.formType === 'checkbox' ? !!editEntry[col.field] : (editEntry[col.field] ?? '')
         }
