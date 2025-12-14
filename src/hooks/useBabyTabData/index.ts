@@ -13,7 +13,7 @@ const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   hour12: true,
 }
 
-interface Entry {
+export interface Entry {
   id: string
   start_time: string
   end_time?: string
@@ -21,7 +21,7 @@ interface Entry {
   [key: string]: any
 }
 
-interface BabyData {
+export interface BabyData {
   [tab: string]: Entry[]
 }
 

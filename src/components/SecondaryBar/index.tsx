@@ -5,6 +5,7 @@ import { useAtom } from 'jotai'
 import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
 import { Select, MenuItem, type SelectChangeEvent, Typography } from '@mui/material'
 import BabySelector from '../BabySelector'
+import config from '../../config'
 
 export function SecondaryBar() {
   const theme = useTheme()
@@ -33,7 +34,7 @@ export function SecondaryBar() {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <Typography variant="body1">Tab:</Typography>
         <Select value={tab || ''} label="Tab" onChange={onTabSelected} size="small">
-          {TABS.map(t => (
+          {TABS.filter(tab => config[tab].TabComponent).map(t => (
             <MenuItem key={t} value={t}>
               {t}
             </MenuItem>

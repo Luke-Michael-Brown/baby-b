@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add'
 import { TABS } from '../../atoms/selectedTabAtom'
 import { useEntryDialog } from '../../dialogs/EntryDialog'
 import ThemedAppBar from '../ThemedAppBar'
+import config from '../../config'
 
 function Footer() {
   const { openEntryDialog } = useEntryDialog()
@@ -13,7 +14,7 @@ function Footer() {
   }
 
   // --- GRID LOGIC ---
-  const items = TABS.slice(1)
+  const items = TABS.filter(tab => config[tab].TabComponent)
   const count = items.length
 
   const chooseBestCols = (count: number) => {

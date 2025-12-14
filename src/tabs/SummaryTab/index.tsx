@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import { TABS } from '../../atoms/selectedTabAtom'
 import SummaryItem from '../../components/SummaryItem'
 import { summayStartDateAtom, summaryEndDateAtom } from '../../atoms/summaryDatesAtom'
+import config from '../../config'
 
 export const RANGES = ['Last Week', 'Last 2 Weeks', 'Last Month', 'Last Year'] as const
 
@@ -87,7 +88,7 @@ function SummaryTab() {
         </Stack>
       </Paper>
 
-      {TABS.slice(1).map(tab => (
+      {TABS.filter(tab => config[tab].summayItems).map(tab => (
         <SummaryItem key={`summary-tile-${tab}`} tab={tab} />
       ))}
     </Box>
