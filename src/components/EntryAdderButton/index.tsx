@@ -1,7 +1,7 @@
+import { memo } from 'react';
+import { Button } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import { useEntryDialog } from '../../dialogs/EntryDialog';
-import { Button } from '@mui/material';
-import { memo } from 'react';
 
 interface Props {
   tab: string;

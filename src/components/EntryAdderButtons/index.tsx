@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
 import { memo } from 'react';
+import { Box } from '@mui/material';
 import { TABS } from '../../atoms/selectedTabAtom';
 import config from '../../config';
 import DataTab from '../../tabs/DataTab';

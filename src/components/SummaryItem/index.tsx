@@ -26,7 +26,7 @@ function SummaryItem({ tab }: Props) {
       <Stack spacing={1}>
         <Stack spacing={1}>
           <Stack spacing={1} direction="row">
-            <Icon />
+            <Icon sx={{ fontSize: '1.5em' }} />
             <Typography variant="body1" sx={{ flexGrow: 1 }}>
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </Typography>

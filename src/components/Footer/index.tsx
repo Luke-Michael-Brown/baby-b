@@ -8,8 +8,8 @@ import {
   type PaletteColor,
 } from '@mui/material';
 
-import ThemedAppBar from '../ThemedAppBar';
 import EntryAdderButtons from '../EntryAdderButtons';
+import ThemedAppBar from '../ThemedAppBar';
 
 function Footer() {
   const theme = useTheme();
