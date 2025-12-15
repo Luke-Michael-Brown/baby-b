@@ -2,9 +2,9 @@
 - Add comments everywhere
 - Update readme
 - Make new icon
-- Use useEffectEvent instead of useCallback
 - Publish it for google
 - Make filter section collapsible
+- Clean up footer code
 
 - Compare against average baby
 - Baby edit name
@@ -14,5 +14,4 @@
 - Cache data for quicker load
 - Add charts to summary page
 - Make useGoogleAPI not hardcoded with my file
-
-- Make add entry a tag above the footer
+- Use useEffectEvent instead of useCallback

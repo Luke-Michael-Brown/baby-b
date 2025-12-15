@@ -5,9 +5,7 @@ import {
   Stack,
   Typography,
   Button,
-  Paper,
   useTheme,
-  type Palette,
   type PaletteColor,
 } from '@mui/material';
 
@@ -16,7 +14,6 @@ import config from '../../config';
 import { useEntryDialog } from '../../dialogs/EntryDialog';
 import DataTab from '../../tabs/DataTab';
 import ThemedAppBar from '../ThemedAppBar';
-import type { useLightDark } from '../../contexts/LightDarkContext';
 
 function Footer() {
   const { openEntryDialog } = useEntryDialog();
