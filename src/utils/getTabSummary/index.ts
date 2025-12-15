@@ -4,6 +4,7 @@ import type { Dayjs } from 'dayjs';
 import config from '../../config';
 import type { Entry } from '../../hooks/useBabyTabData';
 import formatMsToMinSec from '../formatMsToMinSec';
+import mlToOz from '../mlToOz';
 
 export default function getTabSummary(
   tabData: Entry[] | undefined,
@@ -75,10 +76,14 @@ export default function getTabSummary(
           : 0
         : totals[index] / filteredData.length;
 
-      const formattedAverage =
+      let formattedAverage =
         summaryItem.fieldToAverage === 'duration'
           ? formatMsToMinSec(average)
           : `${average.toFixed(2)} ${units}`;
+
+      if (units === 'mL') {
+        formattedAverage = `${formattedAverage} (${mlToOz(average)} oz)`;
+      }
 
       const whatIsAveraged = summaryItem.filters
         ? Object.entries(summaryItem.filters)

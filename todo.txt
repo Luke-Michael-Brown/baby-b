@@ -15,5 +15,4 @@
 - Add charts to summary page
 - Make useGoogleAPI not hardcoded with my file
 
-- Add (oz) for ml
 - Make add entry a tag above the footer
