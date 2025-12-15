@@ -4,7 +4,6 @@
 - Make new icon
 - Publish it for google
 - Make filter section collapsible
-- Clean up footer code
 
 - Compare against average baby
 - Baby edit name
