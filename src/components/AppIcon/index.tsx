@@ -3,15 +3,15 @@ import { Box } from '@mui/material';
 
 import appIconUrl from '../../assets/baby_b_svg.svg';
 
-function AppIcon() {
+function AppIcon({ sx: { fontSize = '3em' } }: { sx: { fontSize: string } }) {
   return (
     <Box
       component="img"
       src={appIconUrl}
       alt="AppIcon"
       sx={theme => ({
-        width: '3em',
-        height: '3em',
+        width: fontSize,
+        height: fontSize,
         verticalAlign: 'middle',
         filter:
           theme.palette.mode === 'light' ? 'invert(1) brightness(1.2)' : 'none',

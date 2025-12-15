@@ -16,5 +16,4 @@
 - Make useGoogleAPI not hardcoded with my file
 
 - Add (oz) for ml
-- Add icons next to tabs in tab selector
 - Make add entry a tag above the footer
