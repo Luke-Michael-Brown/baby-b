@@ -2,10 +2,13 @@ import { useEffect, useCallback } from 'react'
 import { atom, useAtom } from 'jotai'
 import createCacheMap from '../../utils/createCacheMap'
 
+type TokenClient = google.accounts.oauth2.TokenClient
+type TokenResponse = google.accounts.oauth2.TokenResponse
+
 const authAtom = atom<{
-  accessToken: string | undefined
+  accessToken?: string
   isSignedIn: boolean
-  tokenClient: any
+  tokenClient: TokenClient | null
 }>({
   accessToken: undefined,
   isSignedIn: false,
@@ -18,44 +21,45 @@ const {
   resetCacheMap: resetIdCache,
 } = createCacheMap('baby_b_gapi_idcache')
 
+/* ------------------------------------------------------------------ */
+/* Setup / Bootstrap                                                   */
+/* ------------------------------------------------------------------ */
+
 export function useGoogleAPISetup() {
   const [{ tokenClient }, setAuth] = useAtom(authAtom)
 
-  // ---------------------------------------------------------
-  // GIS Script Loader
-  // ---------------------------------------------------------
   useEffect(() => {
     const scriptId = 'gis-script'
 
-    function initClient() {
-      if (!(window as any).google) return
+    const initClient = () => {
+      if (!window.google?.accounts?.oauth2) return
 
-      const client = (window as any).google.accounts.oauth2.initTokenClient({
+      const client = window.google.accounts.oauth2.initTokenClient({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID!,
         scope:
           'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly',
-        callback: (tokenResponse: any) => {
-          if (tokenResponse.access_token) {
-            const expiresAt = Date.now() + (tokenResponse.expires_in || 3600) * 1000
+        callback: (tokenResponse: TokenResponse) => {
+          if (!tokenResponse.access_token) return
 
-            localStorage.setItem(
-              'baby_b_gapi_auth',
-              JSON.stringify({ token: tokenResponse.access_token, expiresAt })
-            )
+          const expiresAt = Date.now() + (parseFloat(tokenResponse.expires_in) ?? 3600) * 1000
 
-            setAuth(oldAuth => ({
-              ...oldAuth,
-              accessToken: tokenResponse.access_token,
-              isSignedIn: true,
-            }))
-          }
+          localStorage.setItem(
+            'baby_b_gapi_auth',
+            JSON.stringify({
+              token: tokenResponse.access_token,
+              expiresAt,
+            })
+          )
+
+          setAuth(old => ({
+            ...old,
+            accessToken: tokenResponse.access_token,
+            isSignedIn: true,
+          }))
         },
       })
 
-      setAuth(oldAuth => ({
-        ...oldAuth,
-        tokenClient: client,
-      }))
+      setAuth(old => ({ ...old, tokenClient: client }))
     }
 
     if (document.getElementById(scriptId)) {
@@ -63,42 +67,41 @@ export function useGoogleAPISetup() {
       return
     }
 
-    const s = document.createElement('script')
-    s.id = scriptId
-    s.src = 'https://accounts.google.com/gsi/client'
-    s.async = true
-    s.defer = true
-    s.onload = initClient
-    document.body.appendChild(s)
-  }, [])
+    const script = document.createElement('script')
+    script.id = scriptId
+    script.src = 'https://accounts.google.com/gsi/client'
+    script.async = true
+    script.defer = true
+    script.onload = initClient
+    document.body.appendChild(script)
+  }, [setAuth])
 
-  // ---------------------------------------------------------
-  // Restore token
-  // ---------------------------------------------------------
   const tryRestoreToken = useCallback(() => {
+    if (!tokenClient) return
+
     const saved = localStorage.getItem('baby_b_gapi_auth')
-    if (!saved || !tokenClient) return
+    if (!saved) return
 
-    const { token, expiresAt } = JSON.parse(saved)
+    const { token, expiresAt } = JSON.parse(saved) as {
+      token?: string
+      expiresAt?: number
+    }
 
-    if (token && Date.now() < expiresAt) {
-      setAuth(oldAuth => ({
-        ...oldAuth,
+    if (token && expiresAt && Date.now() < expiresAt) {
+      setAuth(old => ({
+        ...old,
         accessToken: token,
         isSignedIn: true,
       }))
     } else {
       tokenClient.requestAccessToken({ prompt: '' })
     }
-  }, [tokenClient])
+  }, [tokenClient, setAuth])
 
   useEffect(() => {
     if (tokenClient) tryRestoreToken()
   }, [tokenClient, tryRestoreToken])
 
-  // ---------------------------------------------------------
-  // Resume listeners
-  // ---------------------------------------------------------
   useEffect(() => {
     if (!tokenClient) return
 
@@ -122,12 +125,9 @@ export function useGoogleAPISetup() {
     if (!tokenClient) return
 
     let last = Date.now()
-
     const interval = setInterval(() => {
       const now = Date.now()
-      if (now - last > 3000) {
-        tryRestoreToken()
-      }
+      if (now - last > 3000) tryRestoreToken()
       last = now
     }, 2000)
 
@@ -135,12 +135,13 @@ export function useGoogleAPISetup() {
   }, [tokenClient, tryRestoreToken])
 }
 
+/* ------------------------------------------------------------------ */
+/* Public API                                                          */
+/* ------------------------------------------------------------------ */
+
 export default function useGoogleAPI() {
   const [{ accessToken, isSignedIn, tokenClient }, setAuth] = useAtom(authAtom)
 
-  // ---------------------------------------------------------
-  // Sign In / Sign Out
-  // ---------------------------------------------------------
   const signIn = useCallback(() => {
     if (!tokenClient) throw new Error('GIS not initialized')
     tokenClient.requestAccessToken({ prompt: 'consent' })
@@ -151,7 +152,9 @@ export default function useGoogleAPI() {
       try {
         await fetch(`https://oauth2.googleapis.com/revoke?token=${accessToken}`, {
           method: 'POST',
-          headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded',
+          },
         })
       } catch (err) {
         console.warn('Token revoke failed', err)
@@ -161,28 +164,28 @@ export default function useGoogleAPI() {
     localStorage.removeItem('baby_b_gapi_auth')
     localStorage.removeItem('baby_b_gapi_idcache')
 
-    setAuth(oldAuth => ({
-      ...oldAuth,
+    setAuth(old => ({
+      ...old,
       accessToken: undefined,
       isSignedIn: false,
     }))
 
     window.location.reload()
-  }, [accessToken])
+  }, [accessToken, setAuth])
 
-  // ---------------------------------------------------------
-  // resolvePath (with persistent caching + auto clear-and-retry)
-  // ---------------------------------------------------------
+  /* ------------------------- Drive Helpers ------------------------- */
+
   const resolvePath = useCallback(
     async (filePath: string, createMissing = false, retry = true) => {
-      if (!accessToken) throw new Error('No access token. Please sign in first.')
+      if (!accessToken) {
+        throw new Error('No access token. Please sign in first.')
+      }
 
       const parts = filePath.split('/')
       const fileName = parts.pop()!
-      let parentId: string = 'root'
+      let parentId = 'root'
 
       try {
-        // ---------- FOLDER WALK ----------
         for (const folderName of parts) {
           const cacheKey = `${parentId}/${folderName}`
 
@@ -191,12 +194,14 @@ export default function useGoogleAPI() {
             continue
           }
 
-          const folderRes = await fetch(
-            `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
-            { headers: { Authorization: `Bearer ${accessToken}` } }
+          const res = await fetch(
+            `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
           )
 
-          const data = await folderRes.json()
+          const data = await res.json()
 
           if (data.files?.length) {
             parentId = data.files[0].id
@@ -204,31 +209,28 @@ export default function useGoogleAPI() {
             continue
           }
 
-          // Create folder if needed
-          if (createMissing) {
-            const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
-              method: 'POST',
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                name: folderName,
-                mimeType: 'application/vnd.google-apps.folder',
-                parents: [parentId],
-              }),
-            })
-
-            const created = await createRes.json()
-            parentId = created.id
-            addToIdCache(cacheKey, parentId)
-            continue
+          if (!createMissing) {
+            throw new Error(`Folder "${folderName}" not found`)
           }
 
-          throw new Error(`Folder "${folderName}" not found.`)
+          const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: folderName,
+              mimeType: 'application/vnd.google-apps.folder',
+              parents: [parentId],
+            }),
+          })
+
+          const created = await createRes.json()
+          parentId = created.id
+          addToIdCache(cacheKey, parentId)
         }
 
-        // ---------- FILE LOOKUP ----------
         const fileKey = `${parentId}/${fileName}`
 
         if (idCache.has(fileKey)) {
@@ -236,8 +238,10 @@ export default function useGoogleAPI() {
         }
 
         const fileRes = await fetch(
-          `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
-          { headers: { Authorization: `Bearer ${accessToken}` } }
+          `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
         )
 
         const fileData = await fileRes.json()
@@ -251,7 +255,6 @@ export default function useGoogleAPI() {
         return { parentId, fileName, fileId: null }
       } catch (err) {
         if (retry) {
-          console.warn('ID cache invalidated → clearing and retrying resolvePath()')
           resetIdCache()
           return resolvePath(filePath, createMissing, false)
         }
@@ -261,13 +264,10 @@ export default function useGoogleAPI() {
     [accessToken]
   )
 
-  // ---------------------------------------------------------
-  // Fetch JSON
-  // ---------------------------------------------------------
   const fetchJsonFromDrive = useCallback(
     async (filePath = 'baby_b_tracker/babies_data.json') => {
       const { fileId } = await resolvePath(filePath)
-      if (!fileId) throw new Error(`File "${filePath}" not found.`)
+      if (!fileId) throw new Error('File not found')
 
       const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -278,11 +278,8 @@ export default function useGoogleAPI() {
     [accessToken, resolvePath]
   )
 
-  // ---------------------------------------------------------
-  // Upload JSON
-  // ---------------------------------------------------------
   const uploadJsonToDrive = useCallback(
-    async (data: any, filePath = 'baby_b_tracker/babies_data.json') => {
+    async (data: unknown, filePath = 'baby_b_tracker/babies_data.json') => {
       const { parentId, fileName, fileId } = await resolvePath(filePath, true)
 
       const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -290,22 +287,22 @@ export default function useGoogleAPI() {
       })
 
       if (fileId) {
-        const res = await fetch(
-          `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,
-          {
-            method: 'PATCH',
-            headers: { Authorization: `Bearer ${accessToken}` },
-            body: blob,
-          }
-        )
+        await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${accessToken}` },
+          body: blob,
+        })
 
-        if (!res.ok) throw new Error('Failed to update JSON.')
         return { updated: true, fileId }
       }
 
-      const metadata = { name: fileName, parents: [parentId] }
       const form = new FormData()
-      form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }))
+      form.append(
+        'metadata',
+        new Blob([JSON.stringify({ name: fileName, parents: [parentId] })], {
+          type: 'application/json',
+        })
+      )
       form.append('file', blob)
 
       const res = await fetch(
@@ -318,7 +315,6 @@ export default function useGoogleAPI() {
       )
 
       const created = await res.json()
-
       addToIdCache(`${parentId}/${fileName}`, created.id)
 
       return { created: true, fileId: created.id }
@@ -328,9 +324,9 @@ export default function useGoogleAPI() {
 
   return {
     isSignedIn,
+    accessToken,
     signIn,
     signOut,
-    accessToken,
     fetchJsonFromDrive,
     uploadJsonToDrive,
   }

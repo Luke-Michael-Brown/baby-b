@@ -1,11 +1,11 @@
 import React from 'react'
 import { Box, useTheme } from '@mui/material'
-import type { Palette, PaletteColor } from '@mui/material/styles'
+import type { SxProps, Theme, Palette, PaletteColor } from '@mui/material/styles'
 
 interface ThemedAppBarProps {
   position?: 'fixed' | 'absolute' | 'sticky' | 'static' | 'relative'
   color?: keyof Palette | string
-  sx?: any
+  sx?: SxProps<Theme>
   children?: React.ReactNode
 }
 

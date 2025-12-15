@@ -3,8 +3,6 @@ import config from '../../config'
 import type { Entry } from '../../hooks/useBabyTabData'
 import dayjs from 'dayjs'
 import formatMsToMinSec from '../formatMsToMinSec'
-import isFloatString from '../isFloatString'
-import isBooleanString from '../isBooleanString'
 
 export default function getTabSummary(
   tabData: Entry[] | undefined,
@@ -15,7 +13,7 @@ export default function getTabSummary(
   if (!tabData) return ['No data yet']
 
   const tabConfig = config[tab]
-  const filteredData = tabData.filter((item: any) => {
+  const filteredData = tabData.filter((item: Entry) => {
     const itemDate = dayjs(item.start_time)
     return (
       itemDate.isSame(startDate, 'day') ||
@@ -48,8 +46,8 @@ export default function getTabSummary(
         totals[index] += durationMs
       } else if (fieldToAverage) {
         const value = entry[fieldToAverage]
-        if (!isNaN(value) && typeof value !== 'boolean') {
-          totals[index] += parseFloat(value)
+        if (typeof value === 'number' || typeof value === 'string') {
+          totals[index] += parseFloat(value as string)
         } else if (value === true) {
           totals[index] += 1
         }
@@ -66,7 +64,7 @@ export default function getTabSummary(
 
       const units = summaryItem.fieldToAverage
         ? (tabConfig.fields?.find(f => f.columnFields.field === summaryItem.fieldToAverage)
-            ?.columnFields.headerName ?? '')
+            ?.fullName ?? '')
         : ''
 
       const average = isDaysPeriod
@@ -87,11 +85,11 @@ export default function getTabSummary(
                 return (
                   tabConfig.fields
                     ?.find(f => f.columnFields.field === key)
-                    ?.columnFields.headerName?.toLowerCase() ?? key
+                    ?.fullName?.toLowerCase() ?? key
                 )
               }
 
-              return values[0].toLowerCase()
+              return values[0].toString().toLowerCase()
             })
             .join(', ')
         : summaryItem.fieldToAverage

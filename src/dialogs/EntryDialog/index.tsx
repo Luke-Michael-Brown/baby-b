@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import React from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -19,6 +21,7 @@ import selectedTabAtom from '../../atoms/selectedTabAtom'
 import { atom } from 'jotai'
 import floorTo5 from '../../utils/floorNearest5'
 import config from '../../config'
+import type { Entry } from '../../hooks/useBabyTabData'
 
 export interface EntryDialogProps {
   tab?: string
@@ -52,15 +55,17 @@ export function EntryDialog() {
   const editEntry = useEditEntry()
 
   const [isLoading, setIsLoading] = React.useState(false)
-  const [formValues, setFormValues] = React.useState<Record<string, any>>({})
+  const [formValues, setFormValues] = React.useState<
+    Record<string, string | number | boolean | undefined | Dayjs | null>
+  >({})
 
   React.useEffect(() => {
     if (tab && tabConfig) {
-      const initialValues: Record<string, any> = {}
-      let editEntry: any = {}
+      const initialValues: Record<string, string | number | boolean | undefined | Dayjs | null> = {}
+      let editEntry: Record<string, string | number | boolean | undefined | Dayjs | null> = {}
       if (editId && selectedBaby && tab) {
         const editIndex = babiesData[selectedBaby][tab].findIndex(
-          (entry: any) => entry.id === editId
+          (entry: Entry) => entry.id === editId
         )
         if (editIndex !== -1) {
           editEntry = babiesData[selectedBaby][tab][editIndex]
@@ -71,7 +76,7 @@ export function EntryDialog() {
         if (field.formType === 'datePicker') {
           const editEntryDate = editEntry[field.columnFields.field]
           initialValues[field.columnFields.field] = editEntryDate
-            ? dayjs(editEntryDate)
+            ? dayjs(editEntryDate as string)
             : floorTo5(dayjs())
         } else {
           initialValues[field.columnFields.field] =
@@ -84,9 +89,9 @@ export function EntryDialog() {
       setIsLoading(false)
       setFormValues(initialValues)
     }
-  }, [open, tab, editId, selectedBaby, babiesData])
+  }, [tab, editId, selectedBaby, babiesData, tabConfig])
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | number | boolean | Dayjs | null) => {
     setFormValues(prev => ({ ...prev, [field]: value }))
   }
 

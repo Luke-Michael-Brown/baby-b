@@ -13,24 +13,26 @@ import DataTab from './tabs/DataTab'
 type FieldEntry =
   | {
       formType: string
+      fullName: string
       selectFields?: never
       columnFields: GridColDef
     }
   | {
       formType: 'select'
+      fullName: string
       selectFields: string[]
       columnFields: GridColDef
     }
 
 type SummaryItem = {
   peroid: 'events' | 'days'
-  filters?: { [key: string]: any[] }
+  filters?: { [key: string]: (string | number | boolean)[] }
   fieldToAverage?: string
 }
 
 export interface ConfigEntry {
   Icon: SvgIconComponent | typeof AppIcon
-  TabComponent?: React.FC<any>
+  TabComponent?: React.FC
   lightPalette: PaletteColorOptions
   darkPalette: PaletteColorOptions
   fields?: FieldEntry[]
@@ -59,6 +61,7 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
+        fullName: 'Start Time',
         columnFields: {
           field: 'start_time',
           headerName: 'Start',
@@ -66,6 +69,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'number',
+        fullName: 'mL',
         columnFields: {
           field: 'extra1',
           headerName: 'mL',
@@ -73,6 +77,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'checkbox',
+        fullName: 'Vitamin D',
         columnFields: {
           field: 'extra2',
           headerName: 'VitD',
@@ -94,6 +99,7 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
+        fullName: 'Start Time',
         columnFields: {
           field: 'start_time',
           headerName: 'Start',
@@ -101,6 +107,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'select',
+        fullName: 'Diaper Type',
         selectFields: ['Pee', 'Poo', 'Pee & Poo'],
         columnFields: {
           field: 'extra1',
@@ -125,6 +132,7 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
+        fullName: 'Start Time',
         columnFields: {
           field: 'start_time',
           headerName: 'Start',
@@ -132,6 +140,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'number',
+        fullName: 'mL',
         columnFields: {
           field: 'extra2',
           headerName: 'mL',
@@ -139,6 +148,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'checkbox',
+        fullName: 'Power Pump',
         columnFields: {
           field: 'extra3',
           headerName: 'Power',
@@ -160,6 +170,7 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
+        fullName: 'Start Time',
         columnFields: {
           field: 'start_time',
           headerName: 'Start',
@@ -167,6 +178,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'datePicker',
+        fullName: 'End Time',
         columnFields: {
           field: 'end_time',
           headerName: 'End',
@@ -174,6 +186,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'select',
+        fullName: 'Side',
         selectFields: ['Left', 'Right', 'Both'],
         columnFields: {
           field: 'extra1',
@@ -182,6 +195,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'checkbox',
+        fullName: 'Vitamin D',
         columnFields: {
           field: 'extra2',
           headerName: 'VitD',
@@ -206,6 +220,7 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
+        fullName: 'Start Time',
         columnFields: {
           field: 'start_time',
           headerName: 'Start',
@@ -213,6 +228,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'datePicker',
+        fullName: 'End Time',
         columnFields: {
           field: 'end_time',
           headerName: 'End',
@@ -220,6 +236,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'select',
+        fullName: 'Sleep Type',
         selectFields: ['Night Sleep', 'Nap'],
         columnFields: {
           field: 'extra1',

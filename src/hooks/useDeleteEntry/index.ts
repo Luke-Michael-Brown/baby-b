@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { useQueryClient } from '@tanstack/react-query'
 import useGoogleAPI from '../../hooks/useGoogleAPI'
+import type { Entry } from '../useBabyTabData'
 
 export default function useDeleteEntry() {
   const qc = useQueryClient()
@@ -9,7 +10,7 @@ export default function useDeleteEntry() {
   return async (deleteId: string, babyName: string, tab: string) => {
     const babiesData = await fetchJsonFromDrive()
 
-    const deleteIndex = babiesData[babyName][tab].findIndex((entry: any) => entry.id === deleteId)
+    const deleteIndex = babiesData[babyName][tab].findIndex((entry: Entry) => entry.id === deleteId)
     if (deleteIndex === -1) return
 
     babiesData[babyName][tab][deleteIndex] = {

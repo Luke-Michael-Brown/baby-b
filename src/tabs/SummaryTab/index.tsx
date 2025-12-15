@@ -17,7 +17,7 @@ function SummaryTab() {
   const [startDate, setStartDate] = useAtom(summayStartDateAtom)
   const [endDate, setEndDate] = useAtom(summaryEndDateAtom)
 
-  const handleRangeSelect = (_event: any, value: string | null) => {
+  const handleRangeSelect = (_event: unknown, value: string | null) => {
     if (!value) return
 
     const ranges: Record<string, number> = {

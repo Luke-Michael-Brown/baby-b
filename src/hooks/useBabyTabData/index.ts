@@ -18,7 +18,7 @@ export interface Entry {
   start_time: string
   end_time?: string
   isShown?: boolean
-  [key: string]: any
+  [key: string]: string | boolean | number | undefined
 }
 
 export interface BabyData {

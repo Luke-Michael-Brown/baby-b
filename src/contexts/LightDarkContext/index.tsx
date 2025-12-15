@@ -1,12 +1,19 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import React, { createContext, useMemo, useState } from 'react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { useTheme } from '../../theme'
 
 type Mode = 'light' | 'dark'
 
-const LightDarkContext = createContext({
+interface LightDarkContextType {
+  mode: Mode
+  setMode: (newMode: Mode) => void
+}
+
+const LightDarkContext = createContext<LightDarkContextType>({
   mode: 'light' as Mode,
-  setMode: (_newMode: Mode) => {},
+  setMode: () => {},
 })
 
 export function LightDarkProvider({ children }: { children: React.ReactNode }) {

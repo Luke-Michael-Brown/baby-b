@@ -1,15 +1,21 @@
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { useQueryClient } from '@tanstack/react-query'
 import useGoogleAPI from '../../hooks/useGoogleAPI'
+import type { Entry } from '../useBabyTabData'
 
 export default function useEditEntry() {
   const qc = useQueryClient()
   const { uploadJsonToDrive, fetchJsonFromDrive } = useGoogleAPI()
 
-  return async (editId: string, babyName: string, tab: string, data: Record<string, any>) => {
+  return async (
+    editId: string,
+    babyName: string,
+    tab: string,
+    data: Record<string, string | number | boolean | undefined | Dayjs | null>
+  ) => {
     const babiesData = await fetchJsonFromDrive()
 
-    const editIndex = babiesData[babyName][tab].findIndex((entry: any) => entry.id === editId)
+    const editIndex = babiesData[babyName][tab].findIndex((entry: Entry) => entry.id === editId)
     if (editIndex === -1) return
 
     babiesData[babyName][tab][editIndex] = {
