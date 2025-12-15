@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -96,4 +96,4 @@ function DataTab() {
   ) : null;
 }
 
-export default React.memo(DataTab);
+export default memo(DataTab);

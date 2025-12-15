@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Tooltip, IconButton } from '@mui/material';
 
@@ -22,4 +22,4 @@ function LogoutButton() {
   );
 }
 
-export default React.memo(LogoutButton);
+export default memo(LogoutButton);

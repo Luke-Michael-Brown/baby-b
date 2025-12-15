@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Box } from '@mui/material';
 
 import appIconUrl from '../../assets/baby_b_svg.svg';
@@ -20,4 +20,4 @@ function AppIcon() {
   );
 }
 
-export default React.memo(AppIcon);
+export default memo(AppIcon);

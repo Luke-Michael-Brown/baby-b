@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -104,4 +104,4 @@ function SummaryTab() {
   );
 }
 
-export default React.memo(SummaryTab);
+export default memo(SummaryTab);

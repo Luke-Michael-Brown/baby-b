@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material';
 
@@ -66,4 +66,4 @@ function LoginPage() {
   );
 }
 
-export default React.memo(LoginPage);
+export default memo(LoginPage);

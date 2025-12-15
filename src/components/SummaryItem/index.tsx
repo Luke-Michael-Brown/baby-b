@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -45,4 +45,4 @@ function SummaryItem({ tab }: Props) {
   );
 }
 
-export default React.memo(SummaryItem);
+export default memo(SummaryItem);

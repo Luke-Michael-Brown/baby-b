@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { useAtom } from 'jotai';
 import { Select, MenuItem, Box, Typography } from '@mui/material';
 
@@ -42,4 +42,4 @@ function BabySelector() {
   );
 }
 
-export default React.memo(BabySelector);
+export default memo(BabySelector);

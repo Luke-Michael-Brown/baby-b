@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Stack, Typography, Button } from '@mui/material';
 
@@ -115,4 +115,4 @@ function Footer() {
     </Box>
   );
 }
-export default React.memo(Footer);
+export default memo(Footer);

@@ -1,6 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import React, { createContext, useMemo, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import { useTheme } from '../../theme';
@@ -17,7 +23,7 @@ const LightDarkContext = createContext<LightDarkContextType>({
   setMode: () => {},
 });
 
-export function LightDarkProvider({ children }: { children: React.ReactNode }) {
+export function LightDarkProvider({ children }: { children: ReactNode }) {
   const [mode, _setMode] = useState<Mode>(
     localStorage.getItem('mode') === 'dark' ? 'dark' : 'light',
   );
@@ -40,7 +46,7 @@ export function LightDarkProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useLightDark() {
-  const context = React.useContext(LightDarkContext);
+  const context = useContext(LightDarkContext);
   if (context === undefined) {
     throw new Error('useLightDark must be used within a LightDarkProvider');
   }

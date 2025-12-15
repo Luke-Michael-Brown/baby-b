@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Box } from '@mui/material';
 
 import Footer from '../../components/Footer';
@@ -25,4 +25,4 @@ function ContentPage() {
   );
 }
 
-export default React.memo(ContentPage);
+export default memo(ContentPage);

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 
 function LoadingSceen() {
@@ -16,4 +16,4 @@ function LoadingSceen() {
   );
 }
 
-export default React.memo(LoadingSceen);
+export default memo(LoadingSceen);

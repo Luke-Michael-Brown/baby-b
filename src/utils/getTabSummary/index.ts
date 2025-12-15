@@ -84,14 +84,14 @@ export default function getTabSummary(
         ? Object.entries(summaryItem.filters)
             .map(([key, values]) => {
               if (typeof values[0] === 'boolean') {
-                return (
+                return `${
                   tabConfig.fields
                     ?.find(f => f.columnFields.field === key)
                     ?.fullName?.toLowerCase() ?? key
-                );
+                }(s)`;
               }
 
-              return values[0].toString().toLowerCase();
+              return `${values[0].toString().toLowerCase()}(s)`;
             })
             .join(', ')
         : summaryItem.fieldToAverage

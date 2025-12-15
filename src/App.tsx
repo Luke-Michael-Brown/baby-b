@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';
 
@@ -51,4 +51,4 @@ export function App() {
   );
 }
 
-export default React.memo(App);
+export default memo(App);

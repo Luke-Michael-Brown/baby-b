@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import type { SvgIconComponent } from '@mui/icons-material';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import CribIcon from '@mui/icons-material/Crib';
@@ -33,7 +34,7 @@ type SummaryItem = {
 
 export interface ConfigEntry {
   Icon: SvgIconComponent | typeof AppIcon;
-  TabComponent?: React.FC;
+  TabComponent?: FC;
   lightPalette: PaletteColorOptions;
   darkPalette: PaletteColorOptions;
   fields?: FieldEntry[];

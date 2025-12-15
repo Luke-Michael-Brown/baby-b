@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo, type ReactNode } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import type {
@@ -12,7 +12,7 @@ interface ThemedAppBarProps {
   position?: 'fixed' | 'absolute' | 'sticky' | 'static' | 'relative';
   color?: keyof Palette | string;
   sx?: SxProps<Theme>;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 /**
@@ -78,4 +78,4 @@ function ThemedAppBar({
   );
 }
 
-export default React.memo(ThemedAppBar);
+export default memo(ThemedAppBar);

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Tooltip, IconButton } from '@mui/material';
@@ -23,4 +23,4 @@ function ToggleThemeButton() {
   );
 }
 
-export default React.memo(ToggleThemeButton);
+export default memo(ToggleThemeButton);

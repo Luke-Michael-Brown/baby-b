@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 function TwoLineDate({ date }: { date?: string }) {
   if (!date) return null;
@@ -24,4 +24,4 @@ function TwoLineDate({ date }: { date?: string }) {
   );
 }
 
-export default React.memo(TwoLineDate);
+export default memo(TwoLineDate);

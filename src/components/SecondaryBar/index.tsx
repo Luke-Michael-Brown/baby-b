@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 
@@ -27,4 +27,4 @@ export function SecondaryBar() {
   );
 }
 
-export default React.memo(SecondaryBar);
+export default memo(SecondaryBar);

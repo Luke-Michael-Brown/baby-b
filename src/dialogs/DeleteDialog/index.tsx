@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import React from 'react';
+import { memo, useState } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -34,7 +34,7 @@ export function useDeleteDialog() {
 export function DeleteDialog() {
   const { deleteId } = useAtomValue(deleteDialogPropsAtom);
   const { closeDeleteDialog } = useDeleteDialog();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const onDelete = useDeleteEntry();
 
   const selectedBaby = useAtomValue(selectedBabyAtom);
@@ -81,4 +81,4 @@ export function DeleteDialog() {
   );
 }
 
-export default React.memo(DeleteDialog);
+export default memo(DeleteDialog);

@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import React from 'react';
+import { memo, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { atom } from 'jotai';
 import Button from '@mui/material/Button';
@@ -55,12 +55,12 @@ export function EntryDialog() {
   const addEntry = useAddEntry();
   const editEntry = useEditEntry();
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState<
+  const [isLoading, setIsLoading] = useState(false);
+  const [formValues, setFormValues] = useState<
     Record<string, string | number | boolean | undefined | Dayjs | null>
   >({});
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (tab && tabConfig) {
       const initialValues: Record<
         string,
@@ -105,14 +105,14 @@ export function EntryDialog() {
     setFormValues(prev => ({ ...prev, [field]: value }));
   };
 
-  const allFilled = React.useMemo(() => {
+  const allFilled = useMemo(() => {
     return Object.entries(formValues).every(([key, v]) => {
       if (key === 'vitaminD') return true; // optional boolean
       return v !== '' && v !== null && v !== undefined;
     });
   }, [formValues]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -267,4 +267,4 @@ export function EntryDialog() {
   );
 }
 
-export default React.memo(EntryDialog);
+export default memo(EntryDialog);

@@ -1,4 +1,3 @@
-- Make a config file
 - Add weight tab
 - Add comments everywhere
 - Update readme
@@ -6,8 +5,6 @@
 - Use useEffectEvent instead of useCallback
 - Publish it for google
 - Make filter section collapsible
-- Check eslint/prettier settings
-- Fix prettier
 
 - Compare against average baby
 - Baby edit name
@@ -16,3 +13,8 @@
 - Make more fun spinner
 - Cache data for quicker load
 - Add charts to summary page
+- Make useGoogleAPI not hardcoded with my file
+
+- Add (oz) for ml
+- Add icons next to tabs in tab selector
+- Make add entry a tag above the footer

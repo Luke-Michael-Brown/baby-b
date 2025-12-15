@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -63,4 +63,4 @@ function Header() {
   );
 }
 
-export default React.memo(Header);
+export default memo(Header);

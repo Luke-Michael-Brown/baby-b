@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Tooltip, Box, IconButton } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
@@ -47,4 +47,4 @@ function RefreshButton() {
   );
 }
 
-export default React.memo(RefreshButton);
+export default memo(RefreshButton);

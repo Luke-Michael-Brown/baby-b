@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { useAtomValue } from 'jotai';
 
 import selectedTabAtom from '../../atoms/selectedTabAtom';
@@ -10,4 +10,4 @@ function TabContent() {
   return TabComponent ? <TabComponent /> : null;
 }
 
-export default React.memo(TabContent);
+export default memo(TabContent);

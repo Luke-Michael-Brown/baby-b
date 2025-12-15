@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { useAtom } from 'jotai';
 import { Box, Typography, Select, MenuItem } from '@mui/material';
 
@@ -31,4 +31,4 @@ function TabSelector() {
   );
 }
 
-export default React.memo(TabSelector);
+export default memo(TabSelector);
