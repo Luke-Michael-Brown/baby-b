@@ -1,14 +1,14 @@
-import React from 'react'
-import { useAtom } from 'jotai'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import packageJson from '../../../package.json'
-import ThemedAppBar from '../ThemedAppBar'
-import selectedTabAtom from '../../atoms/selectedTabAtom'
-import RefreshButton from '../RefreshButton'
-import LogoutButton from '../LogoutButton'
-import ToggleThemeButton from '../ToggleThemeButton'
+import React from 'react';
+import { useAtom } from 'jotai';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import packageJson from '../../../package.json';
+import ThemedAppBar from '../ThemedAppBar';
+import selectedTabAtom from '../../atoms/selectedTabAtom';
+import RefreshButton from '../RefreshButton';
+import LogoutButton from '../LogoutButton';
+import ToggleThemeButton from '../ToggleThemeButton';
 
 function Header() {
   const [
@@ -16,11 +16,11 @@ function Header() {
       tabConfig: { Icon },
     },
     setSelectedTab,
-  ] = useAtom(selectedTabAtom)
+  ] = useAtom(selectedTabAtom);
 
   const onTitleClick = () => {
-    setSelectedTab('summary')
-  }
+    setSelectedTab('summary');
+  };
 
   return (
     <Box>
@@ -37,12 +37,21 @@ function Header() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Baby B
             </Typography>
-            <Typography variant="body2" component="div" sx={{ flexGrow: 1, opacity: 0.7 }}>
+            <Typography
+              variant="body2"
+              component="div"
+              sx={{ flexGrow: 1, opacity: 0.7 }}
+            >
               {`v${packageJson.version}`}
             </Typography>
           </Stack>
 
-          <Stack sx={{ ml: 'auto' }} direction="row" spacing={1} alignItems="center">
+          <Stack
+            sx={{ ml: 'auto' }}
+            direction="row"
+            spacing={1}
+            alignItems="center"
+          >
             <RefreshButton />
             <LogoutButton />
             <ToggleThemeButton />
@@ -50,7 +59,7 @@ function Header() {
         </Stack>
       </ThemedAppBar>
     </Box>
-  )
+  );
 }
 
-export default React.memo(Header)
+export default React.memo(Header);

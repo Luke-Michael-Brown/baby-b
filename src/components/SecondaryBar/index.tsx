@@ -1,11 +1,11 @@
-import React from 'react'
-import Box from '@mui/material/Box'
-import { useTheme } from '@mui/material/styles'
-import BabySelector from '../BabySelector'
-import TabSelector from '../TabSelector'
+import React from 'react';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
+import BabySelector from '../BabySelector';
+import TabSelector from '../TabSelector';
 
 export function SecondaryBar() {
-  const theme = useTheme()
+  const theme = useTheme();
 
   return (
     <Box
@@ -23,7 +23,7 @@ export function SecondaryBar() {
       <Box sx={{ flexGrow: 1 }} />
       <TabSelector />
     </Box>
-  )
+  );
 }
 
-export default React.memo(SecondaryBar)
+export default React.memo(SecondaryBar);

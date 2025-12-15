@@ -1,23 +1,34 @@
-import React from 'react'
-import { Box, useTheme } from '@mui/material'
-import type { SxProps, Theme, Palette, PaletteColor } from '@mui/material/styles'
+import React from 'react';
+import { Box, useTheme } from '@mui/material';
+import type {
+  SxProps,
+  Theme,
+  Palette,
+  PaletteColor,
+} from '@mui/material/styles';
 
 interface ThemedAppBarProps {
-  position?: 'fixed' | 'absolute' | 'sticky' | 'static' | 'relative'
-  color?: keyof Palette | string
-  sx?: SxProps<Theme>
-  children?: React.ReactNode
+  position?: 'fixed' | 'absolute' | 'sticky' | 'static' | 'relative';
+  color?: keyof Palette | string;
+  sx?: SxProps<Theme>;
+  children?: React.ReactNode;
 }
 
 /**
  * A theme-aware AppBar replacement that supports custom palette colors.
  */
-function ThemedAppBar({ position = 'static', color = 'primary', sx, children }: ThemedAppBarProps) {
-  const theme = useTheme()
+function ThemedAppBar({
+  position = 'static',
+  color = 'primary',
+  sx,
+  children,
+}: ThemedAppBarProps) {
+  const theme = useTheme();
 
   // Try to get a known palette color safely
   const paletteColor: PaletteColor =
-    (theme.palette[color as keyof Palette] as PaletteColor) || theme.palette.primary
+    (theme.palette[color as keyof Palette] as PaletteColor) ||
+    theme.palette.primary;
 
   return (
     <Box
@@ -63,7 +74,7 @@ function ThemedAppBar({ position = 'static', color = 'primary', sx, children }: 
     >
       {children}
     </Box>
-  )
+  );
 }
 
-export default React.memo(ThemedAppBar)
+export default React.memo(ThemedAppBar);

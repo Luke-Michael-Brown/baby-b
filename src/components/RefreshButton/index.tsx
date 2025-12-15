@@ -1,28 +1,28 @@
-import React, { useState } from 'react'
-import { Tooltip, Box, IconButton } from '@mui/material'
-import { useQueryClient } from '@tanstack/react-query'
-import RefreshIcon from '@mui/icons-material/Refresh'
-import useCurrentPage from '../../hooks/useCurrentPage'
+import React, { useState } from 'react';
+import { Tooltip, Box, IconButton } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import useCurrentPage from '../../hooks/useCurrentPage';
 
 function RefreshButton() {
-  const currentPage = useCurrentPage()
-  const qc = useQueryClient()
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const currentPage = useCurrentPage();
+  const qc = useQueryClient();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const refreshData = async () => {
-    setIsRefreshing(true)
+    setIsRefreshing(true);
     try {
       await qc.invalidateQueries({
         queryKey: ['babies-data'],
         exact: true,
-      })
+      });
     } finally {
-      setIsRefreshing(false)
+      setIsRefreshing(false);
     }
-  }
+  };
 
   if (currentPage !== 'content') {
-    return null
+    return null;
   }
 
   return (
@@ -43,7 +43,7 @@ function RefreshButton() {
         </IconButton>
       </Box>
     </Tooltip>
-  )
+  );
 }
 
-export default React.memo(RefreshButton)
+export default React.memo(RefreshButton);

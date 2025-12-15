@@ -1,17 +1,17 @@
-import React from 'react'
-import Paper from '@mui/material/Paper'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import useTabSummary from '../../hooks/useTabSummary'
-import config from '../../config'
+import React from 'react';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import useTabSummary from '../../hooks/useTabSummary';
+import config from '../../config';
 
 interface Props {
-  tab: string
+  tab: string;
 }
 
 function SummaryItem({ tab }: Props) {
-  const Icon = config[tab].Icon
-  const summaries = useTabSummary({ tab })
+  const Icon = config[tab].Icon;
+  const summaries = useTabSummary({ tab });
 
   return (
     <Paper
@@ -41,7 +41,7 @@ function SummaryItem({ tab }: Props) {
         </Stack>
       </Stack>
     </Paper>
-  )
+  );
 }
 
-export default React.memo(SummaryItem)
+export default React.memo(SummaryItem);

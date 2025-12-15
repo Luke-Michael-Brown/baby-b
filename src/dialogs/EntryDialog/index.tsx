@@ -1,137 +1,148 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import React from 'react'
-import dayjs, { Dayjs } from 'dayjs'
-import { useAtomValue, useSetAtom } from 'jotai'
-import Button from '@mui/material/Button'
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
-import Stack from '@mui/material/Stack'
-import selectedBabyAtom from '../../atoms/selectedBabyAtom'
-import useAddEntry from '../../hooks/useAddEntry'
-import useEditEntry from '../../hooks/useEditEntry'
-import useBabiesData from '../../hooks/useBabiesData'
-import selectedTabAtom from '../../atoms/selectedTabAtom'
-import { atom } from 'jotai'
-import floorTo5 from '../../utils/floorNearest5'
-import config from '../../config'
-import type { Entry } from '../../hooks/useBabyTabData'
+import React from 'react';
+import dayjs, { Dayjs } from 'dayjs';
+import { useAtomValue, useSetAtom } from 'jotai';
+import Button from '@mui/material/Button';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import selectedBabyAtom from '../../atoms/selectedBabyAtom';
+import useAddEntry from '../../hooks/useAddEntry';
+import useEditEntry from '../../hooks/useEditEntry';
+import useBabiesData from '../../hooks/useBabiesData';
+import selectedTabAtom from '../../atoms/selectedTabAtom';
+import { atom } from 'jotai';
+import floorTo5 from '../../utils/floorNearest5';
+import config from '../../config';
+import type { Entry } from '../../hooks/useBabyTabData';
 
 export interface EntryDialogProps {
-  tab?: string
-  editId?: string
+  tab?: string;
+  editId?: string;
 }
 
-export const entryDialogPropsAtom = atom<EntryDialogProps>({})
+export const entryDialogPropsAtom = atom<EntryDialogProps>({});
 
 export function useEntryDialog() {
-  const setEntryDialogProps = useSetAtom(entryDialogPropsAtom)
+  const setEntryDialogProps = useSetAtom(entryDialogPropsAtom);
   const openEntryDialog = (props: EntryDialogProps) => {
-    setEntryDialogProps(props)
-  }
+    setEntryDialogProps(props);
+  };
   const closeEntryDialog = () => {
-    setEntryDialogProps({})
-  }
+    setEntryDialogProps({});
+  };
 
-  return { openEntryDialog, closeEntryDialog }
+  return { openEntryDialog, closeEntryDialog };
 }
 
 export function EntryDialog() {
-  const { tab, editId } = useAtomValue(entryDialogPropsAtom)
-  const tabConfig = config[tab ?? '']
-  const { closeEntryDialog } = useEntryDialog()
-  const { data: babiesData } = useBabiesData()
+  const { tab, editId } = useAtomValue(entryDialogPropsAtom);
+  const tabConfig = config[tab ?? ''];
+  const { closeEntryDialog } = useEntryDialog();
+  const { data: babiesData } = useBabiesData();
 
-  const selectedBaby = useAtomValue(selectedBabyAtom)
-  const setSelectedTab = useSetAtom(selectedTabAtom)
+  const selectedBaby = useAtomValue(selectedBabyAtom);
+  const setSelectedTab = useSetAtom(selectedTabAtom);
 
-  const addEntry = useAddEntry()
-  const editEntry = useEditEntry()
+  const addEntry = useAddEntry();
+  const editEntry = useEditEntry();
 
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<
     Record<string, string | number | boolean | undefined | Dayjs | null>
-  >({})
+  >({});
 
   React.useEffect(() => {
     if (tab && tabConfig) {
-      const initialValues: Record<string, string | number | boolean | undefined | Dayjs | null> = {}
-      let editEntry: Record<string, string | number | boolean | undefined | Dayjs | null> = {}
+      const initialValues: Record<
+        string,
+        string | number | boolean | undefined | Dayjs | null
+      > = {};
+      let editEntry: Record<
+        string,
+        string | number | boolean | undefined | Dayjs | null
+      > = {};
       if (editId && selectedBaby && tab) {
         const editIndex = babiesData[selectedBaby][tab].findIndex(
-          (entry: Entry) => entry.id === editId
-        )
+          (entry: Entry) => entry.id === editId,
+        );
         if (editIndex !== -1) {
-          editEntry = babiesData[selectedBaby][tab][editIndex]
+          editEntry = babiesData[selectedBaby][tab][editIndex];
         }
       }
 
       tabConfig.fields?.forEach(field => {
         if (field.formType === 'datePicker') {
-          const editEntryDate = editEntry[field.columnFields.field]
+          const editEntryDate = editEntry[field.columnFields.field];
           initialValues[field.columnFields.field] = editEntryDate
             ? dayjs(editEntryDate as string)
-            : floorTo5(dayjs())
+            : floorTo5(dayjs());
         } else {
           initialValues[field.columnFields.field] =
             field.formType === 'checkbox'
               ? !!editEntry[field.columnFields.field]
-              : (editEntry[field.columnFields.field] ?? '')
+              : (editEntry[field.columnFields.field] ?? '');
         }
-      })
+      });
 
-      setIsLoading(false)
-      setFormValues(initialValues)
+      setIsLoading(false);
+      setFormValues(initialValues);
     }
-  }, [tab, editId, selectedBaby, babiesData, tabConfig])
+  }, [tab, editId, selectedBaby, babiesData, tabConfig]);
 
-  const handleChange = (field: string, value: string | number | boolean | Dayjs | null) => {
-    setFormValues(prev => ({ ...prev, [field]: value }))
-  }
+  const handleChange = (
+    field: string,
+    value: string | number | boolean | Dayjs | null,
+  ) => {
+    setFormValues(prev => ({ ...prev, [field]: value }));
+  };
 
   const allFilled = React.useMemo(() => {
     return Object.entries(formValues).every(([key, v]) => {
-      if (key === 'vitaminD') return true // optional boolean
-      return v !== '' && v !== null && v !== undefined
-    })
-  }, [formValues])
+      if (key === 'vitaminD') return true; // optional boolean
+      return v !== '' && v !== null && v !== undefined;
+    });
+  }, [formValues]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     try {
-      if (!tab) throw new Error('Tab not selected')
-      if (!selectedBaby) throw new Error('Baby not selected')
+      if (!tab) throw new Error('Tab not selected');
+      if (!selectedBaby) throw new Error('Baby not selected');
       if (editId) {
-        await editEntry(editId, selectedBaby, tab, formValues)
+        await editEntry(editId, selectedBaby, tab, formValues);
       } else {
-        await addEntry(selectedBaby, tab, formValues)
+        await addEntry(selectedBaby, tab, formValues);
       }
-      setSelectedTab(tab)
-      closeEntryDialog()
+      setSelectedTab(tab);
+      closeEntryDialog();
     } catch (err) {
-      console.error(err)
-      setIsLoading(false)
+      console.error(err);
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={!!tab} onClose={closeEntryDialog}>
-      <DialogTitle>{editId ? `Edit ${tab} entry` : `Add ${tab} entry`}</DialogTitle>
+      <DialogTitle>
+        {editId ? `Edit ${tab} entry` : `Add ${tab} entry`}
+      </DialogTitle>
       <DialogContent>
         <form id="add-entry-form" onSubmit={handleSubmit}>
           <Stack spacing={2} sx={{ mt: 1, minWidth: 300 }}>
             {tab &&
               tabConfig?.fields?.map?.(field => {
-                const key = field.columnFields.field
-                const label = field.columnFields.headerName
-                const value = formValues[key] ?? ''
+                const key = field.columnFields.field;
+                const label = field.columnFields.headerName;
+                const value = formValues[key] ?? '';
 
                 switch (field.formType) {
                   case 'datePicker':
@@ -167,7 +178,7 @@ export function EntryDialog() {
                           textField: { required: true, fullWidth: true },
                         }}
                       />
-                    )
+                    );
 
                   case 'select':
                     return (
@@ -189,11 +200,14 @@ export function EntryDialog() {
                           </MenuItem>
                         ))}
                       </Select>
-                    )
+                    );
 
                   case 'checkbox':
                     return (
-                      <label key={key} style={{ display: 'flex', alignItems: 'center' }}>
+                      <label
+                        key={key}
+                        style={{ display: 'flex', alignItems: 'center' }}
+                      >
                         <input
                           type="checkbox"
                           checked={!!value}
@@ -202,7 +216,7 @@ export function EntryDialog() {
                         />
                         {label}
                       </label>
-                    )
+                    );
 
                   case 'number':
                     return (
@@ -220,10 +234,10 @@ export function EntryDialog() {
                           pattern: '[0-9]*',
                         }}
                       />
-                    )
+                    );
 
                   default:
-                    return null
+                    return null;
                 }
               })}
           </Stack>
@@ -249,7 +263,7 @@ export function EntryDialog() {
         </Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }
 
-export default React.memo(EntryDialog)
+export default React.memo(EntryDialog);

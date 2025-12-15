@@ -1,15 +1,15 @@
-import React from 'react'
-import { Tooltip, IconButton } from '@mui/material'
-import LogoutIcon from '@mui/icons-material/Logout'
-import useCurrentPage from '../../hooks/useCurrentPage'
-import useGoogleAPI from '../../hooks/useGoogleAPI'
+import React from 'react';
+import { Tooltip, IconButton } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import useCurrentPage from '../../hooks/useCurrentPage';
+import useGoogleAPI from '../../hooks/useGoogleAPI';
 
 function LogoutButton() {
-  const currentPage = useCurrentPage()
-  const { signOut } = useGoogleAPI()
+  const currentPage = useCurrentPage();
+  const { signOut } = useGoogleAPI();
 
   if (currentPage !== 'content') {
-    return null
+    return null;
   }
 
   return (
@@ -18,7 +18,7 @@ function LogoutButton() {
         <LogoutIcon />
       </IconButton>
     </Tooltip>
-  )
+  );
 }
 
-export default React.memo(LogoutButton)
+export default React.memo(LogoutButton);

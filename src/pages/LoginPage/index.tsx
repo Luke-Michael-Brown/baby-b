@@ -1,10 +1,10 @@
-import React from 'react'
-import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material'
-import useGoogleAPI from '../../hooks/useGoogleAPI'
-import GoogleIcon from '@mui/icons-material/Google'
+import React from 'react';
+import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material';
+import useGoogleAPI from '../../hooks/useGoogleAPI';
+import GoogleIcon from '@mui/icons-material/Google';
 
 function LoginPage() {
-  const { signIn } = useGoogleAPI()
+  const { signIn } = useGoogleAPI();
 
   return (
     <Box
@@ -31,7 +31,9 @@ function LoginPage() {
             Welcome to Baby B
           </Typography>
 
-          <Alert severity="info">Please sign in with Google Drive to continue.</Alert>
+          <Alert severity="info">
+            Please sign in with Google Drive to continue.
+          </Alert>
 
           <Button
             variant="contained"
@@ -48,14 +50,19 @@ function LoginPage() {
             Sign in with Google
           </Button>
 
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1, px: 1, lineHeight: 1 }}>
-            Baby B stores your baby’s data securely in <strong>your</strong> Google Drive. It is
-            completely owned and controlled only by <strong>you</strong>.
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ mt: 1, px: 1, lineHeight: 1 }}
+          >
+            Baby B stores your baby’s data securely in <strong>your</strong>{' '}
+            Google Drive. It is completely owned and controlled only by{' '}
+            <strong>you</strong>.
           </Typography>
         </Stack>
       </Paper>
     </Box>
-  )
+  );
 }
 
-export default React.memo(LoginPage)
+export default React.memo(LoginPage);

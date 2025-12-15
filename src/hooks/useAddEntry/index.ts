@@ -1,17 +1,17 @@
-import dayjs, { Dayjs } from 'dayjs'
-import { useQueryClient } from '@tanstack/react-query'
-import useGoogleAPI from '../../hooks/useGoogleAPI'
+import dayjs, { Dayjs } from 'dayjs';
+import { useQueryClient } from '@tanstack/react-query';
+import useGoogleAPI from '../../hooks/useGoogleAPI';
 
 export default function useAddEntry() {
-  const qc = useQueryClient()
-  const { uploadJsonToDrive, fetchJsonFromDrive } = useGoogleAPI()
+  const qc = useQueryClient();
+  const { uploadJsonToDrive, fetchJsonFromDrive } = useGoogleAPI();
 
   return async (
     babyName: string,
     tab: string,
-    data: Record<string, string | number | boolean | undefined | Dayjs | null>
+    data: Record<string, string | number | boolean | undefined | Dayjs | null>,
   ) => {
-    const babiesData = await fetchJsonFromDrive()
+    const babiesData = await fetchJsonFromDrive();
 
     babiesData[babyName][tab].unshift({
       ...data,
@@ -19,8 +19,8 @@ export default function useAddEntry() {
       isShown: true,
       timestamp: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
       id: crypto.randomUUID(),
-    })
-    await uploadJsonToDrive(babiesData)
-    await qc.invalidateQueries({ queryKey: ['babies-data'], exact: true })
-  }
+    });
+    await uploadJsonToDrive(babiesData);
+    await qc.invalidateQueries({ queryKey: ['babies-data'], exact: true });
+  };
 }

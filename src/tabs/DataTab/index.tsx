@@ -1,56 +1,59 @@
-import React, { useMemo } from 'react'
-import { useAtomValue } from 'jotai'
+import React, { useMemo } from 'react';
+import { useAtomValue } from 'jotai';
 
 import {
   DataGrid,
   GridActionsCellItem,
   type GridColDef,
   type GridRowParams,
-} from '@mui/x-data-grid'
+} from '@mui/x-data-grid';
 
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-import useBabyTabData from '../../hooks/useBabyTabData'
+import useBabyTabData from '../../hooks/useBabyTabData';
 
-import selectedTabAtom from '../../atoms/selectedTabAtom'
-import { useDeleteDialog } from '../../dialogs/DeleteDialog'
-import { useEntryDialog } from '../../dialogs/EntryDialog'
-import TwoLineDate from '../../components/TwoLineDate'
+import selectedTabAtom from '../../atoms/selectedTabAtom';
+import { useDeleteDialog } from '../../dialogs/DeleteDialog';
+import { useEntryDialog } from '../../dialogs/EntryDialog';
+import TwoLineDate from '../../components/TwoLineDate';
 
-const paginationModel = { page: 0, pageSize: 100 }
+const paginationModel = { page: 0, pageSize: 100 };
 const FIELD_TO_FLEX = {
   datePicker: 100,
   number: 60,
   checkbox: 90,
-} as const
+} as const;
 
 function DataTab() {
-  const { tab, tabConfig } = useAtomValue(selectedTabAtom)
-  const { data: tabData } = useBabyTabData()
-  const { openEntryDialog } = useEntryDialog()
-  const { openDeleteDialog } = useDeleteDialog()
+  const { tab, tabConfig } = useAtomValue(selectedTabAtom);
+  const { data: tabData } = useBabyTabData();
+  const { openEntryDialog } = useEntryDialog();
+  const { openDeleteDialog } = useDeleteDialog();
 
   const columns = useMemo<GridColDef[]>(() => {
     const baseColumns: GridColDef[] =
       tabConfig?.fields?.map(field => {
         const column: GridColDef = {
           ...field.columnFields,
-          flex: FIELD_TO_FLEX[field.formType as keyof typeof FIELD_TO_FLEX] ?? 100,
-        }
+          flex:
+            FIELD_TO_FLEX[field.formType as keyof typeof FIELD_TO_FLEX] ?? 100,
+        };
 
         switch (field.formType) {
           case 'datePicker':
-            column.renderCell = params => <TwoLineDate date={params.value as string | undefined} />
-            break
+            column.renderCell = params => (
+              <TwoLineDate date={params.value as string | undefined} />
+            );
+            break;
 
           case 'checkbox':
-            column.renderCell = params => (params.value ? '✓' : '')
-            break
+            column.renderCell = params => (params.value ? '✓' : '');
+            break;
         }
 
-        return column
-      }) ?? []
+        return column;
+      }) ?? [];
 
     const actionsColumn: GridColDef = {
       field: 'actions',
@@ -62,11 +65,11 @@ function DataTab() {
           icon={<EditIcon />}
           label="Edit"
           onClick={e => {
-            e.stopPropagation()
+            e.stopPropagation();
             openEntryDialog({
               tab,
               editId: params.row.id,
-            })
+            });
           }}
         />,
         <GridActionsCellItem
@@ -74,17 +77,17 @@ function DataTab() {
           icon={<DeleteIcon />}
           label="Delete"
           onClick={e => {
-            e.stopPropagation()
+            e.stopPropagation();
             openDeleteDialog({
               deleteId: params.row.id,
-            })
+            });
           }}
         />,
       ],
-    }
+    };
 
-    return [...baseColumns, actionsColumn]
-  }, [openDeleteDialog, openEntryDialog, tab, tabConfig])
+    return [...baseColumns, actionsColumn];
+  }, [openDeleteDialog, openEntryDialog, tab, tabConfig]);
 
   return columns ? (
     <DataGrid
@@ -93,7 +96,7 @@ function DataTab() {
       initialState={{ pagination: { paginationModel } }}
       sx={{ border: 0 }}
     />
-  ) : null
+  ) : null;
 }
 
-export default React.memo(DataTab)
+export default React.memo(DataTab);

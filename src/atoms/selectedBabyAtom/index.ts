@@ -1,4 +1,4 @@
-import { atom } from 'jotai'
+import { atom } from 'jotai';
 
-export const selectedBaby = atom<string | null>(null)
-export default selectedBaby
+export const selectedBaby = atom<string | null>(null);
+export default selectedBaby;

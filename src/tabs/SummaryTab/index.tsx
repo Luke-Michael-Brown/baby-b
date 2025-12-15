@@ -1,39 +1,47 @@
-import React from 'react'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Paper from '@mui/material/Paper'
-import ToggleButton from '@mui/material/ToggleButton'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { useAtom } from 'jotai'
-import dayjs from 'dayjs'
+import React from 'react';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import ToggleButton from '@mui/material/ToggleButton';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useAtom } from 'jotai';
+import dayjs from 'dayjs';
 
-import SummaryItem from '../../components/SummaryItem'
-import { summayStartDateAtom, summaryEndDateAtom } from '../../atoms/summaryDatesAtom'
-import config from '../../config'
+import SummaryItem from '../../components/SummaryItem';
+import {
+  summayStartDateAtom,
+  summaryEndDateAtom,
+} from '../../atoms/summaryDatesAtom';
+import config from '../../config';
 
-export const RANGES = ['Last Week', 'Last 2 Weeks', 'Last Month', 'Last Year'] as const
+export const RANGES = [
+  'Last Week',
+  'Last 2 Weeks',
+  'Last Month',
+  'Last Year',
+] as const;
 
 function SummaryTab() {
-  const [startDate, setStartDate] = useAtom(summayStartDateAtom)
-  const [endDate, setEndDate] = useAtom(summaryEndDateAtom)
+  const [startDate, setStartDate] = useAtom(summayStartDateAtom);
+  const [endDate, setEndDate] = useAtom(summaryEndDateAtom);
 
   const handleRangeSelect = (_event: unknown, value: string | null) => {
-    if (!value) return
+    if (!value) return;
 
     const ranges: Record<string, number> = {
       'Last Week': 7,
       'Last 2 Weeks': 14,
       'Last Month': 30,
       'Last Year': 365,
-    }
+    };
 
     setStartDate(
       dayjs()
         .startOf('day')
-        .subtract(ranges[value] + 1, 'day')
-    )
-    setEndDate(dayjs().endOf('day').subtract(1, 'day'))
-  }
+        .subtract(ranges[value] + 1, 'day'),
+    );
+    setEndDate(dayjs().endOf('day').subtract(1, 'day'));
+  };
 
   return (
     <Box
@@ -93,7 +101,7 @@ function SummaryTab() {
           <SummaryItem key={`summary-tile-${tab}`} tab={tab} />
         ))}
     </Box>
-  )
+  );
 }
 
-export default React.memo(SummaryTab)
+export default React.memo(SummaryTab);

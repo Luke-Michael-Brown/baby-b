@@ -1,42 +1,42 @@
-import type { GridColDef } from '@mui/x-data-grid'
-import AppIcon from './components/AppIcon'
-import CribIcon from '@mui/icons-material/Crib'
-import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation'
-import PregnantWomanIcon from '@mui/icons-material/PregnantWoman'
-import WaterDropIcon from '@mui/icons-material/WaterDrop'
-import JoinInnerIcon from '@mui/icons-material/JoinInner'
-import type { SvgIconComponent } from '@mui/icons-material'
-import type { PaletteColorOptions } from '@mui/material'
-import SummaryTab from './tabs/SummaryTab'
-import DataTab from './tabs/DataTab'
+import type { GridColDef } from '@mui/x-data-grid';
+import AppIcon from './components/AppIcon';
+import CribIcon from '@mui/icons-material/Crib';
+import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
+import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import JoinInnerIcon from '@mui/icons-material/JoinInner';
+import type { SvgIconComponent } from '@mui/icons-material';
+import type { PaletteColorOptions } from '@mui/material';
+import SummaryTab from './tabs/SummaryTab';
+import DataTab from './tabs/DataTab';
 
 type FieldEntry =
   | {
-      formType: string
-      fullName: string
-      selectFields?: never
-      columnFields: GridColDef
+      formType: string;
+      fullName: string;
+      selectFields?: never;
+      columnFields: GridColDef;
     }
   | {
-      formType: 'select'
-      fullName: string
-      selectFields: string[]
-      columnFields: GridColDef
-    }
+      formType: 'select';
+      fullName: string;
+      selectFields: string[];
+      columnFields: GridColDef;
+    };
 
 type SummaryItem = {
-  peroid: 'events' | 'days'
-  filters?: { [key: string]: (string | number | boolean)[] }
-  fieldToAverage?: string
-}
+  peroid: 'events' | 'days';
+  filters?: { [key: string]: (string | number | boolean)[] };
+  fieldToAverage?: string;
+};
 
 export interface ConfigEntry {
-  Icon: SvgIconComponent | typeof AppIcon
-  TabComponent?: React.FC
-  lightPalette: PaletteColorOptions
-  darkPalette: PaletteColorOptions
-  fields?: FieldEntry[]
-  summayItems?: SummaryItem[]
+  Icon: SvgIconComponent | typeof AppIcon;
+  TabComponent?: React.FC;
+  lightPalette: PaletteColorOptions;
+  darkPalette: PaletteColorOptions;
+  fields?: FieldEntry[];
+  summayItems?: SummaryItem[];
 }
 
 const config: Record<string, ConfigEntry> = {
@@ -210,7 +210,11 @@ const config: Record<string, ConfigEntry> = {
     darkPalette: { main: '#9575cd', contrastText: '#121212' },
     summayItems: [
       { peroid: 'days', fieldToAverage: 'duration' },
-      { peroid: 'days', fieldToAverage: 'duration', filters: { extra1: ['Nap'] } },
+      {
+        peroid: 'days',
+        fieldToAverage: 'duration',
+        filters: { extra1: ['Nap'] },
+      },
       {
         peroid: 'days',
         fieldToAverage: 'duration',
@@ -245,6 +249,6 @@ const config: Record<string, ConfigEntry> = {
       },
     ],
   },
-} as const
+} as const;
 
-export default config
+export default config;
