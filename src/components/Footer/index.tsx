@@ -1,12 +1,22 @@
 import { memo } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Stack, Typography, Button } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Typography,
+  Button,
+  Paper,
+  useTheme,
+  type Palette,
+  type PaletteColor,
+} from '@mui/material';
 
 import { TABS } from '../../atoms/selectedTabAtom';
 import config from '../../config';
 import { useEntryDialog } from '../../dialogs/EntryDialog';
 import DataTab from '../../tabs/DataTab';
 import ThemedAppBar from '../ThemedAppBar';
+import type { useLightDark } from '../../contexts/LightDarkContext';
 
 function Footer() {
   const { openEntryDialog } = useEntryDialog();
@@ -21,13 +31,11 @@ function Footer() {
 
   const chooseBestCols = (count: number) => {
     let best = { cols: 1, rows: count, score: Infinity };
-
-    for (let cols = 1; cols <= 4; cols++) {
+    for (let cols = 1; cols <= 5; cols++) {
       const rows = Math.ceil(count / cols);
       const fullInLastRow = count % cols === 0 ? cols : count % cols;
       const balancePenalty = (cols - fullInLastRow) / cols;
       const score = rows + balancePenalty;
-
       if (score < best.score) {
         best = { cols, rows, score };
       }
@@ -37,8 +45,36 @@ function Footer() {
 
   const cols = chooseBestCols(count);
 
+  const theme = useTheme();
+
+  // Try to get a known palette color safely
+  const paletteColor: PaletteColor =
+    (theme.palette.primary as PaletteColor) || theme.palette.primary;
+
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {/* Floating Add Entry Tag aligned left */}
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 56, // height of AppBar or adjust slightly
+          left: 0,
+          color: paletteColor.contrastText,
+          bgcolor: 'primary.main',
+          px: 1,
+          py: 1,
+          borderTopRightRadius: '6px',
+          borderBottomRightRadius: '6px',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <AddIcon sx={{ fontSize: 18, mr: 0.5 }} />
+        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+          Add Entry
+        </Typography>
+      </Box>
+
       <ThemedAppBar
         position="fixed"
         color="primary"
@@ -47,25 +83,20 @@ function Footer() {
         <Stack
           sx={{ px: 2, pt: 1, pb: 2, justifyContent: 'center' }}
           spacing={2}
-          direction="row"
         >
-          <Stack sx={{ alignItems: 'center' }} direction="row">
-            <AddIcon />
-            <Typography variant="body1">Add Entry</Typography>
-          </Stack>
-
+          {/* Grid Buttons */}
           <Box
             sx={{
               display: 'flex',
               flexWrap: 'wrap',
               width: '100%',
               maxWidth: 500,
+              mx: 'auto',
             }}
           >
             {items.map((tab, index) => {
               const row = Math.floor(index / cols);
               const col = index % cols;
-
               const totalRows = Math.ceil(count / cols);
 
               const isTop = row === 0;
@@ -115,4 +146,5 @@ function Footer() {
     </Box>
   );
 }
+
 export default memo(Footer);
