@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { useAtom } from 'jotai';
-import Header from './components/Header';
 import Box from '@mui/material/Box';
-import { useGoogleAPISetup } from './hooks/useGoogleAPI';
-import useBabiesList from './hooks/useBabiesList';
+
 import selectedBabyAtom from './atoms/selectedBabyAtom';
-import LoginPage from './pages/LoginPage';
-import LoadingPage from './pages/LoadingPage';
-import ContentPage from './pages/ContentPage';
+import Header from './components/Header';
+import useBabiesList from './hooks/useBabiesList';
 import useCurrentPage from './hooks/useCurrentPage';
+import { useGoogleAPISetup } from './hooks/useGoogleAPI';
+import ContentPage from './pages/ContentPage';
+import LoadingPage from './pages/LoadingPage';
+import LoginPage from './pages/LoginPage';
 
 export function App() {
   useGoogleAPISetup();

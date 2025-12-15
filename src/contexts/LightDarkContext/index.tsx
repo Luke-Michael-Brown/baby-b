@@ -2,6 +2,7 @@
 
 import React, { createContext, useMemo, useState } from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+
 import { useTheme } from '../../theme';
 
 type Mode = 'light' | 'dark';

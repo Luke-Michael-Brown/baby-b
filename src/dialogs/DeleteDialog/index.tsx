@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
 
-import useDeleteEntry from '../../hooks/useDeleteEntry';
 import selectedBabyAtom from '../../atoms/selectedBabyAtom';
 import selectedTabAtom from '../../atoms/selectedTabAtom';
+import useDeleteEntry from '../../hooks/useDeleteEntry';
 
 interface DeleteDialogProps {
   deleteId?: string;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAtomValue } from 'jotai';
+
 import selectedTabAtom from '../../atoms/selectedTabAtom';
 import config from '../../config';
 

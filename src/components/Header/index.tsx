@@ -3,11 +3,12 @@ import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+
 import packageJson from '../../../package.json';
-import ThemedAppBar from '../ThemedAppBar';
 import selectedTabAtom from '../../atoms/selectedTabAtom';
-import RefreshButton from '../RefreshButton';
 import LogoutButton from '../LogoutButton';
+import RefreshButton from '../RefreshButton';
+import ThemedAppBar from '../ThemedAppBar';
 import ToggleThemeButton from '../ToggleThemeButton';
 
 function Header() {

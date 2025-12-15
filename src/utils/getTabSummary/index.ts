@@ -1,7 +1,8 @@
+import dayjs from 'dayjs';
+
 import type { Dayjs } from 'dayjs';
 import config from '../../config';
 import type { Entry } from '../../hooks/useBabyTabData';
-import dayjs from 'dayjs';
 import formatMsToMinSec from '../formatMsToMinSec';
 
 export default function getTabSummary(

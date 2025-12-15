@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, Stack, Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { Box, Stack, Typography, Button } from '@mui/material';
+
 import { TABS } from '../../atoms/selectedTabAtom';
-import { useEntryDialog } from '../../dialogs/EntryDialog';
-import ThemedAppBar from '../ThemedAppBar';
 import config from '../../config';
+import { useEntryDialog } from '../../dialogs/EntryDialog';
 import DataTab from '../../tabs/DataTab';
+import ThemedAppBar from '../ThemedAppBar';
 
 function Footer() {
   const { openEntryDialog } = useEntryDialog();

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Tooltip, IconButton } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Tooltip, IconButton } from '@mui/material';
+
 import useCurrentPage from '../../hooks/useCurrentPage';
 import useGoogleAPI from '../../hooks/useGoogleAPI';
 

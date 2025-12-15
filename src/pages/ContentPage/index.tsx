@@ -1,8 +1,9 @@
 import React from 'react';
+import { Box } from '@mui/material';
+
 import Footer from '../../components/Footer';
 import SecondaryBar from '../../components/SecondaryBar';
 import TabContent from '../../components/TabContent';
-import { Box } from '@mui/material';
 
 function ContentPage() {
   return (

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { Tooltip, Box, IconButton } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
-import RefreshIcon from '@mui/icons-material/Refresh';
+
 import useCurrentPage from '../../hooks/useCurrentPage';
 
 function RefreshButton() {

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material';
-import useGoogleAPI from '../../hooks/useGoogleAPI';
 import GoogleIcon from '@mui/icons-material/Google';
+import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material';
+
+import useGoogleAPI from '../../hooks/useGoogleAPI';
 
 function LoginPage() {
   const { signIn } = useGoogleAPI();

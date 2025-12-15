@@ -2,8 +2,9 @@ import React from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import useTabSummary from '../../hooks/useTabSummary';
+
 import config from '../../config';
+import useTabSummary from '../../hooks/useTabSummary';
 
 interface Props {
   tab: string;

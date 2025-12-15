@@ -1,7 +1,8 @@
-import { useAtom } from 'jotai';
 import React from 'react';
-import type { SelectChangeEvent } from '@mui/material';
+import { useAtom } from 'jotai';
 import { Box, Typography, Select, MenuItem } from '@mui/material';
+
+import type { SelectChangeEvent } from '@mui/material';
 import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom';
 
 function TabSelector() {

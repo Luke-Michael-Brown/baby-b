@@ -2,6 +2,7 @@ import { useAtomValue } from 'jotai';
 import { createTheme } from '@mui/material/styles';
 import type { PaletteColorOptions, ThemeOptions } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
+
 import selectedTabAtom from './atoms/selectedTabAtom';
 import config from './config';
 

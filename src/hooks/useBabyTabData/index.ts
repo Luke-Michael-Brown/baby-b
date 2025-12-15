@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
-import useGoogleAPI from '../useGoogleAPI';
-import selectedTabAtom from '../../atoms/selectedTabAtom';
+import { useQuery } from '@tanstack/react-query';
+
 import selectedBabyAtom from '../../atoms/selectedBabyAtom';
+import selectedTabAtom from '../../atoms/selectedTabAtom';
+import useGoogleAPI from '../useGoogleAPI';
 
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   year: 'numeric',

@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { atom, useAtom } from 'jotai';
+
 import createCacheMap from '../../utils/createCacheMap';
 
 type TokenClient = google.accounts.oauth2.TokenClient;
@@ -115,6 +116,7 @@ export function useGoogleAPISetup() {
     window.addEventListener('focus', tryRestoreToken);
     document.addEventListener('visibilitychange', onVisible);
 
+    // eslint-disable-next-line consistent-return
     return () => {
       window.removeEventListener('focus', tryRestoreToken);
       document.removeEventListener('visibilitychange', onVisible);
@@ -132,7 +134,10 @@ export function useGoogleAPISetup() {
       last = now;
     }, 2000);
 
-    return () => clearInterval(interval);
+    // eslint-disable-next-line consistent-return
+    return () => {
+      clearInterval(interval);
+    };
   }, [tokenClient, tryRestoreToken]);
 }
 
