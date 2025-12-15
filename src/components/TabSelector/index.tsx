@@ -3,7 +3,6 @@ import React from 'react'
 import type { SelectChangeEvent } from '@mui/material'
 import { Box, Typography, Select, MenuItem } from '@mui/material'
 import selectedTabAtom, { TABS } from '../../atoms/selectedTabAtom'
-import config from '../../config'
 
 function TabSelector() {
   const [{ tab }, setSelectedTab] = useAtom(selectedTabAtom)
@@ -16,7 +15,7 @@ function TabSelector() {
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <Typography variant="body1">Tab:</Typography>
       <Select value={tab || ''} label="Tab" onChange={onTabSelected} size="small">
-        {TABS.filter(tab => config[tab].TabComponent).map(t => (
+        {TABS.map(t => (
           <MenuItem key={t} value={t}>
             {t}
           </MenuItem>

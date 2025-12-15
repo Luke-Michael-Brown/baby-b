@@ -5,6 +5,7 @@ import { TABS } from '../../atoms/selectedTabAtom'
 import { useEntryDialog } from '../../dialogs/EntryDialog'
 import ThemedAppBar from '../ThemedAppBar'
 import config from '../../config'
+import DataTab from '../../tabs/DataTab'
 
 function Footer() {
   const { openEntryDialog } = useEntryDialog()
@@ -14,7 +15,7 @@ function Footer() {
   }
 
   // --- GRID LOGIC ---
-  const items = TABS.filter(tab => config[tab].TabComponent)
+  const items = TABS.filter(tab => config[tab].TabComponent === DataTab)
   const count = items.length
 
   const chooseBestCols = (count: number) => {

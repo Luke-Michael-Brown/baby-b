@@ -7,7 +7,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 
-import { TABS } from '../../atoms/selectedTabAtom'
 import SummaryItem from '../../components/SummaryItem'
 import { summayStartDateAtom, summaryEndDateAtom } from '../../atoms/summaryDatesAtom'
 import config from '../../config'
@@ -88,9 +87,11 @@ function SummaryTab() {
         </Stack>
       </Paper>
 
-      {TABS.filter(tab => config[tab].summayItems).map(tab => (
-        <SummaryItem key={`summary-tile-${tab}`} tab={tab} />
-      ))}
+      {Object.keys(config)
+        .filter(tab => config[tab].summayItems)
+        .map(tab => (
+          <SummaryItem key={`summary-tile-${tab}`} tab={tab} />
+        ))}
     </Box>
   )
 }

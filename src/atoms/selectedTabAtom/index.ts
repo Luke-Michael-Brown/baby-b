@@ -2,7 +2,7 @@ import { atom } from 'jotai'
 import config from '../../config'
 
 // --- Tabs ---
-export const TABS: string[] = Object.keys(config)
+export const TABS: string[] = Object.keys(config).filter(tab => config[tab].TabComponent)
 
 const selectedTabAtom = atom<string>(TABS[0])
 
