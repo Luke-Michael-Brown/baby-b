@@ -81,6 +81,8 @@ export default function getTabSummary(
       formattedValue = formatMsToMinSec(Number(value));
     } else if (typeof value === 'boolean') {
       formattedValue = value ? 'Yes' : 'No';
+    } else if (field === 'start_time') {
+      formattedValue = new Date(value).toLocaleString();
     } else if (!isNaN(Number(value))) {
       formattedValue = Number(value).toFixed(2);
     } else {
