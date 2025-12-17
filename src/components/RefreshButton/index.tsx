@@ -1,28 +1,48 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Tooltip, Box, IconButton } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 
-import useCurrentPage from '../../hooks/useCurrentPage';
+import useGoogleAPI from '../../hooks/useGoogleAPI';
+
+const SPIN_DURATION_MS = 1000;
 
 function RefreshButton() {
-  const currentPage = useCurrentPage();
+  const { isSignedIn } = useGoogleAPI();
   const qc = useQueryClient();
-  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const isRefreshing =
+    useIsFetching({
+      queryKey: ['babies-data'],
+    }) > 0;
+
+  const [shouldSpin, setShouldSpin] = useState(false);
+
+  useEffect(() => {
+    if (isRefreshing) {
+      // Start spinning immediately
+      setShouldSpin(true);
+      return;
+    }
+
+    // Finish the current rotation before stopping
+    if (shouldSpin) {
+      const timeout = setTimeout(() => {
+        setShouldSpin(false);
+      }, SPIN_DURATION_MS);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isRefreshing, shouldSpin]);
 
   const refreshData = async () => {
-    setIsRefreshing(true);
-    try {
-      await qc.invalidateQueries({
-        queryKey: ['babies-data'],
-        exact: true,
-      });
-    } finally {
-      setIsRefreshing(false);
-    }
+    await qc.invalidateQueries({
+      queryKey: ['babies-data'],
+      exact: true,
+    });
   };
 
-  if (currentPage !== 'content') {
+  if (!isSignedIn) {
     return null;
   }
 
@@ -32,13 +52,13 @@ function RefreshButton() {
         <IconButton onClick={refreshData} disabled={isRefreshing}>
           <RefreshIcon
             sx={{
-              ...(isRefreshing && {
+              ...(shouldSpin && {
                 animation: 'spin 1s linear infinite',
-                '@keyframes spin': {
-                  '0%': { transform: 'rotate(0deg)' },
-                  '100%': { transform: 'rotate(360deg)' },
-                },
               }),
+              '@keyframes spin': {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
+              },
             }}
           />
         </IconButton>

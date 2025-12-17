@@ -2,14 +2,12 @@ import { memo } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Tooltip, IconButton } from '@mui/material';
 
-import useCurrentPage from '../../hooks/useCurrentPage';
 import useGoogleAPI from '../../hooks/useGoogleAPI';
 
 function LogoutButton() {
-  const currentPage = useCurrentPage();
-  const { signOut } = useGoogleAPI();
+  const { isSignedIn, signOut } = useGoogleAPI();
 
-  if (currentPage !== 'content') {
+  if (!isSignedIn) {
     return null;
   }
 
