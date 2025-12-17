@@ -2,17 +2,20 @@ import dayjs from 'dayjs';
 
 import type { Dayjs } from 'dayjs';
 import config from '../../config';
-import type { Entry } from '../../types';
+import type { BabyData, Entry } from '../../types';
 import formatMsToMinSec from '../formatMsToMinSec';
 import mlToOz from '../mlToOz';
 
 export default function getTabSummary(
-  tabData: Entry[] | undefined,
+  data: BabyData | undefined,
   tab: string,
   startDate: Dayjs,
   endDate: Dayjs,
 ): string[] {
-  if (!tabData) return ['No data yet'];
+  if (!data) return ['No data yet'];
+
+  const tabData = data[tab];
+  if (!tabData || tabData.length === 0) return ['No data yet'];
 
   const tabConfig = config[tab];
   const filteredData = tabData.filter((item: Entry) => {

@@ -5,17 +5,21 @@ import {
   summayStartDateAtom,
   summaryEndDateAtom,
 } from '../../atoms/summaryDatesAtom';
-import useBabyTabData from '../../hooks/useBabyTabData';
 import getTabSummary from '../../utils/getTabSummary';
+import selectedBabyAtom from '../../atoms/selectedBabyAtom';
+import useBabiesData from '../useBabiesData';
 
 interface Props {
   tab: string;
 }
 
 export default ({ tab }: Props): string[] => {
+  const selectedBaby = useAtomValue(selectedBabyAtom);
   const startDate: Dayjs = useAtomValue(summayStartDateAtom);
   const endDate: Dayjs = useAtomValue(summaryEndDateAtom);
 
-  const { data: tabData } = useBabyTabData({ overrideTab: tab });
-  return getTabSummary(tabData, tab, startDate, endDate);
+  const { data: babiesData } = useBabiesData();
+  const data = selectedBaby ? babiesData?.[selectedBaby] : undefined;
+
+  return getTabSummary(data, tab, startDate, endDate);
 };
