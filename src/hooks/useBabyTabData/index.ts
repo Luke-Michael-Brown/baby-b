@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import selectedBabyAtom from '../../atoms/selectedBabyAtom';
 import selectedTabAtom from '../../atoms/selectedTabAtom';
+import type { BabiesData, Entry } from '../../types';
 import useGoogleAPI from '../useGoogleAPI';
 
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -13,22 +14,6 @@ const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   minute: '2-digit',
   hour12: true,
 };
-
-export interface Entry {
-  id: string;
-  start_time: string;
-  end_time?: string;
-  isShown?: boolean;
-  [key: string]: string | boolean | number | undefined;
-}
-
-export interface BabyData {
-  [tab: string]: Entry[];
-}
-
-interface Data {
-  [babyName: string]: BabyData;
-}
 
 interface Props {
   overrideTab?: string;
@@ -41,8 +26,8 @@ export default function useBabyTabData({ overrideTab }: Props = {}) {
 
   return useQuery({
     queryKey: ['babies-data'],
-    queryFn: () => fetchJsonFromDrive() as Promise<Data>,
-    select: (data: Data) => {
+    queryFn: () => fetchJsonFromDrive() as Promise<BabiesData>,
+    select: (data: BabiesData) => {
       if (!selectedBaby || !data[selectedBaby]) return [];
 
       const entries = data[selectedBaby]?.[overrideTab ?? tab] ?? [];

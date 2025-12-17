@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import type { Dayjs } from 'dayjs';
 import config from '../../config';
-import type { Entry } from '../../hooks/useBabyTabData';
+import type { Entry } from '../../types';
 import formatMsToMinSec from '../formatMsToMinSec';
 import mlToOz from '../mlToOz';
 

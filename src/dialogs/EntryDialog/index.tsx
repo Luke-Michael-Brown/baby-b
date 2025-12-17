@@ -20,8 +20,8 @@ import selectedTabAtom from '../../atoms/selectedTabAtom';
 import config from '../../config';
 import useAddEntry from '../../hooks/useAddEntry';
 import useBabiesData from '../../hooks/useBabiesData';
-import type { Entry } from '../../hooks/useBabyTabData';
 import useEditEntry from '../../hooks/useEditEntry';
+import type { Entry } from '../../types';
 import floorTo5 from '../../utils/floorNearest5';
 
 export interface EntryDialogProps {
@@ -70,7 +70,7 @@ export function EntryDialog() {
         string,
         string | number | boolean | undefined | Dayjs | null
       > = {};
-      if (editId && selectedBaby && tab) {
+      if (editId && selectedBaby && tab && babiesData) {
         const editIndex = babiesData[selectedBaby][tab].findIndex(
           (entry: Entry) => entry.id === editId,
         );

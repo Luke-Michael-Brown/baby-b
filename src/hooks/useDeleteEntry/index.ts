@@ -2,8 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
 import useGoogleAPI from '../../hooks/useGoogleAPI';
-
-import type { Entry } from '../useBabyTabData';
+import type { Entry } from '../../types';
 
 export default function useDeleteEntry() {
   const qc = useQueryClient();

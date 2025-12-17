@@ -3,6 +3,7 @@ import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';
 
 import selectedBabyAtom from './atoms/selectedBabyAtom';
+import Footer from './components/Footer';
 import Header from './components/Header';
 import useBabiesList from './hooks/useBabiesList';
 import useCurrentPage from './hooks/useCurrentPage';
@@ -10,7 +11,6 @@ import useGoogleAPI, { useGoogleAPISetup } from './hooks/useGoogleAPI';
 import ContentPage from './pages/ContentPage';
 import LoadingPage from './pages/LoadingPage';
 import LoginPage from './pages/LoginPage';
-import Footer from './components/Footer';
 
 export function App() {
   useGoogleAPISetup();
