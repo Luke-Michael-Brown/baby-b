@@ -4,6 +4,7 @@ import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import CribIcon from '@mui/icons-material/Crib';
 import JoinInnerIcon from '@mui/icons-material/JoinInner';
 import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
+import ScaleIcon from '@mui/icons-material/Scale';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
 import type { PaletteColorOptions } from '@mui/material';
@@ -27,7 +28,7 @@ type FieldEntry =
     };
 
 type SummaryItem = {
-  summaryType: 'eventsAverage' | 'daysAverage';
+  summaryType: 'eventsAverage' | 'daysAverage' | 'latestValue' | 'firstValue';
   filters?: { [key: string]: (string | number | boolean)[] };
   fieldToSummarize?: string;
 };
@@ -48,7 +49,6 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#4dabf5', contrastText: '#fff' },
     darkPalette: { main: '#42a5f5', contrastText: '#121212' },
   },
-
   bottle: {
     Icon: WaterDropIcon,
     TabComponent: DataTab,
@@ -87,7 +87,6 @@ const config: Record<string, ConfigEntry> = {
       },
     ],
   },
-
   diaper: {
     Icon: BabyChangingStationIcon,
     TabComponent: DataTab,
@@ -118,7 +117,6 @@ const config: Record<string, ConfigEntry> = {
       },
     ],
   },
-
   pump: {
     Icon: JoinInnerIcon,
     TabComponent: DataTab,
@@ -251,6 +249,34 @@ const config: Record<string, ConfigEntry> = {
         columnFields: {
           field: 'extra1',
           headerName: 'Type',
+        },
+      },
+    ],
+  },
+  weight: {
+    Icon: ScaleIcon,
+    TabComponent: DataTab,
+    lightPalette: { main: '#4dd0e1', contrastText: '#121212' },
+    darkPalette: { main: '#26c6da', contrastText: '#121212' },
+    summayItems: [
+      { summaryType: 'latestValue', fieldToSummarize: 'extra1' },
+      { summaryType: 'firstValue', fieldToSummarize: 'extra1' },
+    ],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: {
+          field: 'start_time',
+          headerName: 'Start',
+        },
+      },
+      {
+        formType: 'number',
+        fullName: 'grams',
+        columnFields: {
+          field: 'extra1',
+          headerName: 'grams',
         },
       },
     ],

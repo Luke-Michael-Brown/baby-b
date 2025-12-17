@@ -14,6 +14,10 @@ export default function useAddEntry() {
   ) => {
     const babiesData = await fetchJsonFromDrive();
 
+    if (!babiesData[babyName][tab]) {
+      babiesData[babyName][tab] = [];
+    }
+
     babiesData[babyName][tab].unshift({
       ...data,
       babyName,

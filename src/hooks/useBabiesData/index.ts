@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import useGoogleAPI from '../useGoogleAPI';
 import type { BabiesData } from '../../types';
+import useGoogleAPI from '../useGoogleAPI';
 
 export default function useBabiesData() {
   const { fetchJsonFromDrive } = useGoogleAPI();

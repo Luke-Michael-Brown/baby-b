@@ -1,12 +1,12 @@
 import { useAtomValue } from 'jotai';
 import { Dayjs } from 'dayjs';
 
+import selectedBabyAtom from '../../atoms/selectedBabyAtom';
 import {
   summayStartDateAtom,
   summaryEndDateAtom,
 } from '../../atoms/summaryDatesAtom';
 import getTabSummary from '../../utils/getTabSummary';
-import selectedBabyAtom from '../../atoms/selectedBabyAtom';
 import useBabiesData from '../useBabiesData';
 
 interface Props {
