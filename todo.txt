@@ -2,6 +2,7 @@
 - Update readme
 - Make new icon
 - Publish it for google
+- Add average number of baths per week
 
 - Compare against average baby
 - Baby edit name
