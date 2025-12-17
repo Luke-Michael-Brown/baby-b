@@ -5,6 +5,7 @@ import type { BabyData, Entry } from '../../types';
 import formatMsToMinSec from '../formatMsToMinSec';
 import gramsToLB from '../gramsToLB';
 import mlToOz from '../mlToOz';
+import inchesToFootInches from '../inchesToFootInches';
 
 export default function getTabSummary(
   data: BabyData | undefined,
@@ -95,6 +96,8 @@ export default function getTabSummary(
       return `${formattedValue} ${unit} (${mlToOz(Number(value)).toFixed(2)} oz)`;
     } else if (unit === 'grams') {
       return `${formattedValue} ${unit} (${gramsToLB(Number(value))})`;
+    } else if (unit === '\"') {
+      return `${formattedValue} ${unit} (${inchesToFootInches(Number(value))})`;
     } else if (unit && unit !== 'duration') {
       return `${formattedValue} ${unit}`;
     }

@@ -14,7 +14,7 @@ function ContentPage() {
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
-          pb: '98px',
+          pb: '140px',
         }}
       >
         <TabContent />

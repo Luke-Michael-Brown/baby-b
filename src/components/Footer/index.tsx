@@ -24,7 +24,7 @@ function Footer() {
       <Box
         sx={{
           position: 'fixed',
-          bottom: 56, // height of AppBar or adjust slightly
+          bottom: 98, // height of AppBar or adjust slightly
           left: 0,
           color: paletteColor.contrastText,
           bgcolor: 'primary.main',

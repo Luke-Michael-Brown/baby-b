@@ -5,6 +5,7 @@ import CribIcon from '@mui/icons-material/Crib';
 import JoinInnerIcon from '@mui/icons-material/JoinInner';
 import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
 import ScaleIcon from '@mui/icons-material/Scale';
+import StraightenIcon from '@mui/icons-material/Straighten';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
 import type { PaletteColorOptions } from '@mui/material';
@@ -277,6 +278,34 @@ const config: Record<string, ConfigEntry> = {
         columnFields: {
           field: 'extra1',
           headerName: 'grams',
+        },
+      },
+    ],
+  },
+  height: {
+    Icon: StraightenIcon,
+    TabComponent: DataTab,
+    lightPalette: { main: '#ff8a65', contrastText: '#121212' },
+    darkPalette: { main: '#ff7043', contrastText: '#121212' },
+    summayItems: [
+      { summaryType: 'latestValue', fieldToSummarize: 'extra1' },
+      { summaryType: 'firstValue', fieldToSummarize: 'extra1' },
+    ],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: {
+          field: 'start_time',
+          headerName: 'Start',
+        },
+      },
+      {
+        formType: 'number',
+        fullName: '\"',
+        columnFields: {
+          field: 'extra1',
+          headerName: 'inches',
         },
       },
     ],
