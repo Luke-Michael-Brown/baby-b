@@ -36,7 +36,7 @@ export default function getTabSummary(
     const localDay = dayjs(entry.start_time).format('YYYY-MM-DD');
     uniqueDays.add(localDay);
 
-    tabConfig.summayItems?.forEach(({ fieldToAverage, filters }, index) => {
+    tabConfig.summayItems?.forEach(({ fieldToSummarize, filters }, index) => {
       if (filters) {
         const matchesFilters = Object.entries(filters).every(([key, values]) =>
           values.some(value => entry[key] === value),
@@ -44,13 +44,13 @@ export default function getTabSummary(
         if (!matchesFilters) return;
       }
 
-      if (fieldToAverage === 'duration') {
+      if (fieldToSummarize === 'duration') {
         const start = new Date(entry.start_time);
         const end = new Date(entry.end_time ?? start);
         const durationMs = end.getTime() - start.getTime();
         totals[index] += durationMs;
-      } else if (fieldToAverage) {
-        const value = entry[fieldToAverage];
+      } else if (fieldToSummarize) {
+        const value = entry[fieldToSummarize];
         if (typeof value === 'number' || typeof value === 'string') {
           totals[index] += parseFloat(value as string);
         } else if (value === true) {
@@ -65,11 +65,11 @@ export default function getTabSummary(
   const numberOfDays = uniqueDays.size;
   return (
     tabConfig.summayItems?.map((summaryItem, index) => {
-      const isDaysPeriod = summaryItem.peroid === 'days';
+      const isDaysPeriod = summaryItem.summaryType === 'daysAverage';
 
-      const units = summaryItem.fieldToAverage
+      const units = summaryItem.fieldToSummarize
         ? (tabConfig.fields?.find(
-            f => f.columnFields.field === summaryItem.fieldToAverage,
+            f => f.columnFields.field === summaryItem.fieldToSummarize,
           )?.fullName ?? '')
         : '';
 
@@ -80,7 +80,7 @@ export default function getTabSummary(
         : totals[index] / filteredData.length;
 
       let formattedAverage =
-        summaryItem.fieldToAverage === 'duration'
+        summaryItem.fieldToSummarize === 'duration'
           ? formatMsToMinSec(average)
           : `${average.toFixed(2)} ${units}`;
 
@@ -102,7 +102,7 @@ export default function getTabSummary(
               return `${values[0].toString().toLowerCase()}(s)`;
             })
             .join(', ')
-        : summaryItem.fieldToAverage
+        : summaryItem.fieldToSummarize
           ? ''
           : `${tab}s`;
 

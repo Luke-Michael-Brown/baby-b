@@ -27,9 +27,9 @@ type FieldEntry =
     };
 
 type SummaryItem = {
-  peroid: 'events' | 'days';
+  summaryType: 'eventsAverage' | 'daysAverage';
   filters?: { [key: string]: (string | number | boolean)[] };
-  fieldToAverage?: string;
+  fieldToSummarize?: string;
 };
 
 export interface ConfigEntry {
@@ -55,10 +55,10 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#ffb74d', contrastText: '#121212' },
     darkPalette: { main: '#ffa726', contrastText: '#121212' },
     summayItems: [
-      { peroid: 'days', fieldToAverage: 'extra1' },
-      { peroid: 'events', fieldToAverage: 'extra1' },
-      { peroid: 'days' },
-      { peroid: 'days', fieldToAverage: 'extra2' },
+      { summaryType: 'daysAverage', fieldToSummarize: 'extra1' },
+      { summaryType: 'eventsAverage', fieldToSummarize: 'extra1' },
+      { summaryType: 'daysAverage' },
+      { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
     ],
     fields: [
       {
@@ -94,9 +94,9 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#81c784', contrastText: '#fff' },
     darkPalette: { main: '#66bb6a', contrastText: '#121212' },
     summayItems: [
-      { peroid: 'days', filters: { extra1: ['Pee', 'Pee & Poo'] } },
-      { peroid: 'days', filters: { extra1: ['Poo', 'Pee & Poo'] } },
-      { peroid: 'days' },
+      { summaryType: 'daysAverage', filters: { extra1: ['Pee', 'Pee & Poo'] } },
+      { summaryType: 'daysAverage', filters: { extra1: ['Poo', 'Pee & Poo'] } },
+      { summaryType: 'daysAverage' },
     ],
     fields: [
       {
@@ -125,11 +125,15 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#e57373', contrastText: '#fff' },
     darkPalette: { main: '#ef5350', contrastText: '#fff' },
     summayItems: [
-      { peroid: 'days', fieldToAverage: 'extra2' },
-      { peroid: 'events', fieldToAverage: 'extra2' },
-      { peroid: 'days' },
-      { peroid: 'days', fieldToAverage: 'extra2', filters: { extra3: [true] } },
-      { peroid: 'days', filters: { extra3: [true] } },
+      { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
+      { summaryType: 'eventsAverage', fieldToSummarize: 'extra2' },
+      { summaryType: 'daysAverage' },
+      {
+        summaryType: 'daysAverage',
+        fieldToSummarize: 'extra2',
+        filters: { extra3: [true] },
+      },
+      { summaryType: 'daysAverage', filters: { extra3: [true] } },
     ],
     fields: [
       {
@@ -164,10 +168,10 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#fff176', contrastText: '#121212' },
     darkPalette: { main: '#ffee58', contrastText: '#121212' },
     summayItems: [
-      { peroid: 'days', fieldToAverage: 'duration' },
-      { peroid: 'events', fieldToAverage: 'duration' },
-      { peroid: 'days' },
-      { peroid: 'days', fieldToAverage: 'extra2' },
+      { summaryType: 'daysAverage', fieldToSummarize: 'duration' },
+      { summaryType: 'eventsAverage', fieldToSummarize: 'duration' },
+      { summaryType: 'daysAverage' },
+      { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
     ],
     fields: [
       {
@@ -211,15 +215,15 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#b39ddb', contrastText: '#fff' },
     darkPalette: { main: '#9575cd', contrastText: '#121212' },
     summayItems: [
-      { peroid: 'days', fieldToAverage: 'duration' },
+      { summaryType: 'daysAverage', fieldToSummarize: 'duration' },
       {
-        peroid: 'days',
-        fieldToAverage: 'duration',
+        summaryType: 'daysAverage',
+        fieldToSummarize: 'duration',
         filters: { extra1: ['Nap'] },
       },
       {
-        peroid: 'days',
-        fieldToAverage: 'duration',
+        summaryType: 'daysAverage',
+        fieldToSummarize: 'duration',
         filters: { extra1: ['Night Sleep'] },
       },
     ],
