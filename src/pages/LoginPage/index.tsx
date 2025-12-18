@@ -1,11 +1,24 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material';
 
 import useGoogleAPI from '../../hooks/useGoogleAPI';
 
+const DELAY_TIMEOUT = 200;
+
 function LoginPage() {
   const { signIn } = useGoogleAPI();
+
+  // Delay visibility for auto login case
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsVisible(true), DELAY_TIMEOUT);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <Box
