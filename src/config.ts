@@ -48,38 +48,22 @@ const config: Record<string, ConfigEntry> = {
   summary: {
     Icon: AppIcon,
     TabComponent: SummaryTab,
-    lightPalette: { main: '#9ED0FF', contrastText: '#121212' },
-    darkPalette: { main: '#64B5F6', contrastText: '#121212' },
+    lightPalette: { main: '#B7DBFF', contrastText: '#121212' },
+    darkPalette: { main: '#F7B2CD', contrastText: '#121212' },
   },
 
   bottle: {
     Icon: WaterDropIcon,
     TabComponent: DataTab,
-    lightPalette: { main: '#9FE4E8', contrastText: '#121212' },
-    darkPalette: { main: '#4DD0E1', contrastText: '#121212' },
+    lightPalette: { main: '#B2EBF2', contrastText: '#121212' },
+    darkPalette: { main: '#80DEEA', contrastText: '#121212' },
     summayItems: [
       { summaryType: 'daysAverage', fieldToSummarize: 'extra1' },
       { summaryType: 'eventsAverage', fieldToSummarize: 'extra1' },
       { summaryType: 'daysAverage' },
       { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: 'Start Time',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-      {
-        formType: 'number',
-        fullName: 'mL',
-        columnFields: { field: 'extra1', headerName: 'mL' },
-      },
-      {
-        formType: 'checkbox',
-        fullName: 'Vitamin D',
-        columnFields: { field: 'extra2', headerName: 'VitD' },
-      },
-    ],
+    fields: [],
   },
 
   diaper: {
@@ -92,26 +76,14 @@ const config: Record<string, ConfigEntry> = {
       { summaryType: 'daysAverage', filters: { extra1: ['Poo', 'Pee & Poo'] } },
       { summaryType: 'daysAverage' },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: 'Start Time',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-      {
-        formType: 'select',
-        fullName: 'Diaper Type',
-        selectFields: ['Pee', 'Poo', 'Pee & Poo'],
-        columnFields: { field: 'extra1', headerName: 'Type' },
-      },
-    ],
+    fields: [],
   },
 
   pump: {
     Icon: JoinInnerIcon,
     TabComponent: DataTab,
-    lightPalette: { main: '#F8BBD0', contrastText: '#121212' },
-    darkPalette: { main: '#F48FB1', contrastText: '#121212' },
+    lightPalette: { main: '#FFCCBC', contrastText: '#121212' },
+    darkPalette: { main: '#FFAB91', contrastText: '#121212' },
     summayItems: [
       { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
       { summaryType: 'eventsAverage', fieldToSummarize: 'extra2' },
@@ -123,23 +95,7 @@ const config: Record<string, ConfigEntry> = {
       },
       { summaryType: 'daysAverage', filters: { extra3: [true] } },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: 'Start Time',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-      {
-        formType: 'number',
-        fullName: 'mL',
-        columnFields: { field: 'extra2', headerName: 'mL' },
-      },
-      {
-        formType: 'checkbox',
-        fullName: 'Power Pump',
-        columnFields: { field: 'extra3', headerName: 'Power' },
-      },
-    ],
+    fields: [],
   },
 
   nurse: {
@@ -153,29 +109,7 @@ const config: Record<string, ConfigEntry> = {
       { summaryType: 'daysAverage' },
       { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: 'Start Time',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-      {
-        formType: 'datePicker',
-        fullName: 'End Time',
-        columnFields: { field: 'end_time', headerName: 'End' },
-      },
-      {
-        formType: 'select',
-        fullName: 'Side',
-        selectFields: ['Left', 'Right', 'Both'],
-        columnFields: { field: 'extra1', headerName: 'Side' },
-      },
-      {
-        formType: 'checkbox',
-        fullName: 'Vitamin D',
-        columnFields: { field: 'extra2', headerName: 'VitD' },
-      },
-    ],
+    fields: [],
   },
 
   sleep: {
@@ -196,87 +130,42 @@ const config: Record<string, ConfigEntry> = {
         filters: { extra1: ['Night Sleep'] },
       },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: 'Start Time',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-      {
-        formType: 'datePicker',
-        fullName: 'End Time',
-        columnFields: { field: 'end_time', headerName: 'End' },
-      },
-      {
-        formType: 'select',
-        fullName: 'Sleep Type',
-        selectFields: ['Night Sleep', 'Nap'],
-        columnFields: { field: 'extra1', headerName: 'Type' },
-      },
-    ],
+    fields: [],
   },
 
   bath: {
     Icon: BathtubIcon,
     TabComponent: DataTab,
-    lightPalette: { main: '#B2EBF2', contrastText: '#121212' },
-    darkPalette: { main: '#80DEEA', contrastText: '#121212' },
+    lightPalette: { main: '#C5CAE9', contrastText: '#121212' },
+    darkPalette: { main: '#9FA8DA', contrastText: '#121212' },
     summayItems: [
       { summaryType: 'latestValue', fieldToSummarize: 'start_time' },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: '',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-    ],
+    fields: [],
   },
 
   weight: {
     Icon: ScaleIcon,
     TabComponent: DataTab,
-    lightPalette: { main: '#F3C1DC', contrastText: '#121212' },
-    darkPalette: { main: '#E48BC3', contrastText: '#121212' },
+    lightPalette: { main: '#D7CCC8', contrastText: '#121212' },
+    darkPalette: { main: '#BCAAA4', contrastText: '#121212' },
     summayItems: [
       { summaryType: 'latestValue', fieldToSummarize: 'extra1' },
       { summaryType: 'firstValue', fieldToSummarize: 'extra1' },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: 'Start Time',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-      {
-        formType: 'number',
-        fullName: 'grams',
-        columnFields: { field: 'extra1', headerName: 'grams' },
-      },
-    ],
+    fields: [],
   },
 
   height: {
     Icon: StraightenIcon,
     TabComponent: DataTab,
-    lightPalette: { main: '#FFCCBC', contrastText: '#121212' },
-    darkPalette: { main: '#FFAB91', contrastText: '#121212' },
+    lightPalette: { main: '#FFE0B2', contrastText: '#121212' },
+    darkPalette: { main: '#FFCC80', contrastText: '#121212' },
     summayItems: [
       { summaryType: 'latestValue', fieldToSummarize: 'extra1' },
       { summaryType: 'firstValue', fieldToSummarize: 'extra1' },
     ],
-    fields: [
-      {
-        formType: 'datePicker',
-        fullName: 'Start Time',
-        columnFields: { field: 'start_time', headerName: 'Start' },
-      },
-      {
-        formType: 'number',
-        fullName: '"',
-        columnFields: { field: 'extra1', headerName: 'inches' },
-      },
-    ],
+    fields: [],
   },
 } as const;
 

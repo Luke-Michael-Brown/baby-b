@@ -85,7 +85,7 @@ const darkPalette: TabPallet = Object.keys(config).reduce(
     mode: 'dark',
     primary: { main: '#90caf9', contrastText: '#121212' },
     secondary: { main: '#b785c4', contrastText: '#121212' },
-    background: { default: '#232627', paper: '#2E3133' },
+    background: { default: '#181A1B', paper: '#222425' },
     divider: 'rgba(255,255,255,0.2)',
     text: { primary: '#ffffff', secondary: '#cfd8dc', disabled: '#78909c' },
   } as TabPallet,
