@@ -1,6 +1,5 @@
 - Add comments everywhere
 - Update readme
-- Make new icon
 - Publish it for google
 
 - Add average number of baths per week

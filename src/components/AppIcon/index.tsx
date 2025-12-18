@@ -13,6 +13,7 @@ function AppIcon({ sx: { fontSize = '3em' } }: { sx: { fontSize: string } }) {
         width: fontSize,
         height: fontSize,
         verticalAlign: 'middle',
+        borderRadius: 50,
         filter:
           theme.palette.mode === 'light' ? 'invert(1) brightness(1.2)' : 'none',
       })}
