@@ -49,7 +49,7 @@ const config: Record<string, ConfigEntry> = {
     Icon: AppIcon,
     TabComponent: SummaryTab,
     lightPalette: { main: '#B7DBFF', contrastText: '#121212' },
-    darkPalette: { main: '#F7B2CD', contrastText: '#121212' },
+    darkPalette: { main: '#FAD1E3', contrastText: '#121212' },
   },
 
   bottle: {
