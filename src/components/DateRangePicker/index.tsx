@@ -1,3 +1,6 @@
+// React component for picking between a range of two dates
+// Includes helper buttons to select common range
+
 import {
   Paper,
   Stack,
