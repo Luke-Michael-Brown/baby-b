@@ -140,7 +140,7 @@ export default function getTabSummary(
               new Date(entry.start_time).getTime()
             : entry[fieldToSummarize];
 
-        return `${summaryType === 'latestValue' ? 'Latest' : 'First'}: ${formatWithUnits(
+        return `${summaryType === 'latestValue' ? 'Latest' : 'Birth'} ${tab}: ${formatWithUnits(
           fieldToSummarize,
           value,
         )}`;
