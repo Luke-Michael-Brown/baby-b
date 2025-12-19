@@ -1,12 +1,3 @@
-// This configuration file defines the structure and settings for various tabs
-// in the baby tracking application.
-// It includes type definitions for field entries and summary items, and exports
-// a config object that maps tab names to their respective configurations,
-// including Material-UI icons, tab components, color palettes for light and dark
-// themes, and arrays of summary items for data aggregation.
-// This centralizes the app's UI and data handling logic for different baby care
-// activities such as feeding, diapering, sleeping, and measurements.
-
 import type { FC } from 'react';
 import type { SvgIconComponent } from '@mui/icons-material';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
@@ -72,7 +63,23 @@ const config: Record<string, ConfigEntry> = {
       { summaryType: 'daysAverage' },
       { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+      {
+        formType: 'number',
+        fullName: 'mL',
+        columnFields: { field: 'extra1', headerName: 'mL' },
+      },
+      {
+        formType: 'checkbox',
+        fullName: 'Vitamin D',
+        columnFields: { field: 'extra2', headerName: 'VitD' },
+      },
+    ],
   },
 
   diaper: {
@@ -85,7 +92,19 @@ const config: Record<string, ConfigEntry> = {
       { summaryType: 'daysAverage', filters: { extra1: ['Poo', 'Pee & Poo'] } },
       { summaryType: 'daysAverage' },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+      {
+        formType: 'select',
+        fullName: 'Diaper Type',
+        selectFields: ['Pee', 'Poo', 'Pee & Poo'],
+        columnFields: { field: 'extra1', headerName: 'Type' },
+      },
+    ],
   },
 
   pump: {
@@ -104,7 +123,23 @@ const config: Record<string, ConfigEntry> = {
       },
       { summaryType: 'daysAverage', filters: { extra3: [true] } },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+      {
+        formType: 'number',
+        fullName: 'mL',
+        columnFields: { field: 'extra2', headerName: 'mL' },
+      },
+      {
+        formType: 'checkbox',
+        fullName: 'Power Pump',
+        columnFields: { field: 'extra3', headerName: 'Power' },
+      },
+    ],
   },
 
   nurse: {
@@ -118,7 +153,29 @@ const config: Record<string, ConfigEntry> = {
       { summaryType: 'daysAverage' },
       { summaryType: 'daysAverage', fieldToSummarize: 'extra2' },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+      {
+        formType: 'datePicker',
+        fullName: 'End Time',
+        columnFields: { field: 'end_time', headerName: 'End' },
+      },
+      {
+        formType: 'select',
+        fullName: 'Side',
+        selectFields: ['Left', 'Right', 'Both'],
+        columnFields: { field: 'extra1', headerName: 'Side' },
+      },
+      {
+        formType: 'checkbox',
+        fullName: 'Vitamin D',
+        columnFields: { field: 'extra2', headerName: 'VitD' },
+      },
+    ],
   },
 
   sleep: {
@@ -139,7 +196,24 @@ const config: Record<string, ConfigEntry> = {
         filters: { extra1: ['Night Sleep'] },
       },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+      {
+        formType: 'datePicker',
+        fullName: 'End Time',
+        columnFields: { field: 'end_time', headerName: 'End' },
+      },
+      {
+        formType: 'select',
+        fullName: 'Sleep Type',
+        selectFields: ['Night Sleep', 'Nap'],
+        columnFields: { field: 'extra1', headerName: 'Type' },
+      },
+    ],
   },
 
   bath: {
@@ -150,7 +224,13 @@ const config: Record<string, ConfigEntry> = {
     summayItems: [
       { summaryType: 'latestValue', fieldToSummarize: 'start_time' },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: '',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+    ],
   },
 
   weight: {
@@ -162,7 +242,18 @@ const config: Record<string, ConfigEntry> = {
       { summaryType: 'latestValue', fieldToSummarize: 'extra1' },
       { summaryType: 'firstValue', fieldToSummarize: 'extra1' },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+      {
+        formType: 'number',
+        fullName: 'grams',
+        columnFields: { field: 'extra1', headerName: 'grams' },
+      },
+    ],
   },
 
   height: {
@@ -174,7 +265,18 @@ const config: Record<string, ConfigEntry> = {
       { summaryType: 'latestValue', fieldToSummarize: 'extra1' },
       { summaryType: 'firstValue', fieldToSummarize: 'extra1' },
     ],
-    fields: [],
+    fields: [
+      {
+        formType: 'datePicker',
+        fullName: 'Start Time',
+        columnFields: { field: 'start_time', headerName: 'Start' },
+      },
+      {
+        formType: 'number',
+        fullName: '"',
+        columnFields: { field: 'extra1', headerName: 'inches' },
+      },
+    ],
   },
 } as const;
 
