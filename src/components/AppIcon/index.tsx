@@ -16,14 +16,13 @@ function AppIcon({ sx: { fontSize = '3em' } }: { sx: { fontSize: string } }) {
       component="img"
       src={appIconUrl}
       alt="AppIcon"
-      sx={theme => ({
+      sx={{
         width: fontSize,
         height: fontSize,
         verticalAlign: 'middle',
         borderRadius: 50,
-        filter:
-          theme.palette.mode === 'light' ? 'invert(1) brightness(1.2)' : 'none',
-      })}
+        backgroundColor: 'white',
+      }}
     />
   );
 }
