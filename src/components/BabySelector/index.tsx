@@ -1,3 +1,12 @@
+// This file defines the BabySelector component, a memoized React component
+// that provides a dropdown interface for selecting a baby from the available
+// list.
+// It integrates with Jotai atoms to manage the selected baby state and uses a
+// custom hook to fetch the babies list.
+// The component renders a label and a Material-UI Select component, allowing
+// users to switch between babies and update the application's data context
+// accordingly.
+
 import { memo } from 'react';
 import { useAtom } from 'jotai';
 import { Select, MenuItem, Box, Typography } from '@mui/material';

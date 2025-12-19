@@ -1,3 +1,13 @@
+// This file defines the main App component, which serves as the root of the
+// React application.
+// It integrates Google API authentication, manages global state for selected
+// baby and current page,
+// and conditionally renders different pages (Login, Loading, Content) along
+// with Header and Footer components.
+// The component uses Jotai atoms for state management and Material-UI for
+// styling,
+// ensuring a responsive layout that fills the viewport.
+
 import { memo, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';

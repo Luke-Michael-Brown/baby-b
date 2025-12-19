@@ -1,3 +1,13 @@
+// This file configures the Material-UI themes for the application, supporting
+// both light and dark modes.
+// It extends the Material-UI palette to include custom colors for different tabs
+// (e.g., summary, sleep, diaper),
+// defines a base theme with typography, shape, and component overrides, and
+// provides a useTheme hook that dynamically adjusts the primary color based on
+// the currently selected tab.
+// This ensures consistent theming and visual differentiation across various
+// sections of the baby tracking app.
+
 import { useAtomValue } from 'jotai';
 import { createTheme } from '@mui/material/styles';
 import type { PaletteColorOptions, ThemeOptions } from '@mui/material/styles';

@@ -1,3 +1,7 @@
+// Utility function that creates a persistent cache map using localStorage,
+// providing methods to store, retrieve, and manage key-value pairs across
+// sessions.
+
 export default function createCacheMap(storageKey: string) {
   let cacheMap = new Map();
   const raw = localStorage.getItem(storageKey);

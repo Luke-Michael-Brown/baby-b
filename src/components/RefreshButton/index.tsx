@@ -1,3 +1,4 @@
+// React component for RefreshButton
 import { memo } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Tooltip, Box, IconButton } from '@mui/material';

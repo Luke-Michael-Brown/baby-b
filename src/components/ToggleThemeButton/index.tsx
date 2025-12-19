@@ -1,3 +1,4 @@
+// React component for ToggleThemeButton
 import { memo } from 'react';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';

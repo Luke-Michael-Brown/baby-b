@@ -1,3 +1,4 @@
+// Dialog component for DeleteDialog
 /* eslint-disable react-refresh/only-export-components */
 
 import { memo, useState } from 'react';

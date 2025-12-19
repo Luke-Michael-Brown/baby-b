@@ -1,3 +1,7 @@
+// Page component that displays a loading screen with a circular progress
+// indicator and a baby icon,
+// shown while the application is initializing or loading data.
+
 import { memo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import ChildCareIcon from '@mui/icons-material/ChildCare';

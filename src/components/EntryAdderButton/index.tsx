@@ -1,3 +1,11 @@
+// This file defines the EntryAdderButton component, a memoized React component
+// that renders a button for adding new entries to a specific tab in the baby
+// tracking application.
+// It accepts a tab prop and uses a custom hook to open the entry dialog with the
+// appropriate tab context.
+// The button displays the capitalized tab name and triggers the dialog for data
+// entry when clicked.
+
 import { memo } from 'react';
 import { Button } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';

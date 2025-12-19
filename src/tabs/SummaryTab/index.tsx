@@ -1,3 +1,7 @@
+// Tab component that displays summarized statistics and trends for baby data
+// over a selected date range, using collapsible sections and charts for better
+// visualization.
+
 import { memo, useState } from 'react';
 import { useAtom } from 'jotai';
 import DateRangeIcon from '@mui/icons-material/DateRange';

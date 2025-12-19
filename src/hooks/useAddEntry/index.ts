@@ -1,3 +1,5 @@
+// Custom hook for adding new entries to the data.
+
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs, { Dayjs } from 'dayjs';
 

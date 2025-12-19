@@ -1,3 +1,4 @@
+// React component for TabContent
 import { memo } from 'react';
 import { useAtomValue } from 'jotai';
 

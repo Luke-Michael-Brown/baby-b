@@ -1,3 +1,14 @@
+// This file serves as the entry point for the React application.
+// It configures the dayjs library with UTC and timezone plugins, setting the
+// default timezone to America/Toronto.
+// It initializes the React root, wraps the application with essential providers
+// including React Query for data fetching,
+// Material-UI's LocalizationProvider for date handling, and a custom
+// LightDarkProvider for theme management.
+// Additionally, it renders global dialog components (EntryDialog and
+// DeleteDialog) alongside the main App component,
+// ensuring a consistent and functional UI across the application.
+
 // eslint-disable-next-line import/order
 import dayjs from 'dayjs';
 // eslint-disable-next-line import/order

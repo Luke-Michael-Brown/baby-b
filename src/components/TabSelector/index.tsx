@@ -1,3 +1,4 @@
+// React component for TabSelector
 import { memo } from 'react';
 import { useAtom } from 'jotai';
 import { Box, Typography, Select, MenuItem } from '@mui/material';

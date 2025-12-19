@@ -1,3 +1,5 @@
+// Utility function that processes baby data for a specific tab within a date range, calculating and formatting summary statistics such as totals, averages, or key metrics depending on the tab type (e.g., feeding, sleep, diaper changes).
+
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import config from '../../config';

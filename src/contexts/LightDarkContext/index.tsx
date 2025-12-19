@@ -1,3 +1,4 @@
+// Context provider for LightDarkContext
 /* eslint-disable react-refresh/only-export-components */
 
 import {

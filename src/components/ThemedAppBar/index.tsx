@@ -1,3 +1,4 @@
+// React component for ThemedAppBar
 import { memo, type ReactNode } from 'react';
 import { Box, useTheme } from '@mui/material';
 

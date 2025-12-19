@@ -1,3 +1,4 @@
+// React component for LogoutButton
 import { memo } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Tooltip, IconButton } from '@mui/material';

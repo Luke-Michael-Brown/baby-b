@@ -1,3 +1,4 @@
+// React component for TwoLineDate
 import { memo } from 'react';
 
 function TwoLineDate({ date }: { date?: string }) {

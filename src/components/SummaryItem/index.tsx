@@ -1,3 +1,4 @@
+// React component for SummaryItem
 import { memo } from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';

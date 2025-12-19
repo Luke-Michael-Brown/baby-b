@@ -1,3 +1,5 @@
+// React component for the application footer.
+
 import { memo } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import {

@@ -1,3 +1,5 @@
+// Utility function that converts a weight in grams to a string representation in pounds and ounces, commonly used for baby weight measurements.
+
 export default function gramsToLB(grams: number): string {
   if (grams <= 0) return '0 lb 0 oz';
 

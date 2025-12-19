@@ -1,3 +1,5 @@
+// React component for displaying buttons to add entries for data tabs.
+
 import { memo } from 'react';
 import { Box } from '@mui/material';
 import { TABS } from '../../atoms/selectedTabAtom';

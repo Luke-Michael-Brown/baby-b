@@ -1,3 +1,7 @@
+// React component that renders the application's header bar, including the app
+// icon, baby selector, theme toggle, and logout button for navigation and user
+// controls.
+
 import { memo } from 'react';
 import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';

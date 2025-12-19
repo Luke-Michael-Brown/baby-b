@@ -1,3 +1,7 @@
+// Page component that provides the login interface for the application,
+// allowing users to sign in with Google Drive to access their baby tracking
+// data securely.
+
 import { memo, useEffect, useState } from 'react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material';

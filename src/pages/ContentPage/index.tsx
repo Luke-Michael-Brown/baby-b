@@ -1,3 +1,5 @@
+// Page component for the main content page.
+
 import { memo } from 'react';
 import { Box } from '@mui/material';
 

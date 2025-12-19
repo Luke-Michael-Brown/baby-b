@@ -1,3 +1,7 @@
+// Tab component that provides a data grid interface for viewing, editing, and
+// deleting baby tracking entries, integrated with Material-UI DataGrid for
+// efficient data management.
+
 import { memo, useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import DeleteIcon from '@mui/icons-material/Delete';

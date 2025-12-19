@@ -1,3 +1,12 @@
+// This configuration file defines the structure and settings for various tabs
+// in the baby tracking application.
+// It includes type definitions for field entries and summary items, and exports
+// a config object that maps tab names to their respective configurations,
+// including Material-UI icons, tab components, color palettes for light and dark
+// themes, and arrays of summary items for data aggregation.
+// This centralizes the app's UI and data handling logic for different baby care
+// activities such as feeding, diapering, sleeping, and measurements.
+
 import type { FC } from 'react';
 import type { SvgIconComponent } from '@mui/icons-material';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
