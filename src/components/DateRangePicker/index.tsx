@@ -30,7 +30,6 @@ function DateRangePicker() {
 
   const handleRangeSelect = (_event: unknown, value: string | null) => {
     if (!value) return;
-
     const ranges: Record<string, number> = {
       'Last Week': 7,
       'Last 2 Weeks': 14,
@@ -47,8 +46,7 @@ function DateRangePicker() {
   };
 
   return (
-    <Paper sx={{ p: 1 }}>
-      {/* Header row */}
+    <Paper sx={{ p: 1, overflow: 'hidden' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Stack direction="row" spacing={2} alignItems="center">
           <DateRangeIcon />
@@ -66,29 +64,42 @@ function DateRangePicker() {
           <ExpandMoreIcon />
         </IconButton>
       </Stack>
-
       <Divider sx={{ mb: 1 }} />
-
-      {/* Collapsible content */}
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <Stack spacing={1}>
-          {/* DatePickers */}
-          <Stack direction="row" spacing={1}>
+        <Stack spacing={1} sx={{ mt: 1 }}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ width: '100%', minWidth: 0 }}
+          >
             <DatePicker
               label="Start"
               value={startDate}
               onChange={v => v && setStartDate(v.startOf('day'))}
-              sx={{ flex: 1 }}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  fullWidth: true,
+                  sx: { minWidth: 0 },
+                },
+              }}
+              sx={{ flex: 1, minWidth: 0 }}
             />
             <DatePicker
               label="End"
               value={endDate}
               onChange={v => v && setEndDate(v.endOf('day'))}
-              sx={{ flex: 1 }}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  fullWidth: true,
+                  sx: { minWidth: 0 },
+                },
+              }}
+              sx={{ flex: 1, minWidth: 0 }}
             />
           </Stack>
 
-          {/* Range buttons */}
           <Box
             sx={{
               display: 'grid',
@@ -101,7 +112,7 @@ function DateRangePicker() {
                 key={r}
                 value={r}
                 onClick={() => handleRangeSelect(null, r)}
-                sx={{ width: '100%' }}
+                sx={{ width: '100%', textTransform: 'none' }}
               >
                 {r}
               </ToggleButton>
