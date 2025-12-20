@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 
 import SecondaryBar from '../../components/SecondaryBar';
 import TabContent from '../../components/TabContent';
+import Footer from '../../components/Footer';
 
 function ContentPage() {
   return (
@@ -21,6 +22,7 @@ function ContentPage() {
       >
         <TabContent />
       </Box>
+      <Footer />
     </>
   );
 }
