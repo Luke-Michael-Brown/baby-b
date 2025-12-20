@@ -74,7 +74,7 @@ const config: Record<string, ConfigEntry> = {
       return [
         `Average ${daysAverage}mL (${mlToOz(daysAverage)}oz) per day`,
         `Average ${average}mL (${mlToOz(average)}oz) per bottle`,
-        `Average ${averagePerDay} bottles per day`,
+        `Average ${averagePerDay} bottle(s) per day`,
       ];
     },
     fields: [
@@ -114,7 +114,7 @@ const config: Record<string, ConfigEntry> = {
       );
       if (peeAverages) {
         const { averagePerDay } = peeAverages;
-        summaries.push(`Average ${averagePerDay} pees per day`);
+        summaries.push(`Average ${averagePerDay} pee(s) per day`);
       }
 
       const pooAverages = getAverages(
@@ -127,7 +127,7 @@ const config: Record<string, ConfigEntry> = {
       );
       if (pooAverages) {
         const { averagePerDay } = pooAverages;
-        summaries.push(`Average ${averagePerDay} poos per day`);
+        summaries.push(`Average ${averagePerDay} poo(s) per day`);
       }
 
       const diaperAverages = getAverages(
@@ -139,7 +139,7 @@ const config: Record<string, ConfigEntry> = {
       );
       if (diaperAverages) {
         const { averagePerDay } = diaperAverages;
-        summaries.push(`Average ${averagePerDay} diapers per day`);
+        summaries.push(`Average ${averagePerDay} diaper(s) per day`);
       }
 
       return summaries;
@@ -179,7 +179,7 @@ const config: Record<string, ConfigEntry> = {
         summaries = summaries.concat([
           `Average ${daysAverage}mL (${mlToOz(daysAverage)}oz) per day`,
           `Average ${average}mL (${mlToOz(average)}oz) per pump`,
-          `Average ${averagePerDay} pumps per day`,
+          `Average ${averagePerDay} pump(s) per day`,
         ]);
       }
 
@@ -195,7 +195,7 @@ const config: Record<string, ConfigEntry> = {
         const { average, averagePerDay } = powerAverages;
         summaries = summaries.concat([
           `Average ${average}mL (${mlToOz(average)}oz) per power pump`,
-          `Average ${averagePerDay} power pumps per day`,
+          `Average ${averagePerDay} power pump(s) per day`,
         ]);
       }
 
@@ -239,7 +239,7 @@ const config: Record<string, ConfigEntry> = {
       return [
         `Average ${formatMsToMinSec(daysAverage)} per day`,
         `Average ${formatMsToMinSec(average)} per nurse`,
-        `Average ${averagePerDay} nurses per day`,
+        `Average ${averagePerDay} nurse(s) per day`,
       ];
     },
     fields: [
