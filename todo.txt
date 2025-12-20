@@ -1,13 +1,15 @@
+- Improve summary
+
 - Add comments everywhere
 - Update readme
 - Publish it for google
 
-- Add average number of baths per week
-- Compare against average baby
 - Baby edit name
 - Baby delete
 - Share baby
-- Make more fun spinner
-- Add charts to summary page
 - Make useGoogleAPI not hardcoded with my file
 - Use useEffectEvent instead of useCallback
+
+- Add charts to summary page
+- Compare against average baby
+
