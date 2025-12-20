@@ -6,8 +6,8 @@ import {
   summayStartDateAtom,
   summaryEndDateAtom,
 } from '../../atoms/summaryDatesAtom';
-import getTabSummary from '../../utils/getTabSummary';
 import useBabiesData from '../useBabiesData';
+import config from '../../config';
 
 interface Props {
   tab: string;
@@ -20,6 +20,7 @@ export default ({ tab }: Props): string[] => {
 
   const { data: babiesData } = useBabiesData();
   const data = selectedBaby ? babiesData?.[selectedBaby] : undefined;
+  const tabConfig = config[tab];
 
-  return getTabSummary(data, tab, startDate, endDate);
+  return data ? (tabConfig.getSummary?.(data, startDate, endDate) ?? []) : [];
 };

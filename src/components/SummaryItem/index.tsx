@@ -15,7 +15,7 @@ function SummaryItem({ tab }: Props) {
   const Icon = config[tab].Icon;
   const summaries = useTabSummary({ tab });
 
-  return (
+  return summaries.length > 0 ? (
     <Paper
       sx={{
         px: 1,
@@ -43,7 +43,7 @@ function SummaryItem({ tab }: Props) {
         </Stack>
       </Stack>
     </Paper>
-  );
+  ) : null;
 }
 
 export default memo(SummaryItem);

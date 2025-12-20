@@ -31,7 +31,7 @@ function SummaryTab() {
       <DateRangePicker />
 
       {Object.keys(config)
-        .filter(tab => config[tab].summayItems)
+        .filter(tab => config[tab].getSummary)
         .map(tab => (
           <SummaryItem key={`summary-tile-${tab}`} tab={tab} />
         ))}
