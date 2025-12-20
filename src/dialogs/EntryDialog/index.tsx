@@ -22,7 +22,7 @@ import useAddEntry from '../../hooks/useAddEntry';
 import useBabiesData from '../../hooks/useBabiesData';
 import useEditEntry from '../../hooks/useEditEntry';
 import type { Entry } from '../../types';
-import floorTo5 from '../../utils/floorNearest5';
+import floorTo15 from '../../utils/floorNearest15';
 
 export interface EntryDialogProps {
   tab?: string;
@@ -84,7 +84,7 @@ export function EntryDialog() {
           const editEntryDate = editEntry[field.columnFields.field];
           initialValues[field.columnFields.field] = editEntryDate
             ? dayjs(editEntryDate as string)
-            : floorTo5(dayjs());
+            : floorTo15(dayjs());
         } else {
           initialValues[field.columnFields.field] =
             field.formType === 'checkbox'
