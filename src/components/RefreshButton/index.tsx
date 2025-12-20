@@ -1,39 +1,62 @@
-// React component for RefreshButton
-import { memo } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Tooltip, Box, IconButton } from '@mui/material';
 import { useIsFetching, useQueryClient } from '@tanstack/react-query';
-
 import useGoogleAPI from '../../hooks/useGoogleAPI';
+
+const SPIN_DURATION = 1000; // 1 second per rotation
 
 function RefreshButton() {
   const { isSignedIn } = useGoogleAPI();
   const qc = useQueryClient();
 
-  const isRefreshing =
-    useIsFetching({
-      queryKey: ['babies-data'],
-    }) > 0;
+  const isFetching = useIsFetching({ queryKey: ['babies-data'] }) > 0;
+  const [isSpinning, setIsSpinning] = useState(false);
+
+  // Track when the animation started
+  const startTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isFetching) {
+      // If not already spinning, start the clock
+      if (!isSpinning) {
+        setIsSpinning(true);
+        startTimeRef.current = Date.now();
+      }
+    } else if (isSpinning && startTimeRef.current) {
+      // Data finished. Calculate how far into the current 1s cycle we are.
+      const elapsed = Date.now() - startTimeRef.current;
+      const remainder = SPIN_DURATION - (elapsed % SPIN_DURATION);
+
+      const timeout = setTimeout(() => {
+        setIsSpinning(false);
+        startTimeRef.current = null;
+      }, remainder);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isFetching, isSpinning]);
 
   const refreshData = async () => {
-    await qc.invalidateQueries({
-      queryKey: ['babies-data'],
-      exact: true,
-    });
+    // Only trigger if not already busy
+    if (!isSpinning) {
+      await qc.invalidateQueries({
+        queryKey: ['babies-data'],
+        exact: true,
+      });
+    }
   };
 
-  if (!isSignedIn) {
-    return null;
-  }
+  if (!isSignedIn) return null;
 
   return (
     <Tooltip title="Refresh data">
       <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-        <IconButton onClick={refreshData} disabled={isRefreshing}>
+        <IconButton onClick={refreshData} disabled={isSpinning}>
           <RefreshIcon
             sx={{
-              ...(isRefreshing && {
-                animation: 'spin 1s linear infinite',
+              ...(isSpinning && {
+                animation: `spin ${SPIN_DURATION}ms linear infinite`,
                 '@keyframes spin': {
                   '0%': { transform: 'rotate(0deg)' },
                   '100%': { transform: 'rotate(360deg)' },

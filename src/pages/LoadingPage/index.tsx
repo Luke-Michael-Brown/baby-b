@@ -22,7 +22,6 @@ function LoadingScreen() {
   const [index, setIndex] = useState(Math.floor(Math.random() * ICONS.length));
 
   useEffect(() => {
-    // Change icon every 600ms for a "quick" but visible swap
     const interval = setInterval(() => {
       setIndex(prevIndex => (prevIndex + 1) % ICONS.length);
     }, 800);
@@ -39,7 +38,7 @@ function LoadingScreen() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '200px', // Ensures visibility if parent has no height
+        minHeight: '200px',
       }}
     >
       <Box
