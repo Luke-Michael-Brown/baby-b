@@ -4,6 +4,7 @@ import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import CribIcon from '@mui/icons-material/Crib';
 import JoinInnerIcon from '@mui/icons-material/JoinInner';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
 import ScaleIcon from '@mui/icons-material/Scale';
 import StraightenIcon from '@mui/icons-material/Straighten';
@@ -11,17 +12,17 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
 import type { PaletteColorOptions } from '@mui/material';
 import type { GridColDef } from '@mui/x-data-grid';
+import type { Dayjs } from 'dayjs';
 import AppIcon from './components/AppIcon';
 import DataTab from './tabs/DataTab';
 import SummaryTab from './tabs/SummaryTab';
 import type { BabyData } from './types';
-import getAverages from './utils/getAverages';
-import type { Dayjs } from 'dayjs';
 import formatMsToMinSec from './utils/formatMsToMinSec';
-import mlToOz from './utils/mlToOz';
+import getAverages from './utils/getAverages';
 import getFirstAndLastEntry from './utils/getFirstAndLastEntry';
 import gramsToLB from './utils/gramsToLB';
 import inchesToFootInches from './utils/inchesToFootInches';
+import mlToOz from './utils/mlToOz';
 
 type FieldEntry =
   | {
@@ -138,7 +139,7 @@ const config: Record<string, ConfigEntry> = {
       );
       if (diaperAverages) {
         const { averagePerDay } = diaperAverages;
-        summaries.push(`Average ${averagePerDay} diaper per day`);
+        summaries.push(`Average ${averagePerDay} diapers per day`);
       }
 
       return summaries;
@@ -436,6 +437,55 @@ const config: Record<string, ConfigEntry> = {
         columnFields: { field: 'extra1', headerName: 'inches' },
       },
     ],
+  },
+
+  miscellaneous: {
+    Icon: MoreHorizIcon,
+    lightPalette: { main: '#E0E0E0', contrastText: '#121212' },
+    darkPalette: { main: '#616161', contrastText: '#FFFFFF' },
+    getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
+      const summaries: string[] = [];
+
+      const vitDaverages = getAverages(
+        data,
+        ['bottle', 'nurse'],
+        startDate,
+        endDate,
+        'extra2',
+      );
+      if (vitDaverages) {
+        const { daysAverage } = vitDaverages;
+        summaries.push(`Average ${daysAverage} Vitamin D per day`);
+      }
+
+      const bottleAverages = getAverages(
+        data,
+        ['bottle'],
+        startDate,
+        endDate,
+        'extra1',
+      );
+      const pumpAverages = getAverages(
+        data,
+        ['pump'],
+        startDate,
+        endDate,
+        'extra2',
+      );
+      if (bottleAverages && pumpAverages) {
+        const { daysAverage: bottleDaysAverage } = bottleAverages;
+        const { daysAverage: pumpDaysAverage } = pumpAverages;
+        const breastMilkPercent = Math.min(
+          Math.round((pumpDaysAverage / bottleDaysAverage) * 100),
+          100,
+        );
+        console.log(pumpDaysAverage, bottleDaysAverage);
+
+        summaries.push(`Bottle breast milk percent: ${breastMilkPercent}%`);
+      }
+
+      return summaries;
+    },
   },
 } as const;
 

@@ -1,4 +1,4 @@
-- Improve summary
+- Add misc summary
 
 - Add comments everywhere
 - Update readme

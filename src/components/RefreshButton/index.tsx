@@ -17,6 +17,7 @@ function RefreshButton() {
   const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
+    let timeout = null;
     if (isFetching) {
       // If not already spinning, start the clock
       if (!isSpinning) {
@@ -28,13 +29,17 @@ function RefreshButton() {
       const elapsed = Date.now() - startTimeRef.current;
       const remainder = SPIN_DURATION - (elapsed % SPIN_DURATION);
 
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         setIsSpinning(false);
         startTimeRef.current = null;
       }, remainder);
-
-      return () => clearTimeout(timeout);
     }
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [isFetching, isSpinning]);
 
   const refreshData = async () => {

@@ -5,9 +5,9 @@
 import { memo } from 'react';
 import Box from '@mui/material/Box';
 
+import DateRangePicker from '../../components/DateRangePicker';
 import SummaryItem from '../../components/SummaryItem';
 import config from '../../config';
-import DateRangePicker from '../../components/DateRangePicker';
 
 export const RANGES = [
   'Last Week',

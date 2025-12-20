@@ -1,6 +1,10 @@
 // React component for picking between a range of two dates
 // Includes helper buttons to select common range
 
+import { memo, useState } from 'react';
+import { useAtom } from 'jotai';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Paper,
   Stack,
@@ -11,17 +15,13 @@ import {
   Box,
   ToggleButton,
 } from '@mui/material';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { memo, useState } from 'react';
-import { RANGES } from '../../tabs/SummaryTab';
 import dayjs from 'dayjs';
-import { useAtom } from 'jotai';
 import {
   summayStartDateAtom,
   summaryEndDateAtom,
 } from '../../atoms/summaryDatesAtom';
+import { RANGES } from '../../tabs/SummaryTab';
 
 function DateRangePicker() {
   const [startDate, setStartDate] = useAtom(summayStartDateAtom);

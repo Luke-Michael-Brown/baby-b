@@ -7,8 +7,8 @@ export default function inchesToFootInches(inches: number): string {
   const remainingInches = Math.round(inches % 12);
 
   if (remainingInches === 0) {
-    return `${feet} \'`;
+    return `${feet} '`;
   }
 
-  return `${feet}\' ${remainingInches}\"`;
+  return `${feet}' ${remainingInches}"`;
 }

@@ -1,5 +1,4 @@
 import { memo, useState, useEffect } from 'react';
-import { Box, CircularProgress, Fade } from '@mui/material';
 import BedroomBabyIcon from '@mui/icons-material/BedroomBaby';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
@@ -7,6 +6,7 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import StrollerIcon from '@mui/icons-material/Stroller';
+import { Box, CircularProgress } from '@mui/material';
 
 const ICONS = [
   BedroomBabyIcon,

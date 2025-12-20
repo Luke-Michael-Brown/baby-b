@@ -6,8 +6,8 @@ import {
   summayStartDateAtom,
   summaryEndDateAtom,
 } from '../../atoms/summaryDatesAtom';
-import useBabiesData from '../useBabiesData';
 import config from '../../config';
+import useBabiesData from '../useBabiesData';
 
 interface Props {
   tab: string;

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import type { BabyData } from '../../types';
 import config from '../../config';
+import type { BabyData } from '../../types';
 
 export default function getAverages(
   data: BabyData | undefined,
