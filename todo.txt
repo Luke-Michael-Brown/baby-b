@@ -1,5 +1,4 @@
 - Add comments everywhere
-- Update readme
 - Publish it for google
 
 - Baby edit name

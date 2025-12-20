@@ -1,73 +1,79 @@
-# React + TypeScript + Vite
+# Baby B
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<div style="text-align: center;">
+  <div style="background-color: white; border-radius: 50%; display: inline-block; padding: 10px;">
+    <img src="./public/source.svg" alt="Baby B Logo" width="250" height="250">
+  </div>
+</div>
 
-Currently, two official plugins are available:
+Baby B is a secure baby tracking app that stores your baby's data in your Google Drive, giving you full control and privacy.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## User Guide for Baby B
 
-## React Compiler
+### Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Sign In**: Open the app and click "Sign in with Google" to authenticate using your Google Drive account.
 
-## Expanding the ESLint configuration
+2. **Add a Baby**: After signing in, navigate to the baby list and add a new baby by providing their name and birth date.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Using the App
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Log Entries**: Select a baby and add entries like feeding, diaper changes, or sleep times using the entry form.
+- **View Data**: Browse your baby's history in the entry list, filtered by date or type.
+- **Manage Babies**: Switch between babies or edit their details in the selector.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Tips
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- All data is stored securely in your Google Drive.
+- Use the date picker for accurate logging.
+- The app works offline once data is synced.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+For more help, contact support.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## Developer Guide for Baby B
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+### Prerequisites
+
+- Node.js (version 16 or higher)
+- npm or yarn
+
+### Setup
+
+1. **Clone the Repository**:
+
+   ```
+   git clone https://github.com/yourusername/baby-b.git
+   cd baby-b
+   ```
+
+2. **Install Dependencies**:
+
+   ```
+   npm install
+   ```
+
+3. **Configure Google API**:
+   - Ask maintainer for client id/secret
+   - Add them to a `.env` file as `REACT_APP_GOOGLE_CLIENT_ID` and `REACT_APP_GOOGLE_CLIENT_SECRET`.
+
+4. **Run the App**:
+   ```
+   npm start
+   ```
+   The app will run on `http://localhost:3000`.
+
+### Building
+
+- For production: `npm run build`
+- Lint: `npm run lint`
+- Format: `npm run format`
+
+### CI/CD
+
+This project uses Netlify for continuous integration and deployment. Push to the main branch to trigger automatic builds and deploys.
+
+### Contributing
+
+- Follow the code style in the existing files.
+- Submit pull requests to the main branch.
+- Avoid too many pushes to main as has limited netlify deploys
