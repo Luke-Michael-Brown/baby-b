@@ -34,7 +34,6 @@ export default defineConfig([
       'prefer-const': 'error',
       'no-negated-condition': 'warn',
       eqeqeq: ['error', 'smart'],
-      'consistent-return': 'warn',
       'prefer-arrow-callback': 'error',
       'no-else-return': 'warn',
 
