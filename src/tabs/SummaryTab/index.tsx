@@ -26,6 +26,7 @@ function SummaryTab() {
         gap: 1,
         px: 1,
         py: 1,
+        pb: '44px',
       }}
     >
       <DateRangePicker />

@@ -8,7 +8,7 @@ import { Alert, Button, Box, Paper, Typography, Stack } from '@mui/material';
 
 import useGoogleAPI from '../../hooks/useGoogleAPI';
 
-const DELAY_TIMEOUT = 200;
+const DELAY_TIMEOUT = 500;
 
 function LoginPage() {
   const { signIn } = useGoogleAPI();

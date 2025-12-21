@@ -479,7 +479,6 @@ const config: Record<string, ConfigEntry> = {
           Math.round((pumpDaysAverage / bottleDaysAverage) * 100),
           100,
         );
-        console.log(pumpDaysAverage, bottleDaysAverage);
 
         summaries.push(`Bottle breast milk percent: ${breastMilkPercent}%`);
       }
