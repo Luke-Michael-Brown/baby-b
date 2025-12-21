@@ -41,9 +41,9 @@ declare module '@mui/material/styles' {
 const baseTheme: ThemeOptions = {
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-    h1: { fontWeight: 600 },
-    h2: { fontWeight: 600 },
-    h3: { fontWeight: 500 },
+    h1: { fontWeight: 800 },
+    h2: { fontWeight: 700 },
+    h3: { fontWeight: 600 },
     body1: { fontSize: 16 },
   },
   shape: { borderRadius: 12 },
