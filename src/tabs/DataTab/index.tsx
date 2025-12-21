@@ -18,11 +18,13 @@ import TwoLineDate from '../../components/TwoLineDate';
 import { useDeleteDialog } from '../../dialogs/DeleteDialog';
 import { useEntryDialog } from '../../dialogs/EntryDialog';
 import useBabyTabData from '../../hooks/useBabyTabData';
+import gramsToLB from '../../utils/gramsToLB';
+import inchesToFootInches from '../../utils/inchesToFootInches';
 
 const paginationModel = { page: 0, pageSize: 100 };
 const FIELD_TO_FLEX = {
   datePicker: 100,
-  number: 60,
+  number: 80,
   checkbox: 90,
 } as const;
 
@@ -51,6 +53,15 @@ function DataTab() {
           case 'checkbox':
             column.renderCell = params => (params.value ? '✓' : '');
             break;
+
+          case 'number':
+            if (field.columnFields.headerName === 'grams') {
+              column.renderCell = params =>
+                `${params.value}g (${gramsToLB(params.value)})`;
+            } else if (field.columnFields.headerName === 'inches') {
+              column.renderCell = params =>
+                `${params.value}" (${inchesToFootInches(params.value)})`;
+            }
         }
 
         return column;

@@ -27,13 +27,11 @@ import mlToOz from './utils/mlToOz';
 type FieldEntry =
   | {
       formType: string;
-      fullName: string;
       selectFields?: never;
       columnFields: GridColDef;
     }
   | {
       formType: 'select';
-      fullName: string;
       selectFields: string[];
       columnFields: GridColDef;
     };
@@ -80,17 +78,14 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: 'Start Time',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
       {
         formType: 'number',
-        fullName: 'mL',
         columnFields: { field: 'extra1', headerName: 'mL' },
       },
       {
         formType: 'checkbox',
-        fullName: 'Vitamin D',
         columnFields: { field: 'extra2', headerName: 'VitD' },
       },
     ],
@@ -147,12 +142,10 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: 'Start Time',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
       {
         formType: 'select',
-        fullName: 'Diaper Type',
         selectFields: ['Pee', 'Poo', 'Pee & Poo'],
         columnFields: { field: 'extra1', headerName: 'Type' },
       },
@@ -204,17 +197,14 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: 'Start Time',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
       {
         formType: 'number',
-        fullName: 'mL',
         columnFields: { field: 'extra2', headerName: 'mL' },
       },
       {
         formType: 'checkbox',
-        fullName: 'Power Pump',
         columnFields: { field: 'extra3', headerName: 'Power' },
       },
     ],
@@ -245,23 +235,19 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: 'Start Time',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
       {
         formType: 'datePicker',
-        fullName: 'End Time',
         columnFields: { field: 'end_time', headerName: 'End' },
       },
       {
         formType: 'select',
-        fullName: 'Side',
         selectFields: ['Left', 'Right', 'Both'],
         columnFields: { field: 'extra1', headerName: 'Side' },
       },
       {
         formType: 'checkbox',
-        fullName: 'Vitamin D',
         columnFields: { field: 'extra2', headerName: 'VitD' },
       },
     ],
@@ -324,17 +310,14 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: 'Start Time',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
       {
         formType: 'datePicker',
-        fullName: 'End Time',
         columnFields: { field: 'end_time', headerName: 'End' },
       },
       {
         formType: 'select',
-        fullName: 'Sleep Type',
         selectFields: ['Night Sleep', 'Nap'],
         columnFields: { field: 'extra1', headerName: 'Type' },
       },
@@ -359,7 +342,6 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: '',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
     ],
@@ -390,12 +372,10 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: 'Start Time',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
       {
         formType: 'number',
-        fullName: 'grams',
         columnFields: { field: 'extra1', headerName: 'grams' },
       },
     ],
@@ -428,12 +408,10 @@ const config: Record<string, ConfigEntry> = {
     fields: [
       {
         formType: 'datePicker',
-        fullName: 'Start Time',
         columnFields: { field: 'start_time', headerName: 'Start' },
       },
       {
         formType: 'number',
-        fullName: '"',
         columnFields: { field: 'extra1', headerName: 'inches' },
       },
     ],
