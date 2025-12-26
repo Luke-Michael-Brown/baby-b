@@ -13,6 +13,7 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import type { PaletteColorOptions } from '@mui/material';
 import type { GridColDef } from '@mui/x-data-grid';
 import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import AppIcon from './components/AppIcon';
 import DataTab from './tabs/DataTab';
 import SummaryTab from './tabs/SummaryTab';
@@ -23,7 +24,6 @@ import getFirstAndLastEntry from './utils/getFirstAndLastEntry';
 import gramsToLB from './utils/gramsToLB';
 import inchesToFootInches from './utils/inchesToFootInches';
 import mlToOz from './utils/mlToOz';
-import dayjs from 'dayjs';
 
 type FieldEntry =
   | {
