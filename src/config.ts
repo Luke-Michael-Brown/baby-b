@@ -60,7 +60,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#B2EBF2', contrastText: '#121212' },
     darkPalette: { main: '#80DEEA', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
-      const { latestEntry } = getFirstAndLastEntry(data.bottle);
+      const { timeAgo } = getFirstAndLastEntry(data.bottle);
 
       const averages = getAverages(
         data,
@@ -76,7 +76,7 @@ const config: Record<string, ConfigEntry> = {
         `Average ${daysAverage}mL (${mlToOz(daysAverage)}oz) per day`,
         `Average ${average}mL (${mlToOz(average)}oz) per bottle`,
         `Average ${averagePerDay} bottle(s) per day`,
-        `Last bottle was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
+        `Last bottle was: ${timeAgo} ago`,
       ];
     },
     fields: [
@@ -101,7 +101,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#C8E6C9', contrastText: '#121212' },
     darkPalette: { main: '#A5D6A7', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
-      const { latestEntry } = getFirstAndLastEntry(data.diaper);
+      const { timeAgo } = getFirstAndLastEntry(data.diaper);
       const summaries: string[] = [];
 
       const peeAverages = getAverages(
@@ -143,9 +143,7 @@ const config: Record<string, ConfigEntry> = {
       }
 
       if (summaries.length > 0) {
-        summaries.push(
-          `Last diaper was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
-        );
+        summaries.push(`Last diaper was: ${timeAgo} ago`);
       }
 
       return summaries;
@@ -169,7 +167,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#FFCCBC', contrastText: '#121212' },
     darkPalette: { main: '#FFAB91', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
-      const { latestEntry } = getFirstAndLastEntry(data.pump);
+      const { timeAgo } = getFirstAndLastEntry(data.pump);
       let summaries: string[] = [];
 
       const averages = getAverages(
@@ -205,9 +203,7 @@ const config: Record<string, ConfigEntry> = {
       }
 
       if (summaries.length > 0) {
-        summaries.push(
-          `Last pump was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
-        );
+        summaries.push(`Last pump was: ${timeAgo} ago`);
       }
 
       return summaries;
@@ -234,7 +230,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#FFF9C4', contrastText: '#121212' },
     darkPalette: { main: '#FFF59D', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
-      const { latestEntry } = getFirstAndLastEntry(data.nurse);
+      const { timeAgo } = getFirstAndLastEntry(data.nurse);
       const averages = getAverages(
         data,
         ['nurse'],
@@ -249,7 +245,7 @@ const config: Record<string, ConfigEntry> = {
         `Average ${formatMsToMinSec(daysAverage)} per day`,
         `Average ${formatMsToMinSec(average)} per nurse`,
         `Average ${averagePerDay} nurse(s) per day`,
-        `Last nurse was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
+        `Last nurse was: ${timeAgo} ago`,
       ];
     },
     fields: [
@@ -279,7 +275,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#D1C4E9', contrastText: '#121212' },
     darkPalette: { main: '#B39DDB', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
-      const { latestEntry } = getFirstAndLastEntry(data.sleep);
+      const { timeAgo } = getFirstAndLastEntry(data.sleep);
       const summaries: string[] = [];
 
       const averages = getAverages(
@@ -327,9 +323,7 @@ const config: Record<string, ConfigEntry> = {
       }
 
       if (summaries.length > 0) {
-        summaries.push(
-          `Last sleep was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
-        );
+        summaries.push(`Last sleep was: ${timeAgo} ago`);
       }
 
       return summaries;
