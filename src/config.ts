@@ -451,10 +451,11 @@ const config: Record<string, ConfigEntry> = {
         startDate,
         endDate,
         'extra2',
+        { extra2: [true] },
       );
       if (vitDaverages) {
-        const { daysAverage } = vitDaverages;
-        summaries.push(`Average ${daysAverage} Vitamin D per day`);
+        const { averagePerDay } = vitDaverages;
+        summaries.push(`Average ${averagePerDay} Vitamin D per day`);
       }
 
       const bottleAverages = getAverages(
