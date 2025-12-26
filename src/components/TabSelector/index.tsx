@@ -31,7 +31,7 @@ function TabSelector() {
               value={t}
               sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
             >
-              <Icon sx={{ fontSize: '1em' }} />
+              <Icon sx={{ fontSize: '1em' }} includeBorder={true} />
               {t}
             </MenuItem>
           );

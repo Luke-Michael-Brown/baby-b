@@ -33,9 +33,9 @@ function Footer() {
           px: 1,
           py: 1,
           borderTopRightRadius: '6px',
-          borderBottomRightRadius: '6px',
           display: 'flex',
           alignItems: 'center',
+          zIndex: 1101,
         }}
       >
         <AddIcon sx={{ fontSize: 18, mr: 0.5 }} />

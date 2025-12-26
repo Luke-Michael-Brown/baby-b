@@ -17,6 +17,7 @@ export default function getAverages(
 } | null {
   if (!data) return null;
 
+  const numDays = endDate.diff(startDate, 'day');
   const uniqueDays = new Set<string>();
   let count = 0;
   let total = 0;
@@ -69,6 +70,6 @@ export default function getAverages(
   return {
     average: Math.round((total / count) * 100) / 100,
     daysAverage: Math.round((total / uniqueDays.size) * 100) / 100,
-    averagePerDay: Math.round((count / uniqueDays.size) * 100) / 100,
+    averagePerDay: Math.round((count / numDays) * 100) / 100,
   };
 }

@@ -23,6 +23,7 @@ import getFirstAndLastEntry from './utils/getFirstAndLastEntry';
 import gramsToLB from './utils/gramsToLB';
 import inchesToFootInches from './utils/inchesToFootInches';
 import mlToOz from './utils/mlToOz';
+import dayjs from 'dayjs';
 
 type FieldEntry =
   | {
@@ -59,6 +60,8 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#B2EBF2', contrastText: '#121212' },
     darkPalette: { main: '#80DEEA', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
+      const { latestEntry } = getFirstAndLastEntry(data.bottle);
+
       const averages = getAverages(
         data,
         ['bottle'],
@@ -73,6 +76,7 @@ const config: Record<string, ConfigEntry> = {
         `Average ${daysAverage}mL (${mlToOz(daysAverage)}oz) per day`,
         `Average ${average}mL (${mlToOz(average)}oz) per bottle`,
         `Average ${averagePerDay} bottle(s) per day`,
+        `Last bottle was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
       ];
     },
     fields: [
@@ -97,6 +101,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#C8E6C9', contrastText: '#121212' },
     darkPalette: { main: '#A5D6A7', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
+      const { latestEntry } = getFirstAndLastEntry(data.diaper);
       const summaries: string[] = [];
 
       const peeAverages = getAverages(
@@ -137,6 +142,12 @@ const config: Record<string, ConfigEntry> = {
         summaries.push(`Average ${averagePerDay} diaper(s) per day`);
       }
 
+      if (summaries.length > 0) {
+        summaries.push(
+          `Last diaper was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
+        );
+      }
+
       return summaries;
     },
     fields: [
@@ -158,6 +169,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#FFCCBC', contrastText: '#121212' },
     darkPalette: { main: '#FFAB91', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
+      const { latestEntry } = getFirstAndLastEntry(data.pump);
       let summaries: string[] = [];
 
       const averages = getAverages(
@@ -192,6 +204,12 @@ const config: Record<string, ConfigEntry> = {
         ]);
       }
 
+      if (summaries.length > 0) {
+        summaries.push(
+          `Last pump was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
+        );
+      }
+
       return summaries;
     },
     fields: [
@@ -216,6 +234,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#FFF9C4', contrastText: '#121212' },
     darkPalette: { main: '#FFF59D', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
+      const { latestEntry } = getFirstAndLastEntry(data.nurse);
       const averages = getAverages(
         data,
         ['nurse'],
@@ -230,6 +249,7 @@ const config: Record<string, ConfigEntry> = {
         `Average ${formatMsToMinSec(daysAverage)} per day`,
         `Average ${formatMsToMinSec(average)} per nurse`,
         `Average ${averagePerDay} nurse(s) per day`,
+        `Last nurse was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
       ];
     },
     fields: [
@@ -259,6 +279,7 @@ const config: Record<string, ConfigEntry> = {
     lightPalette: { main: '#D1C4E9', contrastText: '#121212' },
     darkPalette: { main: '#B39DDB', contrastText: '#121212' },
     getSummary: (data: BabyData, startDate: Dayjs, endDate: Dayjs) => {
+      const { latestEntry } = getFirstAndLastEntry(data.sleep);
       const summaries: string[] = [];
 
       const averages = getAverages(
@@ -305,6 +326,12 @@ const config: Record<string, ConfigEntry> = {
         );
       }
 
+      if (summaries.length > 0) {
+        summaries.push(
+          `Last sleep was: ${dayjs().diff(dayjs(latestEntry?.start_time), 'hour')} hour(s) ago`,
+        );
+      }
+
       return summaries;
     },
     fields: [
@@ -336,7 +363,7 @@ const config: Record<string, ConfigEntry> = {
       }
 
       return [
-        `Last bath was ${new Date(latestEntry.start_time).toLocaleString()}`,
+        `Last bath was ${dayjs(latestEntry.start_time).format('dddd MMMM Do YYYY [at] h:mm a')}`,
       ];
     },
     fields: [
@@ -358,7 +385,7 @@ const config: Record<string, ConfigEntry> = {
       if (latestEntry) {
         const grams = latestEntry.extra1 as number;
         summaries.push(
-          `Latest weight: ${grams} grams (${gramsToLB(grams)}) on ${new Date(latestEntry.start_time).toLocaleString()}`,
+          `Latest weight: ${grams} grams (${gramsToLB(grams)}) on ${new Date(latestEntry.start_time).toLocaleDateString()}`,
         );
       }
 
@@ -392,7 +419,7 @@ const config: Record<string, ConfigEntry> = {
       if (latestEntry) {
         const inches = latestEntry.extra1 as number;
         summaries.push(
-          `Latest height: ${inches} " (${inchesToFootInches(inches)}) on ${new Date(latestEntry.start_time).toLocaleString()}`,
+          `Latest height: ${inches} " (${inchesToFootInches(inches)}) on ${new Date(latestEntry.start_time).toLocaleDateString()}`,
         );
       }
 

@@ -10,7 +10,13 @@ import { Box } from '@mui/material';
 
 import appIconUrl from '../../assets/baby_b_svg.svg';
 
-function AppIcon({ sx: { fontSize = '3em' } }: { sx: { fontSize: string } }) {
+function AppIcon({
+  sx: { fontSize = '3em' },
+  includeBorder = false,
+}: {
+  sx: { fontSize: string };
+  includeBorder?: boolean;
+}) {
   return (
     <Box
       component="img"
@@ -22,6 +28,7 @@ function AppIcon({ sx: { fontSize = '3em' } }: { sx: { fontSize: string } }) {
         verticalAlign: 'middle',
         borderRadius: 50,
         backgroundColor: 'white',
+        border: includeBorder ? 1 : 0,
       }}
     />
   );
