@@ -1,6 +1,3 @@
-// Helper for getting the first ever entry and last entry ever for a given entry
-// Also provides timeAgo which represents the num of hours and mins between now and latest entry
-
 import dayjs from 'dayjs';
 import type { Entry } from '../../types';
 
@@ -28,16 +25,21 @@ export default function getFirstAndLastEntry(tabData: Entry[]): {
   let timeAgo: string | null = null;
 
   if (latestEntry) {
-    const diffInMinutes = dayjs().diff(
-      dayjs((latestEntry as Entry).start_time),
-      'minute',
-    );
+    const now = dayjs();
+    const start = dayjs((latestEntry as Entry).start_time);
+    const diffInMinutes = now.diff(start, 'minute');
 
-    // Calculate hours and the remaining minutes
-    const h = Math.floor(diffInMinutes / 60);
-    const m = diffInMinutes % 60;
-
-    timeAgo = h > 0 ? `${h}h ${m}m` : `${m}m`;
+    // 1. If more than 24 hours (1440 minutes)
+    if (diffInMinutes >= 1440) {
+      const days = Math.floor(diffInMinutes / 1440);
+      timeAgo = days === 1 ? '1 day ago' : `${days} days ago`;
+    }
+    // 2. If under 24 hours, show h/m
+    else {
+      const h = Math.floor(diffInMinutes / 60);
+      const m = diffInMinutes % 60;
+      timeAgo = h > 0 ? `${h}h ${m}m ago` : `${m}m ago`;
+    }
   }
 
   return { firstEntry, latestEntry, timeAgo };
