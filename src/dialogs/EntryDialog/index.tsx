@@ -46,6 +46,8 @@ export function useEntryDialog() {
 export function EntryDialog() {
   const { tab, editId } = useAtomValue(entryDialogPropsAtom);
   const tabConfig = config[tab ?? ''];
+  const Icon = tabConfig ? tabConfig.Icon : () => null;
+
   const { closeEntryDialog } = useEntryDialog();
   const { data: babiesData } = useBabiesData();
 
@@ -133,7 +135,8 @@ export function EntryDialog() {
 
   return (
     <Dialog open={!!tab} onClose={closeEntryDialog}>
-      <DialogTitle>
+      <DialogTitle sx={{ alignItems: 'center' }}>
+        <Icon sx={{ fontSize: '1.25rem', mr: 0.5 }} />
         {editId ? `Edit ${tab} entry` : `Add ${tab} entry`}
       </DialogTitle>
       <DialogContent>

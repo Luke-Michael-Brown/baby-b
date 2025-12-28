@@ -1,11 +1,15 @@
 // React component for SummaryItem
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import config from '../../config';
 import useTabSummary from '../../hooks/useTabSummary';
+import { IconButton } from '@mui/material';
+import TableChartIcon from '@mui/icons-material/TableChart';
+import { useSetAtom } from 'jotai';
+import selectedTabAtom from '../../atoms/selectedTabAtom';
 
 interface Props {
   tab: string;
@@ -14,6 +18,12 @@ interface Props {
 function SummaryItem({ tab }: Props) {
   const Icon = config[tab].Icon;
   const summaries = useTabSummary({ tab });
+
+  const setSelectedTab = useSetAtom(selectedTabAtom);
+
+  const goToTab = useCallback(() => {
+    setSelectedTab(tab);
+  }, [setSelectedTab, tab]);
 
   return summaries.length > 0 ? (
     <Paper
@@ -27,10 +37,14 @@ function SummaryItem({ tab }: Props) {
       <Stack spacing={1}>
         <Stack spacing={1}>
           <Stack spacing={1} direction="row">
-            <Icon sx={{ fontSize: '1.5em' }} />
-            <Typography variant="body1" sx={{ flexGrow: 1 }}>
+            <Icon sx={{ fontSize: '2em' }} />
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </Typography>
+
+            <IconButton sx={{ p: 0 }} onClick={goToTab} color="inherit">
+              <TableChartIcon sx={{ fontSize: '1.25em' }} />
+            </IconButton>
           </Stack>
 
           <Stack spacing={0}>
