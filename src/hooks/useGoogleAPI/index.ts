@@ -1,13 +1,10 @@
 import { useEffect, useCallback } from 'react';
 import { atom, useAtom } from 'jotai';
+
 import createCacheMap from '../../utils/createCacheMap';
 
 type TokenClient = google.accounts.oauth2.TokenClient;
 type TokenResponse = google.accounts.oauth2.TokenResponse;
-
-/* ------------------------------------------------------------------ */
-/* Atoms & Cache                                                      */
-/* ------------------------------------------------------------------ */
 
 const authAtom = atom<{
   accessToken?: string;
@@ -26,53 +23,11 @@ const {
 } = createCacheMap('baby_b_gapi_idcache');
 
 /* ------------------------------------------------------------------ */
-/* Setup / Bootstrap Hook                                             */
+/* Setup / Bootstrap                                                   */
 /* ------------------------------------------------------------------ */
 
 export function useGoogleAPISetup() {
-  const [{ tokenClient, isSignedIn }, setAuth] = useAtom(authAtom);
-
-  // Internal sign out helper to avoid circular deps
-  const handleInternalSignOut = useCallback(() => {
-    localStorage.removeItem('baby_b_gapi_auth');
-    localStorage.removeItem('baby_b_gapi_idcache');
-    setAuth(old => ({
-      ...old,
-      accessToken: undefined,
-      isSignedIn: false,
-    }));
-    // Force a reload to clear all query caches and sensitive memory
-    window.location.reload();
-  }, [setAuth]);
-
-  const tryRestoreToken = useCallback(() => {
-    if (!tokenClient) return;
-
-    const saved = localStorage.getItem('baby_b_gapi_auth');
-    if (!saved) {
-      if (isSignedIn) handleInternalSignOut();
-      return;
-    }
-
-    const { token, expiresAt } = JSON.parse(saved) as {
-      token?: string;
-      expiresAt?: number;
-    };
-
-    // 1. If token is valid (with 60s buffer), just restore it
-    if (token && expiresAt && Date.now() < expiresAt - 60000) {
-      setAuth(old => ({
-        ...old,
-        accessToken: token,
-        isSignedIn: true,
-      }));
-    }
-    // 2. If expired or nearly expired, attempt silent refresh
-    else {
-      console.log('Token expired/expiring. Attempting silent refresh...');
-      tokenClient.requestAccessToken({ prompt: '' });
-    }
-  }, [tokenClient, setAuth, isSignedIn, handleInternalSignOut]);
+  const [{ tokenClient }, setAuth] = useAtom(authAtom);
 
   useEffect(() => {
     const scriptId = 'gis-script';
@@ -85,17 +40,10 @@ export function useGoogleAPISetup() {
         scope:
           'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.readonly',
         callback: (tokenResponse: TokenResponse) => {
-          // IF SILENT REFRESH FAILS: Google returns an error property
-          if (tokenResponse.error) {
-            console.warn('Google Auth Error:', tokenResponse.error);
-            handleInternalSignOut();
-            return;
-          }
-
           if (!tokenResponse.access_token) return;
 
           const expiresAt =
-            Date.now() + (parseFloat(tokenResponse.expires_in) || 3600) * 1000;
+            Date.now() + (parseFloat(tokenResponse.expires_in) ?? 3600) * 1000;
 
           localStorage.setItem(
             'baby_b_gapi_auth',
@@ -128,43 +76,52 @@ export function useGoogleAPISetup() {
     script.defer = true;
     script.onload = initClient;
     document.body.appendChild(script);
-  }, [setAuth, handleInternalSignOut]);
+  }, [setAuth]);
 
-  // Initial restoration
+  const tryRestoreToken = useCallback(() => {
+    if (!tokenClient) return;
+
+    const saved = localStorage.getItem('baby_b_gapi_auth');
+    if (!saved) return;
+
+    const { token, expiresAt } = JSON.parse(saved) as {
+      token?: string;
+      expiresAt?: number;
+    };
+
+    if (token && expiresAt && Date.now() < expiresAt) {
+      setAuth(old => ({
+        ...old,
+        accessToken: token,
+        isSignedIn: true,
+      }));
+    } else {
+      tokenClient.requestAccessToken({ prompt: '' });
+    }
+  }, [tokenClient, setAuth]);
+
   useEffect(() => {
     if (tokenClient) tryRestoreToken();
   }, [tokenClient, tryRestoreToken]);
 
-  // Visibility & Focus listeners
   useEffect(() => {
     if (!tokenClient) return;
 
     const onVisible = () => {
-      if (document.visibilityState === 'visible') tryRestoreToken();
+      if (document.visibilityState === 'visible') {
+        tryRestoreToken();
+      }
     };
 
     window.addEventListener('focus', tryRestoreToken);
     document.addEventListener('visibilitychange', onVisible);
 
+    // eslint-disable-next-line consistent-return
     return () => {
       window.removeEventListener('focus', tryRestoreToken);
       document.removeEventListener('visibilitychange', onVisible);
     };
   }, [tokenClient, tryRestoreToken]);
-
-  // Background expiry monitor (Runs every 5 mins)
-  useEffect(() => {
-    if (!isSignedIn) return;
-
-    const interval = setInterval(
-      () => {
-        tryRestoreToken();
-      },
-      1000 * 60 * 5,
-    );
-
-    return () => clearInterval(interval);
-  }, [isSignedIn, tryRestoreToken]);
 
   // iOS PWA resume detection
   useEffect(() => {
@@ -177,12 +134,15 @@ export function useGoogleAPISetup() {
       last = now;
     }, 2000);
 
-    return () => clearInterval(interval);
+    // eslint-disable-next-line consistent-return
+    return () => {
+      clearInterval(interval);
+    };
   }, [tokenClient, tryRestoreToken]);
 }
 
 /* ------------------------------------------------------------------ */
-/* Public API Hook                                                    */
+/* Public API                                                          */
 /* ------------------------------------------------------------------ */
 
 export default function useGoogleAPI() {
@@ -200,7 +160,9 @@ export default function useGoogleAPI() {
           `https://oauth2.googleapis.com/revoke?token=${accessToken}`,
           {
             method: 'POST',
-            headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+            headers: {
+              'Content-type': 'application/x-www-form-urlencoded',
+            },
           },
         );
       } catch (err) {
@@ -224,7 +186,9 @@ export default function useGoogleAPI() {
 
   const resolvePath = useCallback(
     async (filePath: string, createMissing = false, retry = true) => {
-      if (!accessToken) throw new Error('No access token. Please sign in.');
+      if (!accessToken) {
+        throw new Error('No access token. Please sign in first.');
+      }
 
       const parts = filePath.split('/');
       const fileName = parts.pop()!;
@@ -233,6 +197,7 @@ export default function useGoogleAPI() {
       try {
         for (const folderName of parts) {
           const cacheKey = `${parentId}/${folderName}`;
+
           if (idCache.has(cacheKey)) {
             parentId = idCache.get(cacheKey)!;
             continue;
@@ -240,18 +205,22 @@ export default function useGoogleAPI() {
 
           const res = await fetch(
             `https://www.googleapis.com/drive/v3/files?q=name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
-            { headers: { Authorization: `Bearer ${accessToken}` } },
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            },
           );
 
           const data = await res.json();
+
           if (data.files?.length) {
             parentId = data.files[0].id;
             addToIdCache(cacheKey, parentId);
             continue;
           }
 
-          if (!createMissing)
+          if (!createMissing) {
             throw new Error(`Folder "${folderName}" not found`);
+          }
 
           const createRes = await fetch(
             'https://www.googleapis.com/drive/v3/files',
@@ -275,16 +244,20 @@ export default function useGoogleAPI() {
         }
 
         const fileKey = `${parentId}/${fileName}`;
+
         if (idCache.has(fileKey)) {
           return { parentId, fileName, fileId: idCache.get(fileKey)! };
         }
 
         const fileRes = await fetch(
           `https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and trashed=false and ('${parentId}' in parents or sharedWithMe)&fields=files(id)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=allDrives`,
-          { headers: { Authorization: `Bearer ${accessToken}` } },
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
         );
 
         const fileData = await fileRes.json();
+
         if (fileData.files?.length) {
           const id = fileData.files[0].id;
           addToIdCache(fileKey, id);
@@ -310,8 +283,11 @@ export default function useGoogleAPI() {
 
       const res = await fetch(
         `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-        { headers: { Authorization: `Bearer ${accessToken}` } },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
       );
+
       return res.json();
     },
     [accessToken, resolvePath],
@@ -320,6 +296,7 @@ export default function useGoogleAPI() {
   const uploadJsonToDrive = useCallback(
     async (data: unknown, filePath = 'baby_b_tracker/babies_data.json') => {
       const { parentId, fileName, fileId } = await resolvePath(filePath, true);
+
       const blob = new Blob([JSON.stringify(data, null, 2)], {
         type: 'application/json',
       });
@@ -333,6 +310,7 @@ export default function useGoogleAPI() {
             body: blob,
           },
         );
+
         return { updated: true, fileId };
       }
 
@@ -356,6 +334,7 @@ export default function useGoogleAPI() {
 
       const created = await res.json();
       addToIdCache(`${parentId}/${fileName}`, created.id);
+
       return { created: true, fileId: created.id };
     },
     [accessToken, resolvePath],
