@@ -11,13 +11,13 @@ export default function useCurrentPage() {
   const { isLoading } = useBabiesList();
   const selectedBaby = useAtomValue(selectedBabyAtom);
 
-  if (!isSignedIn) {
-    return 'login' as Page;
-  }
-
-  if (isLoading || !selectedBaby) {
+  if (isLoading && !selectedBaby) {
     return 'loading' as Page;
   }
 
-  return 'content' as Page;
+  if (selectedBaby && isSignedIn) {
+    return 'content' as Page;
+  }
+
+  return 'login' as Page;
 }

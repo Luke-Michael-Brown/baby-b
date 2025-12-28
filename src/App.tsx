@@ -25,19 +25,16 @@ export function App() {
   useGoogleAPISetup();
 
   const currentPage = useCurrentPage();
-  const { data: babiesList, isLoading } = useBabiesList();
+  const { data: babiesList } = useBabiesList();
   const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
 
   useEffect(() => {
-    if (
-      selectedBaby === null &&
-      !isLoading &&
-      babiesList &&
-      babiesList.length > 0
-    ) {
+    if (selectedBaby === null && babiesList && babiesList.length > 0) {
       setSelectedBaby(babiesList[0]);
+    } else if (babiesList?.length === 0) {
+      setSelectedBaby(null);
     }
-  }, [selectedBaby, babiesList, isLoading, setSelectedBaby]);
+  }, [selectedBaby, babiesList, setSelectedBaby]);
 
   return (
     <Box
