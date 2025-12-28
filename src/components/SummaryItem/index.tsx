@@ -1,15 +1,15 @@
 // React component for SummaryItem
 import { memo, useCallback } from 'react';
+import { useSetAtom } from 'jotai';
+import TableChartIcon from '@mui/icons-material/TableChart';
+import { IconButton } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
+import selectedTabAtom from '../../atoms/selectedTabAtom';
 import config from '../../config';
 import useTabSummary from '../../hooks/useTabSummary';
-import { IconButton } from '@mui/material';
-import TableChartIcon from '@mui/icons-material/TableChart';
-import { useSetAtom } from 'jotai';
-import selectedTabAtom from '../../atoms/selectedTabAtom';
 
 interface Props {
   tab: string;

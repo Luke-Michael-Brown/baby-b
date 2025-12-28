@@ -116,7 +116,6 @@ export function useGoogleAPISetup() {
     window.addEventListener('focus', tryRestoreToken);
     document.addEventListener('visibilitychange', onVisible);
 
-    // eslint-disable-next-line consistent-return
     return () => {
       window.removeEventListener('focus', tryRestoreToken);
       document.removeEventListener('visibilitychange', onVisible);
@@ -134,7 +133,6 @@ export function useGoogleAPISetup() {
       last = now;
     }, 2000);
 
-    // eslint-disable-next-line consistent-return
     return () => {
       clearInterval(interval);
     };
