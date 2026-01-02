@@ -3,11 +3,13 @@
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs, { Dayjs } from 'dayjs';
 
-import useGoogleAPI from '../../hooks/useGoogleAPI';
+import { useGoogleFileAPI } from '../../hooks/useGoogleAPI';
 
 export default function useAddEntry() {
   const qc = useQueryClient();
-  const { uploadJsonToDrive, fetchJsonFromDrive } = useGoogleAPI();
+  const { uploadJsonToDrive, fetchJsonFromDrive } = useGoogleFileAPI({
+    filePath: import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_NAME!,
+  });
 
   return async (
     babyName: string,

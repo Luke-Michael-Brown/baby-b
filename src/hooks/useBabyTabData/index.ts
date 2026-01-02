@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import selectedBabyAtom from '../../atoms/selectedBabyAtom';
 import selectedTabAtom from '../../atoms/selectedTabAtom';
 import type { BabiesData, Entry } from '../../types';
-import useGoogleAPI from '../useGoogleAPI';
+import { useGoogleFileAPI } from '../useGoogleAPI';
 
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
   year: 'numeric',
@@ -20,7 +20,9 @@ interface Props {
 }
 
 export default function useBabyTabData({ overrideTab }: Props = {}) {
-  const { fetchJsonFromDrive } = useGoogleAPI();
+  const { fetchJsonFromDrive } = useGoogleFileAPI({
+    filePath: import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_NAME!,
+  });
   const { tab } = useAtomValue(selectedTabAtom);
   const selectedBaby = useAtomValue(selectedBabyAtom);
 

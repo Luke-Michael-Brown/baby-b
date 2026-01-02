@@ -1,9 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
-import useGoogleAPI from '../useGoogleAPI';
+import { useGoogleFileAPI } from '../useGoogleAPI';
 
 export default function useBabiesList() {
-  const { fetchJsonFromDrive } = useGoogleAPI();
+  const { fetchJsonFromDrive } = useGoogleFileAPI({
+    filePath: import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_NAME!,
+  });
 
   return useQuery({
     queryKey: ['babies-data'],

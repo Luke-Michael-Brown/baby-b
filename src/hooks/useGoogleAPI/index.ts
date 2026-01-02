@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 
 import createCacheMap from '../../utils/createCacheMap';
 
@@ -180,7 +180,15 @@ export default function useGoogleAPI() {
     window.location.reload();
   }, [accessToken, setAuth]);
 
-  /* ------------------------- Drive Helpers ------------------------- */
+  return {
+    isSignedIn,
+    signIn,
+    signOut,
+  };
+}
+
+export function useGoogleFileAPI({ filePath }: { filePath: string }) {
+  const { accessToken } = useAtomValue(authAtom);
 
   const resolvePath = useCallback(
     async (filePath: string, createMissing = false, retry = true) => {
@@ -274,25 +282,22 @@ export default function useGoogleAPI() {
     [accessToken],
   );
 
-  const fetchJsonFromDrive = useCallback(
-    async (filePath = 'baby_b_tracker/babies_data.json') => {
-      const { fileId } = await resolvePath(filePath);
-      if (!fileId) throw new Error('File not found');
+  const fetchJsonFromDrive = useCallback(async () => {
+    const { fileId } = await resolvePath(filePath);
+    if (!fileId) throw new Error('File not found');
 
-      const res = await fetch(
-        `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        },
-      );
+    const res = await fetch(
+      `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
 
-      return res.json();
-    },
-    [accessToken, resolvePath],
-  );
+    return res.json();
+  }, [accessToken, resolvePath]);
 
   const uploadJsonToDrive = useCallback(
-    async (data: unknown, filePath = 'baby_b_tracker/babies_data.json') => {
+    async (data: unknown) => {
       const { parentId, fileName, fileId } = await resolvePath(filePath, true);
 
       const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -339,10 +344,6 @@ export default function useGoogleAPI() {
   );
 
   return {
-    isSignedIn,
-    accessToken,
-    signIn,
-    signOut,
     fetchJsonFromDrive,
     uploadJsonToDrive,
   };
