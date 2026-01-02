@@ -1,5 +1,5 @@
 // React component for ToggleThemeButton
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Tooltip, IconButton } from '@mui/material';
@@ -11,9 +11,9 @@ function ToggleThemeButton() {
   const theme = useTheme();
   const mode = theme?.palette?.mode ?? 'light';
   const { setMode } = useLightDark();
-  const onToggleMode = () => {
+  const onToggleMode = useCallback(() => {
     setMode(mode === 'light' ? 'dark' : 'light');
-  };
+  }, []);
 
   return (
     <Tooltip title="Toggle theme">

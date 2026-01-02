@@ -7,7 +7,7 @@
 // users to switch between babies and update the application's data context
 // accordingly.
 
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { Select, MenuItem, Box, Typography } from '@mui/material';
 
@@ -19,9 +19,9 @@ function BabySelector() {
   const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
   const { data: babiesList = [] } = useBabiesList();
 
-  const onBabySelected = (event: SelectChangeEvent<string>) => {
+  const onBabySelected = useCallback((event: SelectChangeEvent<string>) => {
     setSelectedBaby(event.target.value);
-  };
+  }, []);
 
   return (
     <Box

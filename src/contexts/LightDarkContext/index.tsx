@@ -3,6 +3,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -28,10 +29,10 @@ export function LightDarkProvider({ children }: { children: ReactNode }) {
   const [mode, _setMode] = useState<Mode>(
     localStorage.getItem('mode') === 'dark' ? 'dark' : 'light',
   );
-  const setMode = (newMode: Mode) => {
+  const setMode = useCallback((newMode: Mode) => {
     _setMode(newMode);
     localStorage.setItem('mode', newMode);
-  };
+  }, []);
 
   const theme = useTheme(mode);
   const value = useMemo(() => ({ mode, setMode }), [mode]);

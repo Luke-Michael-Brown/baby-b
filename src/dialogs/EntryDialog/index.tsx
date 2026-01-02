@@ -1,6 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import { memo, useEffect, useMemo, useState, type FormEvent } from 'react';
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type FormEvent,
+} from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { atom } from 'jotai';
 import Button from '@mui/material/Button';
@@ -33,12 +40,12 @@ export const entryDialogPropsAtom = atom<EntryDialogProps>({});
 
 export function useEntryDialog() {
   const setEntryDialogProps = useSetAtom(entryDialogPropsAtom);
-  const openEntryDialog = (props: EntryDialogProps) => {
+  const openEntryDialog = useCallback((props: EntryDialogProps) => {
     setEntryDialogProps(props);
-  };
-  const closeEntryDialog = () => {
+  }, []);
+  const closeEntryDialog = useCallback(() => {
     setEntryDialogProps({});
-  };
+  }, []);
 
   return { openEntryDialog, closeEntryDialog };
 }

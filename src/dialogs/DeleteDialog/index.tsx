@@ -1,7 +1,7 @@
 // Dialog component for DeleteDialog
 /* eslint-disable react-refresh/only-export-components */
 
-import { memo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -22,12 +22,12 @@ const deleteDialogPropsAtom = atom<DeleteDialogProps>({});
 
 export function useDeleteDialog() {
   const setDeleteDialogProps = useSetAtom(deleteDialogPropsAtom);
-  const openDeleteDialog = (props: DeleteDialogProps) => {
+  const openDeleteDialog = useCallback((props: DeleteDialogProps) => {
     setDeleteDialogProps(props);
-  };
-  const closeDeleteDialog = () => {
+  }, []);
+  const closeDeleteDialog = useCallback(() => {
     setDeleteDialogProps({});
-  };
+  }, []);
 
   return { openDeleteDialog, closeDeleteDialog };
 }

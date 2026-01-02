@@ -2,7 +2,7 @@
 // icon, baby selector, theme toggle, and logout button for navigation and user
 // controls.
 
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { useAtom } from 'jotai';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -23,9 +23,9 @@ function Header() {
     setSelectedTab,
   ] = useAtom(selectedTabAtom);
 
-  const onTitleClick = () => {
+  const onTitleClick = useCallback(() => {
     setSelectedTab('summary');
-  };
+  }, []);
 
   return (
     <Box>

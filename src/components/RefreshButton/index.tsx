@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, useRef } from 'react';
+import { memo, useState, useEffect, useRef, useCallback } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Tooltip, Box, IconButton } from '@mui/material';
 import { useIsFetching, useQueryClient } from '@tanstack/react-query';
@@ -42,7 +42,7 @@ function RefreshButton() {
     };
   }, [isFetching, isSpinning]);
 
-  const refreshData = async () => {
+  const refreshData = useCallback(async () => {
     // Only trigger if not already busy
     if (!isSpinning) {
       await qc.invalidateQueries({
@@ -50,7 +50,7 @@ function RefreshButton() {
         exact: true,
       });
     }
-  };
+  }, [isSpinning]);
 
   if (!isSignedIn) return null;
 

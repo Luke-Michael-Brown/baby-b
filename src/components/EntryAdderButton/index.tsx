@@ -6,7 +6,7 @@
 // The button displays the capitalized tab name and triggers the dialog for data
 // entry when clicked.
 
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Button } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 import { useEntryDialog } from '../../dialogs/EntryDialog';
@@ -19,9 +19,9 @@ interface Props {
 function EntryAdderButton(props: Props) {
   const { openEntryDialog } = useEntryDialog();
 
-  const onAddButtonClicked = () => {
+  const onAddButtonClicked = useCallback(() => {
     openEntryDialog({ tab: props.tab });
-  };
+  }, []);
 
   return (
     <Button

@@ -1,5 +1,5 @@
 // React component for TabSelector
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { Box, Typography, Select, MenuItem } from '@mui/material';
 
@@ -10,9 +10,9 @@ import config from '../../config';
 function TabSelector() {
   const [{ tab }, setSelectedTab] = useAtom(selectedTabAtom);
 
-  const onTabSelected = (event: SelectChangeEvent<string>) => {
+  const onTabSelected = useCallback((event: SelectChangeEvent<string>) => {
     setSelectedTab(event.target.value);
-  };
+  }, []);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

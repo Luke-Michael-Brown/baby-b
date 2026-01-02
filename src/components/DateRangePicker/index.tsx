@@ -1,7 +1,7 @@
 // React component for picking between a range of two dates
 // Includes helper buttons to select common range
 
-import { memo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useAtom } from 'jotai';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -28,18 +28,21 @@ function DateRangePicker() {
   const [endDate, setEndDate] = useAtom(summaryEndDateAtom);
   const [open, setOpen] = useState(false);
 
-  const handleRangeSelect = (_event: unknown, value: string | null) => {
-    if (!value) return;
-    const ranges: Record<string, number> = {
-      'Last Week': 7,
-      'Last 2 Weeks': 14,
-      'Last Month': 30,
-      'Last Year': 365,
-    };
+  const handleRangeSelect = useCallback(
+    (_event: unknown, value: string | null) => {
+      if (!value) return;
+      const ranges: Record<string, number> = {
+        'Last Week': 7,
+        'Last 2 Weeks': 14,
+        'Last Month': 30,
+        'Last Year': 365,
+      };
 
-    setStartDate(dayjs().startOf('day').subtract(ranges[value], 'day'));
-    setEndDate(dayjs().endOf('day').subtract(1, 'day'));
-  };
+      setStartDate(dayjs().startOf('day').subtract(ranges[value], 'day'));
+      setEndDate(dayjs().endOf('day').subtract(1, 'day'));
+    },
+    [],
+  );
 
   return (
     <Paper sx={{ p: 1, overflow: 'hidden' }}>
