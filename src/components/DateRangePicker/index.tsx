@@ -37,11 +37,7 @@ function DateRangePicker() {
       'Last Year': 365,
     };
 
-    setStartDate(
-      dayjs()
-        .startOf('day')
-        .subtract(ranges[value] + 1, 'day'),
-    );
+    setStartDate(dayjs().startOf('day').subtract(ranges[value], 'day'));
     setEndDate(dayjs().endOf('day').subtract(1, 'day'));
   };
 

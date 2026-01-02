@@ -17,7 +17,7 @@ export default function getAverages(
 } | null {
   if (!data) return null;
 
-  const numDays = endDate.diff(startDate, 'day');
+  const numDays = endDate.diff(startDate, 'day') + 1;
   const uniqueDays = new Set<string>();
   let count = 0;
   let total = 0;
