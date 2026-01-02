@@ -19,7 +19,7 @@ import { useDeleteDialog } from '../../dialogs/DeleteDialog';
 import { useEntryDialog } from '../../dialogs/EntryDialog';
 import useBabyTabData from '../../hooks/useBabyTabData';
 import gramsToLB from '../../utils/gramsToLB';
-import inchesToFootInches from '../../utils/inchesToFootInches';
+import cmToInchesAndFeet from '../../utils/cmToInchesAndFeet';
 
 const paginationModel = { page: 0, pageSize: 100 };
 const FIELD_TO_FLEX = {
@@ -58,9 +58,9 @@ function DataTab() {
             if (field.columnFields.headerName === 'grams') {
               column.renderCell = params =>
                 `${params.value}g (${gramsToLB(params.value)})`;
-            } else if (field.columnFields.headerName === 'inches') {
+            } else if (field.columnFields.headerName === 'cm') {
               column.renderCell = params =>
-                `${params.value}" (${inchesToFootInches(params.value)})`;
+                `${params.value}cm (${cmToInchesAndFeet(params.value)})`;
             }
         }
 

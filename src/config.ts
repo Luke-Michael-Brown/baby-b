@@ -22,7 +22,7 @@ import formatMsToMinSec from './utils/formatMsToMinSec';
 import getAverages from './utils/getAverages';
 import getFirstAndLastEntry from './utils/getFirstAndLastEntry';
 import gramsToLB from './utils/gramsToLB';
-import inchesToFootInches from './utils/inchesToFootInches';
+import cmToInchesAndFeet from './utils/cmToInchesAndFeet';
 import mlToOz from './utils/mlToOz';
 
 type FieldEntry =
@@ -423,17 +423,15 @@ const config: Record<string, ConfigEntry> = {
       const summaries: string[] = [];
       const { firstEntry, latestEntry } = getFirstAndLastEntry(data.height);
       if (latestEntry) {
-        const inches = latestEntry.extra1 as number;
+        const cm = latestEntry.extra1 as number;
         summaries.push(
-          `Latest height: ${inches} " (${inchesToFootInches(inches)}) on ${new Date(latestEntry.start_time).toLocaleDateString()}`,
+          `Latest height: ${cm}cm (${cmToInchesAndFeet(cm)}) on ${new Date(latestEntry.start_time).toLocaleDateString()}`,
         );
       }
 
       if (firstEntry) {
-        const inches = firstEntry.extra1 as number;
-        summaries.push(
-          `Birth height: ${inches} " (${inchesToFootInches(inches)})`,
-        );
+        const cm = firstEntry.extra1 as number;
+        summaries.push(`Birth height: ${cm}cm (${cmToInchesAndFeet(cm)})`);
       }
 
       return summaries;
@@ -445,7 +443,7 @@ const config: Record<string, ConfigEntry> = {
       },
       {
         formType: 'number',
-        columnFields: { field: 'extra1', headerName: 'inches' },
+        columnFields: { field: 'extra1', headerName: 'cm' },
       },
     ],
   },
