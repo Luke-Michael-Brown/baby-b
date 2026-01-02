@@ -10,9 +10,12 @@ import config from '../../config';
 function TabSelector() {
   const [{ tab }, setSelectedTab] = useAtom(selectedTabAtom);
 
-  const onTabSelected = useCallback((event: SelectChangeEvent<string>) => {
-    setSelectedTab(event.target.value);
-  }, []);
+  const onTabSelected = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      setSelectedTab(event.target.value);
+    },
+    [setSelectedTab],
+  );
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

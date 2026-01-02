@@ -13,7 +13,7 @@ function ToggleThemeButton() {
   const { setMode } = useLightDark();
   const onToggleMode = useCallback(() => {
     setMode(mode === 'light' ? 'dark' : 'light');
-  }, []);
+  }, [setMode, mode]);
 
   return (
     <Tooltip title="Toggle theme">

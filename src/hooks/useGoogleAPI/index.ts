@@ -294,7 +294,7 @@ export function useGoogleFileAPI({ filePath }: { filePath: string }) {
     );
 
     return res.json();
-  }, [accessToken, resolvePath]);
+  }, [accessToken, resolvePath, filePath]);
 
   const uploadJsonToDrive = useCallback(
     async (data: unknown) => {
@@ -340,7 +340,7 @@ export function useGoogleFileAPI({ filePath }: { filePath: string }) {
 
       return { created: true, fileId: created.id };
     },
-    [accessToken, resolvePath],
+    [accessToken, resolvePath, filePath],
   );
 
   return {

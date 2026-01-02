@@ -50,7 +50,7 @@ function RefreshButton() {
         exact: true,
       });
     }
-  }, [isSpinning]);
+  }, [isSpinning, qc]);
 
   if (!isSignedIn) return null;
 

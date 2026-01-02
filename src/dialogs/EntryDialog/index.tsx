@@ -40,12 +40,15 @@ export const entryDialogPropsAtom = atom<EntryDialogProps>({});
 
 export function useEntryDialog() {
   const setEntryDialogProps = useSetAtom(entryDialogPropsAtom);
-  const openEntryDialog = useCallback((props: EntryDialogProps) => {
-    setEntryDialogProps(props);
-  }, []);
+  const openEntryDialog = useCallback(
+    (props: EntryDialogProps) => {
+      setEntryDialogProps(props);
+    },
+    [setEntryDialogProps],
+  );
   const closeEntryDialog = useCallback(() => {
     setEntryDialogProps({});
-  }, []);
+  }, [setEntryDialogProps]);
 
   return { openEntryDialog, closeEntryDialog };
 }

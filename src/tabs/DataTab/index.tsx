@@ -18,8 +18,8 @@ import TwoLineDate from '../../components/TwoLineDate';
 import { useDeleteDialog } from '../../dialogs/DeleteDialog';
 import { useEntryDialog } from '../../dialogs/EntryDialog';
 import useBabyTabData from '../../hooks/useBabyTabData';
-import gramsToLB from '../../utils/gramsToLB';
 import cmToInchesAndFeet from '../../utils/cmToInchesAndFeet';
+import gramsToLB from '../../utils/gramsToLB';
 
 const paginationModel = { page: 0, pageSize: 100 };
 const FIELD_TO_FLEX = {

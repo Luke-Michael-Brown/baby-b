@@ -1,9 +1,9 @@
+import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
 import { useGoogleFileAPI } from '../../hooks/useGoogleAPI';
 import type { Entry } from '../../types';
-import { useCallback } from 'react';
 
 export default function useDeleteEntry() {
   const qc = useQueryClient();

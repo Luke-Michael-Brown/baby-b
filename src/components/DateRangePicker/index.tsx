@@ -41,7 +41,7 @@ function DateRangePicker() {
       setStartDate(dayjs().startOf('day').subtract(ranges[value], 'day'));
       setEndDate(dayjs().endOf('day').subtract(1, 'day'));
     },
-    [],
+    [setStartDate, setEndDate],
   );
 
   return (

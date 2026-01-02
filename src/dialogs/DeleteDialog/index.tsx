@@ -22,12 +22,15 @@ const deleteDialogPropsAtom = atom<DeleteDialogProps>({});
 
 export function useDeleteDialog() {
   const setDeleteDialogProps = useSetAtom(deleteDialogPropsAtom);
-  const openDeleteDialog = useCallback((props: DeleteDialogProps) => {
-    setDeleteDialogProps(props);
-  }, []);
+  const openDeleteDialog = useCallback(
+    (props: DeleteDialogProps) => {
+      setDeleteDialogProps(props);
+    },
+    [setDeleteDialogProps],
+  );
   const closeDeleteDialog = useCallback(() => {
     setDeleteDialogProps({});
-  }, []);
+  }, [setDeleteDialogProps]);
 
   return { openDeleteDialog, closeDeleteDialog };
 }

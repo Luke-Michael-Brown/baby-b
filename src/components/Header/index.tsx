@@ -25,7 +25,7 @@ function Header() {
 
   const onTitleClick = useCallback(() => {
     setSelectedTab('summary');
-  }, []);
+  }, [setSelectedTab]);
 
   return (
     <Box>

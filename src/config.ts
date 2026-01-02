@@ -18,11 +18,11 @@ import AppIcon from './components/AppIcon';
 import DataTab from './tabs/DataTab';
 import SummaryTab from './tabs/SummaryTab';
 import type { BabyData } from './types';
+import cmToInchesAndFeet from './utils/cmToInchesAndFeet';
 import formatMsToMinSec from './utils/formatMsToMinSec';
 import getAverages from './utils/getAverages';
 import getFirstAndLastEntry from './utils/getFirstAndLastEntry';
 import gramsToLB from './utils/gramsToLB';
-import cmToInchesAndFeet from './utils/cmToInchesAndFeet';
 import mlToOz from './utils/mlToOz';
 
 type FieldEntry =

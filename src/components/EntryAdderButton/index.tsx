@@ -17,11 +17,12 @@ interface Props {
 }
 
 function EntryAdderButton(props: Props) {
+  const { tab } = props;
   const { openEntryDialog } = useEntryDialog();
 
   const onAddButtonClicked = useCallback(() => {
-    openEntryDialog({ tab: props.tab });
-  }, []);
+    openEntryDialog({ tab: tab });
+  }, [openEntryDialog, tab]);
 
   return (
     <Button
@@ -32,7 +33,7 @@ function EntryAdderButton(props: Props) {
       onClick={onAddButtonClicked}
       sx={props.sx}
     >
-      {props.tab.charAt(0).toUpperCase() + props.tab.slice(1)}
+      {tab.charAt(0).toUpperCase() + tab.slice(1)}
     </Button>
   );
 }

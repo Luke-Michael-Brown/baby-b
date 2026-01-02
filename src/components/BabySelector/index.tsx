@@ -19,9 +19,12 @@ function BabySelector() {
   const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
   const { data: babiesList = [] } = useBabiesList();
 
-  const onBabySelected = useCallback((event: SelectChangeEvent<string>) => {
-    setSelectedBaby(event.target.value);
-  }, []);
+  const onBabySelected = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      setSelectedBaby(event.target.value);
+    },
+    [setSelectedBaby],
+  );
 
   return (
     <Box
