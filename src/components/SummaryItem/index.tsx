@@ -16,7 +16,8 @@ interface Props {
 }
 
 function SummaryItem({ tab }: Props) {
-  const Icon = config[tab].Icon;
+  const tabConfig = config[tab];
+  const Icon = tabConfig.Icon;
   const summaries = useTabSummary({ tab });
 
   const setSelectedTab = useSetAtom(selectedTabAtom);
@@ -42,9 +43,11 @@ function SummaryItem({ tab }: Props) {
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </Typography>
 
-            <IconButton sx={{ p: 0 }} onClick={goToTab} color="inherit">
-              <TableChartIcon sx={{ fontSize: '1.25em' }} />
-            </IconButton>
+            {tabConfig.TabComponent ? (
+              <IconButton sx={{ p: 0 }} onClick={goToTab} color="inherit">
+                <TableChartIcon sx={{ fontSize: '1.25em' }} />
+              </IconButton>
+            ) : null}
           </Stack>
 
           <Stack spacing={0}>
