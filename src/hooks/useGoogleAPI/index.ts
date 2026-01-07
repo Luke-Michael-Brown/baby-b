@@ -113,28 +113,10 @@ export function useGoogleAPISetup() {
       }
     };
 
-    window.addEventListener('focus', tryRestoreToken);
     document.addEventListener('visibilitychange', onVisible);
 
     return () => {
-      window.removeEventListener('focus', tryRestoreToken);
       document.removeEventListener('visibilitychange', onVisible);
-    };
-  }, [tokenClient, tryRestoreToken]);
-
-  // iOS PWA resume detection
-  useEffect(() => {
-    if (!tokenClient) return;
-
-    let last = Date.now();
-    const interval = setInterval(() => {
-      const now = Date.now();
-      if (now - last > 3000) tryRestoreToken();
-      last = now;
-    }, 2000);
-
-    return () => {
-      clearInterval(interval);
     };
   }, [tokenClient, tryRestoreToken]);
 }
