@@ -77,7 +77,7 @@ const config: Record<string, ConfigEntry> = {
         `Average ${daysAverage}mL (${mlToOz(daysAverage)}oz) per day`,
         `Average ${average}mL (${mlToOz(average)}oz) per bottle`,
         `Average ${averagePerDay} bottle(s) per day`,
-        `Last bottle was: ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
+        `Last bottle was: ${latestEntry?.extra1}mL, ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
       ];
     },
     fields: [
@@ -146,7 +146,7 @@ const config: Record<string, ConfigEntry> = {
 
       if (summaries.length > 0) {
         summaries.push(
-          `Last diaper was: ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
+          `Last diaper was: ${latestEntry?.extra1}, ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
         );
       }
 
@@ -209,7 +209,7 @@ const config: Record<string, ConfigEntry> = {
 
       if (summaries.length > 0) {
         summaries.push(
-          `Last pump was: ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
+          `Last pump was: ${latestEntry?.extra2}mL, ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
         );
       }
 
@@ -333,7 +333,7 @@ const config: Record<string, ConfigEntry> = {
 
       if (summaries.length > 0) {
         summaries.push(
-          `Last sleep was: ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
+          `Last sleep was: ${latestEntry?.extra1}, ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
         );
       }
 
