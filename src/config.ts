@@ -369,7 +369,7 @@ const config: Record<string, ConfigEntry> = {
       const latestDate = dayjs(latestEntry.start_time);
 
       return [
-        `Last bath was: ${timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
+        `Last bath was: ${timeAgo} on ${latestDate.format('YYYY-MM-DD')}`,
       ];
     },
     fields: [
@@ -387,11 +387,14 @@ const config: Record<string, ConfigEntry> = {
     darkPalette: { main: '#BCAAA4', contrastText: '#121212' },
     getSummary: (data: BabyData) => {
       const summaries: string[] = [];
-      const { firstEntry, latestEntry } = getFirstAndLastEntry(data.weight);
+      const { firstEntry, latestEntry, timeAgo } = getFirstAndLastEntry(
+        data.weight,
+      );
       if (latestEntry) {
+        const latestDate = dayjs(latestEntry.start_time);
         const grams = latestEntry.extra1 as number;
         summaries.push(
-          `Latest weight: ${grams} grams (${gramsToLB(grams)}) on ${new Date(latestEntry.start_time).toLocaleDateString()}`,
+          `Latest weight: ${grams} grams (${gramsToLB(grams)}) measured ${timeAgo} on ${latestDate.format('YYYY-MM-DD')}`,
         );
       }
 
@@ -421,11 +424,14 @@ const config: Record<string, ConfigEntry> = {
     darkPalette: { main: '#FFCC80', contrastText: '#121212' },
     getSummary: (data: BabyData) => {
       const summaries: string[] = [];
-      const { firstEntry, latestEntry } = getFirstAndLastEntry(data.height);
+      const { firstEntry, latestEntry, timeAgo } = getFirstAndLastEntry(
+        data.height,
+      );
       if (latestEntry) {
+        const latestDate = dayjs(latestEntry.start_time);
         const cm = latestEntry.extra1 as number;
         summaries.push(
-          `Latest height: ${cm}cm (${cmToInchesAndFeet(cm)}) on ${new Date(latestEntry.start_time).toLocaleDateString()}`,
+          `Latest height: ${cm}cm (${cmToInchesAndFeet(cm)}) measured ${timeAgo} on ${latestDate.format('YYYY-MM-DD')}`,
         );
       }
 
@@ -491,6 +497,30 @@ const config: Record<string, ConfigEntry> = {
         );
 
         summaries.push(`Bottle breast milk percent: ${breastMilkPercent}%`);
+      }
+
+      const feedFirstAndLast = getFirstAndLastEntry([
+        ...data.bottle,
+        ...data.nurse,
+      ]);
+      if (feedFirstAndLast.latestEntry) {
+        const latestDate = dayjs(feedFirstAndLast.latestEntry.start_time);
+        summaries.push(
+          `Last feed was: ${feedFirstAndLast.timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
+        );
+      }
+
+      const milkRemovalFirstAndLast = getFirstAndLastEntry([
+        ...data.pump,
+        ...data.nurse,
+      ]);
+      if (milkRemovalFirstAndLast.latestEntry) {
+        const latestDate = dayjs(
+          milkRemovalFirstAndLast.latestEntry.start_time,
+        );
+        summaries.push(
+          `Last milk removal was: ${milkRemovalFirstAndLast.timeAgo} at ${latestDate.format('h:mm A')} on ${latestDate.format('YYYY-MM-DD')}`,
+        );
       }
 
       return summaries;
