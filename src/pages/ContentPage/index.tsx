@@ -6,8 +6,8 @@ import { Box } from '@mui/material';
 import Footer from '../../components/Footer';
 import SecondaryBar from '../../components/SecondaryBar';
 import TabContent from '../../components/TabContent';
-import { EntryDialog } from '../../dialogs/EntryDialog';
 import { DeleteDialog } from '../../dialogs/DeleteDialog';
+import { EntryDialog } from '../../dialogs/EntryDialog';
 
 function ContentPage() {
   return (

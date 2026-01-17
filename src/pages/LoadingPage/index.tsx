@@ -1,4 +1,5 @@
 import { memo, useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
 import BedroomBabyIcon from '@mui/icons-material/BedroomBaby';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
@@ -7,7 +8,6 @@ import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import StrollerIcon from '@mui/icons-material/Stroller';
 import { Box, CircularProgress } from '@mui/material';
-import { useAtom } from 'jotai';
 import selectedBabyAtom from '../../atoms/selectedBabyAtom';
 import useBabiesList from '../../hooks/useBabiesList';
 
