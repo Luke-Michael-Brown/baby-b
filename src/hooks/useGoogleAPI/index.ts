@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { atom, useAtom, useAtomValue } from 'jotai';
 
 import createCacheMap from '../../utils/createCacheMap';
+import isIOS from '../../utils/isIOS';
 
 type TokenClient = google.accounts.oauth2.TokenClient;
 type TokenResponse = google.accounts.oauth2.TokenResponse;
@@ -84,18 +85,11 @@ export function useGoogleAPISetup() {
     const saved = localStorage.getItem('baby_b_gapi_auth');
     if (!saved) return;
 
-    const { token, expiresAt } = JSON.parse(saved) as {
-      token?: string;
-      expiresAt?: number;
-    };
+    const { token, expiresAt } = JSON.parse(saved);
 
     if (token && expiresAt && Date.now() < expiresAt) {
-      setAuth(old => ({
-        ...old,
-        accessToken: token,
-        isSignedIn: true,
-      }));
-    } else {
+      setAuth(old => ({ ...old, accessToken: token, isSignedIn: true }));
+    } else if (!isIOS()) {
       tokenClient.requestAccessToken({ prompt: '' });
     }
   }, [tokenClient, setAuth]);
@@ -130,7 +124,7 @@ export default function useGoogleAPI() {
 
   const signIn = useCallback(() => {
     if (!tokenClient) throw new Error('GIS not initialized');
-    tokenClient.requestAccessToken({ prompt: 'consent' });
+    tokenClient.requestAccessToken({ prompt: 'select_account' });
   }, [tokenClient]);
 
   const signOut = useCallback(async () => {

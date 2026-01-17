@@ -6,6 +6,8 @@ import { Box } from '@mui/material';
 import Footer from '../../components/Footer';
 import SecondaryBar from '../../components/SecondaryBar';
 import TabContent from '../../components/TabContent';
+import { EntryDialog } from '../../dialogs/EntryDialog';
+import { DeleteDialog } from '../../dialogs/DeleteDialog';
 
 function ContentPage() {
   return (
@@ -23,6 +25,9 @@ function ContentPage() {
         <TabContent />
       </Box>
       <Footer />
+
+      <EntryDialog />
+      <DeleteDialog />
     </>
   );
 }

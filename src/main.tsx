@@ -33,8 +33,6 @@ import './index.css';
 import App from './App';
 
 import { LightDarkProvider } from './contexts/LightDarkContext';
-import DeleteDialog from './dialogs/DeleteDialog';
-import EntryDialog from './dialogs/EntryDialog';
 
 const queryClient = new QueryClient();
 
@@ -44,9 +42,6 @@ createRoot(document.getElementById('root')!).render(
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <LightDarkProvider>
           <App />
-
-          <EntryDialog />
-          <DeleteDialog />
         </LightDarkProvider>
       </LocalizationProvider>
     </QueryClientProvider>

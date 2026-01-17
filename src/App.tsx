@@ -8,13 +8,10 @@
 // styling,
 // ensuring a responsive layout that fills the viewport.
 
-import { memo, useEffect } from 'react';
-import { useAtom } from 'jotai';
+import { memo } from 'react';
 import Box from '@mui/material/Box';
 
-import selectedBabyAtom from './atoms/selectedBabyAtom';
 import Header from './components/Header';
-import useBabiesList from './hooks/useBabiesList';
 import useCurrentPage from './hooks/useCurrentPage';
 import { useGoogleAPISetup } from './hooks/useGoogleAPI';
 import ContentPage from './pages/ContentPage';
@@ -23,18 +20,7 @@ import LoginPage from './pages/LoginPage';
 
 export function App() {
   useGoogleAPISetup();
-
   const currentPage = useCurrentPage();
-  const { data: babiesList } = useBabiesList();
-  const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
-
-  useEffect(() => {
-    if (selectedBaby === null && babiesList && babiesList.length > 0) {
-      setSelectedBaby(babiesList[0]);
-    } else if (babiesList?.length === 0) {
-      setSelectedBaby(null);
-    }
-  }, [selectedBaby, babiesList, setSelectedBaby]);
 
   return (
     <Box

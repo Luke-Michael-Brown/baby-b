@@ -7,6 +7,9 @@ import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import StrollerIcon from '@mui/icons-material/Stroller';
 import { Box, CircularProgress } from '@mui/material';
+import { useAtom } from 'jotai';
+import selectedBabyAtom from '../../atoms/selectedBabyAtom';
+import useBabiesList from '../../hooks/useBabiesList';
 
 const ICONS = [
   BedroomBabyIcon,
@@ -19,6 +22,17 @@ const ICONS = [
 ];
 
 function LoadingScreen() {
+  const { data: babiesList } = useBabiesList();
+  const [selectedBaby, setSelectedBaby] = useAtom(selectedBabyAtom);
+
+  useEffect(() => {
+    if (selectedBaby === null && babiesList && babiesList.length > 0) {
+      setSelectedBaby(babiesList[0]);
+    } else if (babiesList?.length === 0) {
+      setSelectedBaby(null);
+    }
+  }, [selectedBaby, babiesList, setSelectedBaby]);
+
   const [index, setIndex] = useState(Math.floor(Math.random() * ICONS.length));
 
   useEffect(() => {
